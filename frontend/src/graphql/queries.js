@@ -21,3 +21,22 @@ export const USERS_QUERY = gql`
     }
   }
 `
+
+export const POSTS_QUERY = gql` 
+query {
+  posts {
+    id
+    title
+    body
+    author {
+      name
+    }
+    likes {
+      user {
+        name
+      }
+    
+    }
+}
+}
+`
