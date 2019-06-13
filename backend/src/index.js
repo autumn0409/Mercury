@@ -9,7 +9,7 @@ import Like from './resolvers/Like'
 
 import mongoose from 'mongoose';
 
-const DB_URL = "mongodb+srv://Adam:type54932468@cluster0-hkucr.mongodb.net/hw3?retryWrites=true&w=majority"
+const DB_URL = "mongodb://localhost:27017/Web_final?retryWrites=true&w=majority"
 
 mongoose.connect(DB_URL, {
   useNewUrlParser: true
