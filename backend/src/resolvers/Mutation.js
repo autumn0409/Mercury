@@ -6,7 +6,7 @@ import Post from '../models/post';
 import Comment from '../models/comment';
 import Like from '../models/like';
 
-import { checkUserExists, checkPostExists, checkEmailTaken } from '../utils/checking';
+import { checkUserExists, checkPostExists, checkEmailTaken, checkNameTaken } from '../utils/checking';
 
 const Mutation = {
   async createUser(parent, args, { db }, info) {
@@ -14,7 +14,13 @@ const Mutation = {
     const emailTaken = await checkEmailTaken(db, args.data.email);
 
     if (emailTaken) {
-      throw new Error('Email taken')
+      throw new Error('Email taken');
+    }
+
+    const nameTaken = await checkNameTaken(db, args.data.name);
+
+    if (nameTaken) {
+      throw new Error('Name taken');
     }
 
     const user = {
