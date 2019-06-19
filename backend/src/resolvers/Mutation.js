@@ -301,27 +301,28 @@ const Mutation = {
 
     return comment;
   },
-  //   updateComment(parent, args, { db, pubsub }, info) {
-  //     const { id, data } = args
-  //     const comment = db.comments.find(comment => comment.id === id)
+  async updateComment(parent, args, { db, pubsub }, info) {
+    const { id, data } = args
+    const comment = await db.collection('comments').findOne({ id: id });
 
-  //     if (!comment) {
-  //       throw new Error('Comment not found')
-  //     }
+    if (comment === null) {
+      throw new Error('Comment not found')
+    }
 
-  //     if (typeof data.text === 'string') {
-  //       comment.text = data.text
-  //     }
+    if (typeof data.text === 'string') {
+      db.collection('comments').updateOne({ id: id }, { $set: { text: data.text } });
+      comment.text = data.text;
+    }
 
-  //     pubsub.publish(`comment ${comment.post}`, {
-  //       comment: {
-  //         mutation: 'UPDATED',
-  //         data: comment
-  //       }
-  //     })
+    pubsub.publish(`comment ${comment.post}`, {
+      comment: {
+        mutation: 'UPDATED',
+        data: comment
+      }
+    })
 
-  //     return comment
-  //   }
+    return comment
+  },
   async createLike(parent, args, { db, pubsub }, info) {
 
     const userExists = await checkUserExists(db, args.data.user);
