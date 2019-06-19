@@ -4,6 +4,11 @@ const Post = {
       { "id": parent.author }
     );
   },
+  sub(parent, args, { db }, info) {
+    return db.collection('subs').findOne(
+      { "id": parent.sub }
+    );
+  },
   comments(parent, args, { db }, info) {
     return db.collection('comments').find(
       { "post": parent.id }

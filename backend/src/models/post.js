@@ -22,6 +22,10 @@ const PostSchema = new Schema({
         type: String,
         required: true,
     },
+    sub: {
+        type: String,
+        required: true,
+    }
 });
 
 // Creating a table within database with the defined schema

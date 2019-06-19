@@ -1,6 +1,7 @@
 import uuidv4 from 'uuid/v4'
 
 import User from '../models/user';
+import Sub from '../models/sub';
 import Post from '../models/post';
 import Comment from '../models/comment';
 import Like from '../models/like';
@@ -82,6 +83,23 @@ const Mutation = {
 
   //   return user
   // },
+  createSub(parent, args, { db, pubsub }, info) {
+
+    const sub = {
+      id: uuidv4(),
+      ...args.data
+    }
+
+    const newSubData = new Sub({
+      id: sub.id,
+      name: sub.name,
+    })
+
+    newSubData.save();
+
+    return sub;
+  },
+  // TODOS: update, delete sub
   async createPost(parent, args, { db, pubsub }, info) {
 
     let userExists = await checkUserExists(db, args.data.author);
@@ -101,6 +119,7 @@ const Mutation = {
       body: post.body,
       published: post.published,
       author: post.author,
+      sub: post.sub,
     })
 
     newPostData.save();
