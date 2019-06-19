@@ -136,7 +136,6 @@ const Mutation = {
 
     return sub;
   },
-  // TODOS: update, delete sub
   async createPost(parent, args, { db, pubsub }, info) {
 
     const userExists = await checkUserExists(db, args.data.author);
@@ -352,6 +351,23 @@ const Mutation = {
         data: like
       }
     });
+
+    return like;
+  },
+  async deleteLike(parent, args, { db, pubsub }, info) {
+    const result = await db.collection('likes').findOneAndDelete({ id: args.id });
+    const like = result.value;
+
+    if (like === null) {
+      throw new Error('Like not found')
+    }
+
+    pubsub.publish(`like ${like.post}`, {
+      like: {
+        mutation: 'DELETED',
+        data: like
+      }
+    })
 
     return like;
   },
