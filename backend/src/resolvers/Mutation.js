@@ -137,7 +137,7 @@ const Mutation = {
   },
   async deletePost(parent, args, { db, pubsub }, info) {
 
-    const result = await db.collection('posts').findOneAndDelete({ $and: [{ id: args.id }, { published: true }] });
+    const result = await db.collection('posts').findOneAndDelete({ id: args.id });
     const post = result.value;
 
     if (post === null) {
@@ -165,52 +165,55 @@ const Mutation = {
 
     return post
   },
-  // updatePost(parent, args, { db, pubsub }, info) {
-  //   const { id, data } = args
-  //   const post = db.posts.find(post => post.id === id)
-  //   const originalPost = { ...post }
+  async updatePost(parent, args, { db, pubsub }, info) {
+    const { id, data } = args
+    const post = await db.collection('posts').findOne({ id: id });
+    const originalPost = { ...post }
 
-  //   if (!post) {
-  //     throw new Error('Post not found')
-  //   }
+    if (post === null) {
+      throw new Error('Post not found');
+    }
 
-  //   if (typeof data.title === 'string') {
-  //     post.title = data.title
-  //   }
+    if (typeof data.title === 'string') {
+      db.collection('posts').updateOne({ id: id }, { $set: { title: data.title } });
+      post.title = data.title;
+    }
 
-  //   if (typeof data.body === 'string') {
-  //     post.body = data.body
-  //   }
+    if (typeof data.body === 'string') {
+      db.collection('posts').updateOne({ id: id }, { $set: { body: data.body } });
+      post.body = data.body;
+    }
 
-  //   if (typeof data.published === 'boolean') {
-  //     post.published = data.published
+    if (typeof data.published === 'boolean') {
+      db.collection('posts').updateOne({ id: id }, { $set: { published: data.published } });
+      post.published = data.published;
 
-  //     if (originalPost.published && !post.published) {
-  //       pubsub.publish('post', {
-  //         post: {
-  //           mutation: 'DELETED',
-  //           data: originalPost
-  //         }
-  //       })
-  //     } else if (!originalPost.published && post.published) {
-  //       pubsub.publish('post', {
-  //         post: {
-  //           mutation: 'CREATED',
-  //           data: post
-  //         }
-  //       })
-  //     }
-  //   } else if (post.published) {
-  //     pubsub.publish('post', {
-  //       post: {
-  //         mutation: 'UPDATED',
-  //         data: post
-  //       }
-  //     })
-  //   }
+      if (originalPost.published && !post.published) {
+        pubsub.publish('post', {
+          post: {
+            mutation: 'DELETED',
+            data: originalPost
+          }
+        })
+      } else if (!originalPost.published && post.published) {
+        pubsub.publish('post', {
+          post: {
+            mutation: 'CREATED',
+            data: post
+          }
+        })
+      }
+    } else if (post.published) {
+      pubsub.publish('post', {
+        post: {
+          mutation: 'UPDATED',
+          data: post
+        }
+      })
+    }
 
-  //   return post
-  // },
+    return post
+  },
   async createComment(parent, args, { db, pubsub }, info) {
 
     const userExists = await checkUserExists(db, args.data.author);
