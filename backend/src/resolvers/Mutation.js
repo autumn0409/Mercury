@@ -11,7 +11,7 @@ import { checkUserExists, checkPostExists, checkEmailTaken } from '../utils/chec
 const Mutation = {
   async createUser(parent, args, { db }, info) {
 
-    let emailTaken = await checkEmailTaken(db, args.data.email);
+    const emailTaken = await checkEmailTaken(db, args.data.email);
 
     if (emailTaken) {
       throw new Error('Email taken')
@@ -102,7 +102,7 @@ const Mutation = {
   // TODOS: update, delete sub
   async createPost(parent, args, { db, pubsub }, info) {
 
-    let userExists = await checkUserExists(db, args.data.author);
+    const userExists = await checkUserExists(db, args.data.author);
 
     if (!userExists) {
       throw new Error('User not found')
@@ -135,28 +135,36 @@ const Mutation = {
 
     return post;
   },
-  // deletePost(parent, args, { db, pubsub }, info) {
-  //   const postIndex = db.posts.findIndex(post => post.id === args.id)
+  async deletePost(parent, args, { db, pubsub }, info) {
 
-  //   if (postIndex === -1) {
-  //     throw new Error('Post not found')
-  //   }
+    const result = await db.collection('posts').findOneAndDelete({ $and: [{ id: args.id }, { published: true }] });
+    const post = result.value;
 
-  //   const [post] = db.posts.splice(postIndex, 1)
+    if (post === null) {
+      throw new Error('Post not found');
+    }
 
-  //   db.comments = db.comments.filter(comment => comment.post !== args.id)
+    db.collection('comments').deleteMany({ post: args.id }, (err, result) => {
+      if (err)
+        throw err;
+    })
 
-  //   if (post.published) {
-  //     pubsub.publish('post', {
-  //       post: {
-  //         mutation: 'DELETED',
-  //         data: post
-  //       }
-  //     })
-  //   }
+    db.collection('likes').deleteMany({ post: args.id }, (err, result) => {
+      if (err)
+        throw err;
+    })
 
-  //   return post
-  // },
+    if (post.published) {
+      pubsub.publish('post', {
+        post: {
+          mutation: 'DELETED',
+          data: post
+        }
+      })
+    }
+
+    return post
+  },
   // updatePost(parent, args, { db, pubsub }, info) {
   //   const { id, data } = args
   //   const post = db.posts.find(post => post.id === id)
@@ -205,9 +213,9 @@ const Mutation = {
   // },
   async createComment(parent, args, { db, pubsub }, info) {
 
-    let userExists = await checkUserExists(db, args.data.author);
+    const userExists = await checkUserExists(db, args.data.author);
 
-    let postExists = await checkPostExists(db, args.data.post);
+    const postExists = await checkPostExists(db, args.data.post);
 
     if (!userExists || !postExists) {
       throw new Error('Unable to find user and post')
@@ -278,9 +286,9 @@ const Mutation = {
   //   }
   async createLike(parent, args, { db, pubsub }, info) {
 
-    let userExists = await checkUserExists(db, args.data.user);
+    const userExists = await checkUserExists(db, args.data.user);
 
-    let postExists = await checkPostExists(db, args.data.post);
+    const postExists = await checkPostExists(db, args.data.post);
 
     if (!userExists || !postExists) {
       throw new Error('Unable to find user and post')
