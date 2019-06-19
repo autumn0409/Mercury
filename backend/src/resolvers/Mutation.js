@@ -284,25 +284,23 @@ const Mutation = {
 
     return comment;
   },
-  //   deleteComment(parent, args, { db, pubsub }, info) {
-  //     const commentIndex = db.comments.findIndex(
-  //       comment => comment.id === args.id
-  //     )
+  async deleteComment(parent, args, { db, pubsub }, info) {
+    const result = await db.collection('comments').findOneAndDelete({ id: args.id });
+    const comment = result.value;
 
-  //     if (commentIndex === -1) {
-  //       throw new Error('Comment not found')
-  //     }
+    if (comment === null) {
+      throw new Error('Comment not found')
+    }
 
-  //     const [deletedComment] = db.comments.splice(commentIndex, 1)
-  //     pubsub.publish(`comment ${deletedComment.post}`, {
-  //       comment: {
-  //         mutation: 'DELETED',
-  //         data: deletedComment
-  //       }
-  //     })
+    pubsub.publish(`comment ${comment.post}`, {
+      comment: {
+        mutation: 'DELETED',
+        data: comment
+      }
+    })
 
-  //     return deletedComment
-  //   },
+    return comment;
+  },
   //   updateComment(parent, args, { db, pubsub }, info) {
   //     const { id, data } = args
   //     const comment = db.comments.find(comment => comment.id === id)
