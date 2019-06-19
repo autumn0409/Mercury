@@ -33,28 +33,44 @@ const Mutation = {
 
     return user;
   },
-  // deleteUser(parent, args, { db }, info) {
-  //   const userIndex = db.users.findIndex(user => user.id === args.id)
+  async deleteUser(parent, args, { db }, info) {
+    const result = await db.collection('users').findOneAndDelete({ id: args.id });
+    const user = result.value;
+    if (user === null) {
+      throw new Error('User not found')
+    }
 
-  //   if (userIndex === -1) {
-  //     throw new Error('User not found')
-  //   }
+    while (true) {
+      const deleteResult = await db.collection('posts').findOneAndDelete({ author: args.id });
+      const deletedPost = deleteResult.value;
 
-  //   const deletedUsers = db.users.splice(userIndex, 1)
+      if (deletedPost === null) {
+        break;
+      } else {
+        db.collection('comments').deleteMany({ post: deletedPost.id }, (err, result) => {
+          if (err)
+            throw err;
+        })
 
-  //   db.posts = db.posts.filter(post => {
-  //     const match = post.author === args.id
+        db.collection('likes').deleteMany({ post: deletedPost.id }, (err, result) => {
+          if (err)
+            throw err;
+        })
+      }
+    }
 
-  //     if (match) {
-  //       db.comments = db.comments.filter(comment => comment.post !== post.id)
-  //     }
+    db.collection('comments').deleteMany({ author: args.id }, (err, result) => {
+      if (err)
+        throw err;
+    })
 
-  //     return !match
-  //   })
-  //   db.comments = db.comments.filter(comment => comment.author !== args.id)
+    db.collection('likes').deleteMany({ user: args.id }, (err, result) => {
+      if (err)
+        throw err;
+    })
 
-  //   return deletedUsers[0]
-  // },
+    return user;
+  },
   // updateUser(parent, args, { db }, info) {
   //   const { id, data } = args
   //   const user = db.users.find(user => user.id === id)
@@ -83,7 +99,13 @@ const Mutation = {
 
   //   return user
   // },
-  createSub(parent, args, { db, pubsub }, info) {
+  async createSub(parent, args, { db, pubsub }, info) {
+
+    const subExists = await db.collection('subs').findOne({ name: args.data.name });
+
+    if (subExists) {
+      throw new Error('Sub exists')
+    }
 
     const sub = {
       id: uuidv4(),
