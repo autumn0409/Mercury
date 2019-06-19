@@ -77,34 +77,43 @@ const Mutation = {
 
     return user;
   },
-  // updateUser(parent, args, { db }, info) {
-  //   const { id, data } = args
-  //   const user = db.users.find(user => user.id === id)
+  async updateUser(parent, args, { db }, info) {
+    const { id, data } = args
+    const user = await db.collection('users').findOne({ id: id });
 
-  //   if (!user) {
-  //     throw new Error('User not found')
-  //   }
+    if (user === null) {
+      throw new Error('User not found')
+    }
 
-  //   if (typeof data.email === 'string') {
-  //     const emailTaken = db.users.some(user => user.email === data.email)
+    if (typeof data.email === 'string') {
+      const emailTaken = await checkEmailTaken(db, data.email);
 
-  //     if (emailTaken) {
-  //       throw new Error('Email taken')
-  //     }
+      if (emailTaken) {
+        throw new Error('Email taken')
+      }
 
-  //     user.email = data.email
-  //   }
+      db.collection('users').updateOne({ id: id }, { $set: { email: data.email } });
+      user.email = data.email
+    }
 
-  //   if (typeof data.name === 'string') {
-  //     user.name = data.name
-  //   }
+    if (typeof data.name === 'string') {
+      const nameTaken = await checkNameTaken(db, data.name);
 
-  //   if (typeof data.age !== 'undefined') {
-  //     user.age = data.age
-  //   }
+      if (nameTaken) {
+        throw new Error('Name taken')
+      }
 
-  //   return user
-  // },
+      db.collection('users').updateOne({ id: id }, { $set: { name: data.name } });
+      user.name = data.name
+    }
+
+    if (typeof data.age !== 'undefined') {
+      db.collection('users').updateOne({ id: id }, { $set: { age: data.age } });
+      user.age = data.age
+    }
+
+    return user
+  },
   async createSub(parent, args, { db, pubsub }, info) {
 
     const subExists = await db.collection('subs').findOne({ name: args.data.name });
