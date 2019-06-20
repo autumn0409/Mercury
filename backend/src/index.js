@@ -39,9 +39,12 @@ const server = new GraphQLServer({
     Comment,
     Like,
   },
-  context: {
-    db,
-    pubsub
+  context(request) {
+    return {
+      db,
+      pubsub,
+      request
+    }
   }
 })
 

@@ -1,25 +1,27 @@
+import getUserId from '../utils/getUserId';
+
 const Query = {
-  async users(parent, args, { db }, info) {
+  users: async (parent, args, { db }, info) => {
     if (!args.query) {
       return db.collection('users').find().toArray();
     }
 
     return db.collection('users').find(
-      { "name": { $regex: new RegExp("^" + args.query.toLowerCase(), "i") } }
+      { username: { $regex: new RegExp("^" + args.query.toLowerCase(), "i") } }
     ).toArray();
   },
 
-  subs(parent, args, { db }, info) {
+  subs: (parent, args, { db }, info) => {
     if (!args.query) {
       return db.collection('subs').find().toArray();
     }
 
     return db.collection('subs').find(
-      { "name": { $regex: new RegExp("^" + args.query.toLowerCase(), "i") } }
+      { name: { $regex: new RegExp("^" + args.query.toLowerCase(), "i") } }
     ).toArray();
   },
 
-  posts(parent, args, { db }, info) {
+  posts: (parent, args, { db }, info) => {
     if (!args.query) {
       return db.collection('posts').find().toArray();
     }
@@ -27,26 +29,28 @@ const Query = {
     return db.collection('posts').find(
       {
         $or: [
-          { "title": { $regex: new RegExp(args.query.toLowerCase(), "i") } },
-          { "body": { $regex: new RegExp(args.query.toLowerCase(), "i") } }
+          { title: { $regex: new RegExp(args.query.toLowerCase(), "i") } },
+          { body: { $regex: new RegExp(args.query.toLowerCase(), "i") } }
         ]
       }).toArray();
   },
 
-  comments(parent, args, { db }, info) {
+  comments: (parent, args, { db }, info) => {
     return db.collection('comments').find().toArray();
   },
 
-  likes(parent, args, { db }, info) {
+  likes: (parent, args, { db }, info) => {
     return db.collection('likes').find().toArray();
   },
 
-  me() {
-    return {
-      id: '8fd7c19a-98ae-4d3a-aac1-d26b417a665e',
-      name: 'Andrew',
-      email: 'andrew@example.com'
-    }
+  me: async (parent, args, { request }) => {
+    const id = getUserId(request)
+
+    const me = await User.findById(id)
+
+    if (!me) throw new Error('Unknown token.')
+
+    return me
   },
 }
 

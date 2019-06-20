@@ -10,20 +10,9 @@ export const checkEmailTaken = (db, email) => {
     })
 }
 
-export const checkNameTaken = (db, name) => {
+export const checkUsernameTaken = (db, username) => {
     return new Promise((resolve, reject) => {
-        db.collection('users').findOne({ name: name }, (err, result) => {
-            if (err)
-                throw err;
-            else
-                resolve(result !== null);
-        });
-    })
-}
-
-export const checkUserExists = (db, author) => {
-    return new Promise((resolve, reject) => {
-        db.collection('users').findOne({ id: author }, (err, result) => {
+        db.collection('users').findOne({ username: username }, (err, result) => {
             if (err)
                 throw err;
             else
