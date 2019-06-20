@@ -43,8 +43,8 @@ const Mutation = {
       token: generateToken(newUserData.id)
     };
   },
-  login: async (parent, args) => {
-    const user = await User.findOne({ username: args.data.username })
+  login: async (parent, args, { db }) => {
+    const user = await db.collection('users').findOne({ username: args.data.username })
     if (!user) throw new Error('Unable to login.')
 
     const isMatch = await bcrypt.compare(args.data.password, user.password)
@@ -55,81 +55,82 @@ const Mutation = {
       token: generateToken(user.id)
     }
   },
-  // async deleteUser(parent, args, { db }, info) {
-  //   const result = await db.collection('users').findOneAndDelete({ id: args.id });
-  //   const user = result.value;
-  //   if (user === null) {
-  //     throw new Error('User not found')
-  //   }
+  deleteUser: async (parent, args, { db, request }, info) => {
+    const userId = getUserId(request);
+    const user = await User.findOne({ id: userId });
+    if (!user)
+      throw Error('Not logged in.');
 
-  //   while (true) {
-  //     const deleteResult = await db.collection('posts').findOneAndDelete({ author: args.id });
-  //     const deletedPost = deleteResult.value;
+    while (true) {
+      const deleteResult = await db.collection('posts').findOneAndDelete({ author: userId });
+      const deletedPost = deleteResult.value;
 
-  //     if (deletedPost === null) {
-  //       break;
-  //     } else {
-  //       db.collection('comments').deleteMany({ post: deletedPost.id }, (err, result) => {
-  //         if (err)
-  //           throw err;
-  //       })
+      if (deletedPost === null) {
+        break;
+      } else {
+        db.collection('comments').deleteMany({ post: deletedPost.id }, (err, result) => {
+          if (err)
+            throw err;
+        })
 
-  //       db.collection('likes').deleteMany({ post: deletedPost.id }, (err, result) => {
-  //         if (err)
-  //           throw err;
-  //       })
-  //     }
-  //   }
+        db.collection('likes').deleteMany({ post: deletedPost.id }, (err, result) => {
+          if (err)
+            throw err;
+        })
+      }
+    }
 
-  //   db.collection('comments').deleteMany({ author: args.id }, (err, result) => {
-  //     if (err)
-  //       throw err;
-  //   })
+    db.collection('comments').deleteMany({ author: userId }, (err, result) => {
+      if (err)
+        throw err;
+    })
 
-  //   db.collection('likes').deleteMany({ user: args.id }, (err, result) => {
-  //     if (err)
-  //       throw err;
-  //   })
+    db.collection('likes').deleteMany({ user: userId }, (err, result) => {
+      if (err)
+        throw err;
+    })
 
-  //   return user;
-  // },
-  // async updateUser(parent, args, { db }, info) {
-  //   const { id, data } = args
-  //   const user = await db.collection('users').findOne({ id: id });
+    db.collection('users').deleteOne({ id: userId });
 
-  //   if (user === null) {
-  //     throw new Error('User not found')
-  //   }
+    return user;
+  },
+  updateUser: async (parent, args, { db, request }, info) => {
+    const { data } = args;
 
-  //   if (typeof data.email === 'string') {
-  //     const emailTaken = await checkEmailTaken(db, data.email);
+    const userId = getUserId(request);
+    const user = await User.findOne({ id: userId });
+    if (!user)
+      throw Error('Not logged in.');
 
-  //     if (emailTaken) {
-  //       throw new Error('Email taken')
-  //     }
+    if (typeof data.email === 'string') {
+      const emailTaken = await checkEmailTaken(db, data.email);
 
-  //     db.collection('users').updateOne({ id: id }, { $set: { email: data.email } });
-  //     user.email = data.email
-  //   }
+      if (emailTaken) {
+        throw new Error('Email taken')
+      }
 
-  //   if (typeof data.name === 'string') {
-  //     const nameTaken = await checkUsernameTaken(db, data.name);
+      db.collection('users').updateOne({ id: userId }, { $set: { email: data.email } });
+      user.email = data.email
+    }
 
-  //     if (nameTaken) {
-  //       throw new Error('Name taken')
-  //     }
+    if (typeof data.username === 'string') {
+      const usernameTaken = await checkUsernameTaken(db, data.username);
 
-  //     db.collection('users').updateOne({ id: id }, { $set: { name: data.name } });
-  //     user.name = data.name
-  //   }
+      if (usernameTaken) {
+        throw new Error('Username taken')
+      }
 
-  //   if (typeof data.age !== 'undefined') {
-  //     db.collection('users').updateOne({ id: id }, { $set: { age: data.age } });
-  //     user.age = data.age
-  //   }
+      db.collection('users').updateOne({ id: userId }, { $set: { username: data.username } });
+      user.username = data.username
+    }
 
-  //   return user
-  // },
+    if (typeof data.age !== 'undefined') {
+      db.collection('users').updateOne({ id: userId }, { $set: { age: data.age } });
+      user.age = data.age
+    }
+
+    return user
+  },
   createSub: async (parent, args, { db, pubsub }, info) => {
 
     const subExists = await db.collection('subs').findOne({ name: args.data.name });
@@ -193,11 +194,16 @@ const Mutation = {
     if (!user)
       throw Error('Not logged in.');
 
-    const result = await db.collection('posts').findOneAndDelete({ id: args.id });
-    const post = result.value;
+    const post = await db.collection('posts').findOne({ id: args.id });
+
     if (!post) {
       throw new Error('Post not found');
     }
+    if (post.author !== userId) {
+      throw new Error('No authorization');
+    }
+
+    db.collection('posts').deleteOne({ id: args.id });
 
     db.collection('comments').deleteMany({ post: args.id }, (err, result) => {
       if (err)
@@ -233,6 +239,9 @@ const Mutation = {
 
     if (!post) {
       throw new Error('Post not found');
+    }
+    if (post.author !== userId) {
+      throw new Error('No authorization');
     }
 
     if (typeof data.title === 'string') {
@@ -312,19 +321,23 @@ const Mutation = {
 
     return comment;
   },
-  deleteComment: async (parent, args, { db, pubsub }, info) => {
+  deleteComment: async (parent, args, { db, pubsub, request }, info) => {
 
     const userId = getUserId(request);
     const user = await User.findOne({ id: userId });
     if (!user)
       throw Error('Not logged in.');
 
-    const result = await db.collection('comments').findOneAndDelete({ id: args.id });
-    const comment = result.value;
+    const comment = await db.collection('comments').findOne({ id: args.id });
 
     if (!comment) {
       throw new Error('Comment not found')
     }
+    if (comment.author !== userId) {
+      throw new Error('No authorization');
+    }
+
+    db.collection('comments').deleteOne({ id: args.id });
 
     pubsub.publish(`comment ${comment.post}`, {
       comment: {
@@ -335,7 +348,7 @@ const Mutation = {
 
     return comment;
   },
-  updateComment: async (parent, args, { db, pubsub }, info) => {
+  updateComment: async (parent, args, { db, pubsub, request }, info) => {
 
     const userId = getUserId(request);
     const user = await User.findOne({ id: userId });
@@ -347,6 +360,9 @@ const Mutation = {
 
     if (!comment) {
       throw new Error('Comment not found')
+    }
+    if (comment.author !== userId) {
+      throw new Error('No authorization');
     }
 
     if (typeof data.text === 'string') {
@@ -378,7 +394,7 @@ const Mutation = {
 
     const like = {
       id: uuidv4(),
-      author: userId,
+      user: userId,
       ...args.data
     }
 
@@ -399,19 +415,23 @@ const Mutation = {
 
     return like;
   },
-  deleteLike: async (parent, args, { db, pubsub }, info) => {
+  deleteLike: async (parent, args, { db, pubsub, request }, info) => {
 
     const userId = getUserId(request);
     const user = await User.findOne({ id: userId });
     if (!user)
       throw Error('Not logged in.');
 
-    const result = await db.collection('likes').findOneAndDelete({ id: args.id });
-    const like = result.value;
+    const like = await db.collection('likes').findOne({ id: args.id });
 
     if (!like) {
       throw new Error('Like not found')
     }
+    if (like.user !== userId) {
+      throw new Error('No authorization');
+    }
+
+    db.collection('likes').deleteOne({ id: args.id });
 
     pubsub.publish(`like ${like.post}`, {
       like: {
