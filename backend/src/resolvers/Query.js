@@ -43,10 +43,10 @@ const Query = {
     return db.collection('likes').find().toArray();
   },
 
-  me: async (parent, args, { request }) => {
+  me: async (parent, args, { db, request }) => {
     const id = getUserId(request)
 
-    const me = await User.findById(id)
+    const me = await db.collection('users').findOne({ id: id });
 
     if (!me) throw new Error('Unknown token.')
 
