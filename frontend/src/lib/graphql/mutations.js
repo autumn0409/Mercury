@@ -57,7 +57,7 @@ export const CREATE_LIKE_MUTATION = gql`
  * Mutations
  */
 export const REGISTER_MUTATION = gql`
-  mutation createUser($username: String!, $password: String!, email: String!, age: Number!)
+  mutation createUser($username: String!, $password: String!, $email: String!, $age: Number!)
     {
     createUser(data:{
       username: $username,password: $password,
