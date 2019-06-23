@@ -1,9 +1,7 @@
 
 import React, { Component } from 'react'
-import { Redirect } from 'react-router';
-import Author from '../../components/Author'
+
 import Navbar from "../../containers/Navbar"
-import classes from './App.module.css'
 import createPost from '../../components/create-post-page'
 import postPage from '../../containers/PostPage'
 import frontPage from "../../components/front-page"
@@ -16,26 +14,14 @@ import {
   POSTS_SUBSCRIPTION,
 } from '../../graphql'
 
-import { BrowserRouter as Router, Route, Link,Switch } from "react-router-dom";
+import { Redirect,BrowserRouter as Router, Route, Link,Switch } from "react-router-dom";
 import { Query, Mutation } from 'react-apollo'
 import {
   Container,
   Row,
   Col,
-  Form,
-  FormGroup,
-  Label,
-  Input,
-  Button,
-  ButtonDropdown,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem,
-  Carousel,
-  CarouselItem,
-  CarouselControl,
-  CarouselIndicators,
-  CarouselCaption
+
+  DropdownItem
 } from 'reactstrap'
 
 
@@ -117,19 +103,22 @@ class App extends Component {
     ));
 
     return (
-      <Container  >
+
+      <Container>
         <Router>
         <Navbar></Navbar>
         <Row>
           <Col>
-
-              <Route path = '/posts/' component = {postPage}/>
+          
+              <Route path = '/posts' component = {postPage}/>
               <Route path='/createPost' component = {createPost}/>
               <Route path = '/frontPage' component = {frontPage}/>
+              <Redirect from = "/" to = "/frontPage"/>
           </Col>
         </Row>
         </Router>
       </Container>
+
     )
   }
 }

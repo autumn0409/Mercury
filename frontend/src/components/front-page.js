@@ -87,7 +87,6 @@ class FrontPage extends Component {
 
     return (
         <Router>
-
               <Carousel
                 activeIndex={activeIndex}
                 next={this.next}
