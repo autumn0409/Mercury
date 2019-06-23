@@ -5,17 +5,10 @@ import Navbar from "../../containers/Navbar"
 import createPost from '../../components/create-post-page'
 import postPage from '../../containers/PostPage'
 import frontPage from "../../components/front-page"
+import RegisterPage from "../Register/Register"
 
-
-
-import {
-  USERS_QUERY,
-  CREATE_POST_MUTATION,
-  POSTS_SUBSCRIPTION,
-} from '../../graphql'
 
 import { Redirect,BrowserRouter as Router, Route, Link,Switch } from "react-router-dom";
-import { Query, Mutation } from 'react-apollo'
 import {
   Container,
   Row,
@@ -109,7 +102,7 @@ class App extends Component {
         <Navbar></Navbar>
         <Row>
           <Col>
-          
+              <Route path = "/register" component = {RegisterPage}/>
               <Route path = '/posts' component = {postPage}/>
               <Route path='/createPost' component = {createPost}/>
               <Route path = '/frontPage' component = {frontPage}/>

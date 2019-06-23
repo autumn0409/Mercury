@@ -1,4 +1,5 @@
 export { USERS_QUERY } from './queries'
 export { POSTS_QUERY} from './queries'
-export { CREATE_POST_MUTATION, CREATE_LIKE_MUTATION } from './mutations'
+export { CREATE_POST_MUTATION, CREATE_LIKE_MUTATION,REGISTER_MUTATION,REGISTER_SCHEMA } from './mutations'
 export { POSTS_SUBSCRIPTION, LIKES_SUBSCRIPTION } from './subscriptions'
+export { ME_QUERY, MESSAGES_QUERY } from './queries'
