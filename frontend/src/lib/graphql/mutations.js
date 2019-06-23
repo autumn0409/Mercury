@@ -57,8 +57,8 @@ export const CREATE_LIKE_MUTATION = gql`
  * Mutations
  */
 export const REGISTER_MUTATION = gql`
-  mutation createUser($username: String!, $password: String!, $email: String!, $age: Number!)
-    {
+  mutation createUser($username: String!, $password: String!, $email: String!, $age: Int!)
+  {
     createUser(data:{
       username: $username,password: $password,
       email: $email, age: $age
@@ -66,9 +66,8 @@ export const REGISTER_MUTATION = gql`
       user{
         id
         username
-      }
-    } 
-    token   
+      }token
+    }
   }
 `
 
@@ -107,7 +106,7 @@ export const REGISTER_SCHEMA = Yup.object().shape({
   email: Yup.string()
     .email()
     .required('Email is required'),
-  age: Yup.string().required("age is required")
+  age: Yup.number().required("age is required")
     
     
 })
