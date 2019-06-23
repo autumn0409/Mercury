@@ -1,4 +1,20 @@
+
 import React, { Component } from 'react'
+import { Redirect } from 'react-router';
+import Author from '../../components/Author'
+import Navbar from "../../containers/Navbar"
+import classes from './App.module.css'
+import createPost from '../../components/create-post-page'
+import postPage from '../../containers/PostPage'
+import frontPage from "../../components/front-page"
+
+
+
+import {
+  USERS_QUERY,
+  CREATE_POST_MUTATION,
+  POSTS_SUBSCRIPTION,
+} from '../../graphql'
 
 import { BrowserRouter as Router, Route, Link,Switch } from "react-router-dom";
 import { Query, Mutation } from 'react-apollo'
@@ -15,30 +31,27 @@ import {
   DropdownToggle,
   DropdownMenu,
   DropdownItem,
+  Carousel,
+  CarouselItem,
+  CarouselControl,
+  CarouselIndicators,
+  CarouselCaption
 } from 'reactstrap'
 
-import {
-  USERS_QUERY,
-  CREATE_POST_MUTATION,
-  POSTS_SUBSCRIPTION,
-} from '../../graphql'
-
-import Author from '../../components/Author'
-import Navbar from "../../containers/Navbar"
-import classes from './App.module.css'
-import createPost from '../../components/create-post-page'
-import postPage from '../../containers/PostPage'
 
 let unsubscribe = null
 
 class App extends Component {
-  state = {
-    formTitle: '',
-    formBody: '',
-    dropdownOpen: false,
-    dropdownAuthor: '',
-    authorList: []
+  constructor(props) {
+    super(props);
+    this.state = { activeIndex: 0,
+      formTitle: '',
+      formBody: '',
+      dropdownOpen: false,
+      dropdownAuthor: '',
+      authorList: [] };
   }
+
 
   setUsers = (users) => {
     this.setState({
@@ -109,13 +122,10 @@ class App extends Component {
         <Navbar></Navbar>
         <Row>
           <Col>
-            <h1 className={classes.title}>Modern GraphQL Tutorial</h1>
-          </Col>
-        </Row>
-        <Row>
-          <Col>
+
               <Route path = '/posts/' component = {postPage}/>
               <Route path='/createPost' component = {createPost}/>
+              <Route path = '/frontPage' component = {frontPage}/>
           </Col>
         </Row>
         </Router>
