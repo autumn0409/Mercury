@@ -103,7 +103,13 @@ export const REGISTER_SCHEMA = Yup.object().shape({
 		.required('Username is required.'),
 	password: Yup.string()
 		.min(8)
-		.required('Password is required.')
+    .required('Password is required.'),
+  email: Yup.string()
+    .email()
+    .required('Email is required'),
+  age: Yup.string().required("age is required")
+    
+    
 })
 
 export const LOGIN_SCHEMA = Yup.object().shape({

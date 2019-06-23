@@ -14,7 +14,7 @@ class Register extends Component {
 	render() {
 		const { client, history, isAuth, loading: authHint } = this.props
 
-		if (isAuth) return <Redirect to="/chat" />
+		if (isAuth) return <Redirect to="/frontpage" />
 
 		return (
 			<Mutation
@@ -27,7 +27,7 @@ class Register extends Component {
 					// Force a reload of all current queries now that user is
 					// logged in
 					client.cache.reset().then(() => {
-						history.push('/chat')
+						history.push('/frontpage')
 					})
 				}}
 				onError={error => console.error(error)}
@@ -37,13 +37,15 @@ class Register extends Component {
 						<Hint />
 					) : (
 						<Formik
-							initialValues={{ username: '', password: '' }}
+							initialValues={{ username: '', password:'',email:'',age:'' }}
 							validationSchema={REGISTER_SCHEMA}
 							onSubmit={(values, { setSubmitting }) => {
 								register({
 									variables: {
 										username: values.username.toLowerCase(),
-										password: values.password
+										password: values.password,
+										email: values.email,
+										age: values.age	
 									}
 								})
 								setSubmitting(false)
@@ -97,15 +99,58 @@ class Register extends Component {
 													: ''}
 											</FormText>
 										</FormGroup>
+
+										<FormGroup>
+											<Label for="email">Email</Label>
+											<Input
+												id="email"
+												name="email"
+												value={values.email}
+												type="email"
+												autoComplete="current-email"
+												label="Email"
+												onChange={handleChange}
+												onBlur={handleBlur}
+												placeholder="Email"
+											/>
+											<FormText color="danger">
+												{errors.email
+													? errors.email.replace('email', 'Email')
+													: ''}
+											</FormText>
+										</FormGroup>
+										<FormGroup>
+											<Label for="age">Age</Label>
+											<Input
+												id="age"
+												name="age"
+												value={values.age}
+												type="age"
+												autoComplete="current-age"
+												label="Age"
+												onChange={handleChange}
+												onBlur={handleBlur}
+												placeholder="Age"
+											/>
+											<FormText color="danger">
+												{errors.age
+													? errors.age.replace('age', 'Age')
+													: ''}
+											</FormText>
+										</FormGroup>
 										<div className="col-sm-12 text-center">
 											<Button
 												type="submit"
 												disabled={
 													!values.username ||
 													!values.password ||
+													!values.email ||
+													!values.age ||
 													isSubmitting ||
 													!!(errors.username && touched.username) ||
-													!!(errors.password && touched.password)
+													!!(errors.password && touched.password) ||
+													!!(errors.email && touched.email) ||
+													!!(errors.age && touched.age)
 												}
 												outline
 												style={{ width: '100px', margin: '5px' }}
