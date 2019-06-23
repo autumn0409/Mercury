@@ -30,30 +30,41 @@ export default class Example extends React.Component {
     return (
       <div>
         <Navbar color="light" light expand="md">
-          <NavbarBrand href="/">reactstrap</NavbarBrand>
+          <NavbarBrand href="/frontPage">Reddit Clone</NavbarBrand>
           <NavbarToggler onClick={this.toggle} />
           <Collapse isOpen={this.state.isOpen} navbar>
             <Nav className="ml-auto" navbar>
               <NavItem>
-                <NavLink href="/createPost/">Post Something</NavLink>
+                <NavLink href="/createPost/">Post Something!</NavLink>
               </NavItem>
               <NavItem>
-                <NavLink href="/posts/">View posts from users</NavLink>
+                <NavLink href="/posts/">What's new?</NavLink>
               </NavItem>
+              
               <UncontrolledDropdown nav inNavbar>
                 <DropdownToggle nav caret>
-                  Options
+                  Settings
                 </DropdownToggle>
                 <DropdownMenu right>
                   <DropdownItem>
-                    Option 1
+                  <NavItem>
+                    <NavLink href="/register/">Register</NavLink>
+                  </NavItem>
                   </DropdownItem>
                   <DropdownItem>
-                    Option 2
+                  <NavItem>
+                    <NavLink href="/login/">Login</NavLink>
+                  </NavItem>
+                  </DropdownItem>
+                  <DropdownItem>
+                    My profile
+                  </DropdownItem>
+                  <DropdownItem>
+                    My Posts
                   </DropdownItem>
                   <DropdownItem divider />
                   <DropdownItem>
-                    Reset
+                    Favorites
                   </DropdownItem>
                 </DropdownMenu>
               </UncontrolledDropdown>

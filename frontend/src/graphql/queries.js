@@ -4,17 +4,17 @@ export const USERS_QUERY = gql`
   query {
     users {
       id
-      name
+      username
       posts {
         id
         title
         body
         author {
-          name
+          username
         }
         likes {
           user {
-            name
+            username
           }
         }
       }
@@ -29,11 +29,11 @@ query {
     title
     body
     author {
-      name
+      username
     }
     likes {
       user {
-        name
+        username
       }
     
     }
