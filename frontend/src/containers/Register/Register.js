@@ -39,15 +39,18 @@ class Register extends Component {
 						<Formik
 							initialValues={{ username: '', password:'',email:'',age:'' }}
 							validationSchema={REGISTER_SCHEMA}
-							onSubmit={(values, { setSubmitting }) => {
+							onSubmit={
+								(values, { setSubmitting }) => {
 								register({
 									variables: {
 										username: values.username.toLowerCase(),
 										password: values.password,
 										email: values.email,
-										age: values.age	
+										age: parseInt(values.age)	
 									}
-								})
+								}
+								)
+								console.log(values)
 								setSubmitting(false)
 							}}
 							render={({
@@ -125,7 +128,7 @@ class Register extends Component {
 												id="age"
 												name="age"
 												value={values.age}
-												type="age"
+												type="number" 
 												autoComplete="current-age"
 												label="Age"
 												onChange={handleChange}
