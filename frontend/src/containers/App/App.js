@@ -5,6 +5,8 @@ import Navbar from "../../containers/Navbar"
 import createPost from '../../components/create-post-page'
 import postPage from '../../containers/PostPage'
 import frontPage from "../../components/front-page"
+import RegisterPage from "../Register/Register"
+import { Redirect,BrowserRouter as Router, Route, Link,Switch } from "react-router-dom";
 import Login from '../Login/Login'
 
 
@@ -15,7 +17,7 @@ import {
   POSTS_SUBSCRIPTION,
 } from '../../lib/graphql'
 
-import { Redirect, BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
+//import { Redirect, BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
 import { Query, Mutation } from 'react-apollo'
 import {
   Container,
@@ -117,6 +119,7 @@ class App extends Component {
                 <Route path='/createPost' component={createPost} />
                 <Route path='/frontPage' component={frontPage} />
                 <Route path='/login' component={Login} />
+                <Route path='/register' component={RegisterPage}/>
                 <Redirect from="/" to="/frontPage" />
               </Switch>
             </Col>

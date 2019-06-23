@@ -26,6 +26,8 @@ export const CREATE_POST_MUTATION = gql`
   }
 `
 
+
+
 export const CREATE_LIKE_MUTATION = gql`
   mutation createLike(
     $user: ID!
@@ -55,11 +57,19 @@ export const CREATE_LIKE_MUTATION = gql`
  * Mutations
  */
 export const REGISTER_MUTATION = gql`
-	mutation Register($username: String!, $password: String!) {
-		createUser(data: { username: $username, password: $password }) {
-			token
-		}
-	}
+  mutation createUser($username: String!, $password: String!, $email: String!, $age: Number!)
+    {
+    createUser(data:{
+      username: $username,password: $password,
+      email: $email, age: $age
+    }){
+      user{
+        id
+        username
+      }
+    } 
+    token   
+  }
 `
 
 export const LOGIN_MUTATION = gql`
