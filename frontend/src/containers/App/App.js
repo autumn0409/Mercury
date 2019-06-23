@@ -5,6 +5,7 @@ import Navbar from "../../containers/Navbar"
 import createPost from '../../components/create-post-page'
 import postPage from '../../containers/PostPage'
 import frontPage from "../../components/front-page"
+import Login from '../Login/Login'
 
 
 
@@ -111,11 +112,13 @@ class App extends Component {
           <Navbar></Navbar>
           <Row>
             <Col>
-
-              <Route path='/posts' component={postPage} />
-              <Route path='/createPost' component={createPost} />
-              <Route path='/frontPage' component={frontPage} />
-              <Redirect from="/" to="/frontPage" />
+              <Switch>
+                <Route path='/posts' component={postPage} />
+                <Route path='/createPost' component={createPost} />
+                <Route path='/frontPage' component={frontPage} />
+                <Route path='/login' component={Login} />
+                <Redirect from="/" to="/frontPage" />
+              </Switch>
             </Col>
           </Row>
         </Router>
