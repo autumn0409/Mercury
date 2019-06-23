@@ -47,6 +47,7 @@ export const ME_QUERY = gql`
 			username
 		}
 	}
+<<<<<<< HEAD
 `
 
 export const MESSAGES_QUERY = gql`
@@ -59,4 +60,6 @@ export const MESSAGES_QUERY = gql`
 			}
 		}
 	}
+=======
+>>>>>>> 152b6d7be71157d5612fdafd01a1061466bf8fb3
 `

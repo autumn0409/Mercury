@@ -1,6 +1,6 @@
 import React from 'react';
 import { Mutation, Subscription } from 'react-apollo'
-import { LIKES_SUBSCRIPTION, CREATE_LIKE_MUTATION } from '../graphql'
+import { LIKES_SUBSCRIPTION, CREATE_LIKE_MUTATION } from '../lib/graphql'
 
 import {
   Card,

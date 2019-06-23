@@ -11,7 +11,8 @@ import {
   UncontrolledDropdown,
   DropdownToggle,
   DropdownMenu,
-  DropdownItem } from 'reactstrap';
+  DropdownItem
+} from 'reactstrap';
 
 export default class Example extends React.Component {
   constructor(props) {
@@ -41,21 +42,21 @@ export default class Example extends React.Component {
               <NavItem>
                 <NavLink href="/posts/">What's new?</NavLink>
               </NavItem>
-              
+
               <UncontrolledDropdown nav inNavbar>
                 <DropdownToggle nav caret>
                   Settings
                 </DropdownToggle>
                 <DropdownMenu right>
                   <DropdownItem>
-                  <NavItem>
-                    <NavLink href="/register/">Register</NavLink>
-                  </NavItem>
+                    <NavItem>
+                      <NavLink href="/register">Register</NavLink>
+                    </NavItem>
                   </DropdownItem>
                   <DropdownItem>
-                  <NavItem>
-                    <NavLink href="/login/">Login</NavLink>
-                  </NavItem>
+                    <NavItem>
+                      <NavLink href="/login">Login</NavLink>
+                    </NavItem>
                   </DropdownItem>
                   <DropdownItem>
                     My profile
@@ -72,7 +73,7 @@ export default class Example extends React.Component {
             </Nav>
           </Collapse>
         </Navbar>
-        </div>
+      </div>
     );
   }
 }
