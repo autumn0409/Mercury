@@ -12,9 +12,9 @@ import {
   USERS_QUERY,
   CREATE_POST_MUTATION,
   POSTS_SUBSCRIPTION,
-} from '../../graphql'
+} from '../../lib/graphql'
 
-import { Redirect,BrowserRouter as Router, Route, Link,Switch } from "react-router-dom";
+import { Redirect, BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
 import { Query, Mutation } from 'react-apollo'
 import {
   Container,
@@ -30,12 +30,14 @@ let unsubscribe = null
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = { activeIndex: 0,
+    this.state = {
+      activeIndex: 0,
       formTitle: '',
       formBody: '',
       dropdownOpen: false,
       dropdownAuthor: '',
-      authorList: [] };
+      authorList: []
+    };
   }
 
 
@@ -106,16 +108,16 @@ class App extends Component {
 
       <Container>
         <Router>
-        <Navbar></Navbar>
-        <Row>
-          <Col>
-          
-              <Route path = '/posts' component = {postPage}/>
-              <Route path='/createPost' component = {createPost}/>
-              <Route path = '/frontPage' component = {frontPage}/>
-              <Redirect from = "/" to = "/frontPage"/>
-          </Col>
-        </Row>
+          <Navbar></Navbar>
+          <Row>
+            <Col>
+
+              <Route path='/posts' component={postPage} />
+              <Route path='/createPost' component={createPost} />
+              <Route path='/frontPage' component={frontPage} />
+              <Redirect from="/" to="/frontPage" />
+            </Col>
+          </Row>
         </Router>
       </Container>
 

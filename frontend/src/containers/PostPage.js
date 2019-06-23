@@ -19,7 +19,7 @@ import {
   USERS_QUERY,
   CREATE_POST_MUTATION,
   POSTS_SUBSCRIPTION,
-} from '../graphql'
+} from '../lib/graphql'
 
 import Author from '../components/Author'
 import Navbar from "../containers/Navbar"
@@ -103,7 +103,7 @@ class PostPage extends Component {
       <Container  >
 
         <Row>
-         
+
           <Col xs="6">
             <Query query={USERS_QUERY} onCompleted={data => this.setUsers(data.users)}>
               {({ loading, error, data, subscribeToMore }) => {

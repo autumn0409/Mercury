@@ -19,7 +19,7 @@ import {
   USERS_QUERY,
   CREATE_POST_MUTATION,
   POSTS_SUBSCRIPTION,
-} from '../graphql'
+} from '../lib/graphql'
 
 import Author from './Author'
 import Navbar from "../containers/Navbar"
