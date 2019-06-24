@@ -91,40 +91,41 @@ class Post extends React.Component {
         })
       }
     })
-
-    handleDislike = () => {
-      this.createLike({
-        variables: {
-          post: this.props.id,
-          like: false,
-        }
-      }).catch(e => {
-        const message = e.graphQLErrors[0].message;
-
-        if (message.includes("Like exists")) {
-          const likeId = message.replace('Like exists: ', '');
-          this.deleteLike({
-            variables: {
-              id: likeId,
-            }
-          })
-        } else if (message.includes("Change like")) {
-          const likeId = message.replace('Change like: ', '');
-          this.deleteLike({
-            variables: {
-              id: likeId,
-            }
-          })
-          this.createLike({
-            variables: {
-              post: this.props.id,
-              like: false,
-            }
-          })
-        }
-      })
-    }
   }
+
+  handleDislike = () => {
+    this.createLike({
+      variables: {
+        post: this.props.id,
+        like: false,
+      }
+    }).catch(e => {
+      const message = e.graphQLErrors[0].message;
+
+      if (message.includes("Like exists")) {
+        const likeId = message.replace('Like exists: ', '');
+        this.deleteLike({
+          variables: {
+            id: likeId,
+          }
+        })
+      } else if (message.includes("Change like")) {
+        const likeId = message.replace('Change like: ', '');
+        this.deleteLike({
+          variables: {
+            id: likeId,
+          }
+        })
+        this.createLike({
+          variables: {
+            post: this.props.id,
+            like: false,
+          }
+        })
+      }
+    })
+  }
+
   /*
   routeChange = () =>{
     let path = `newPath`;
