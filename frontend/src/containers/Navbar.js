@@ -1,4 +1,6 @@
 import React from 'react';
+import withAuthGuard from '../hoc/AuthGuard/AuthGuard'
+//'../../hoc/AuthGuard/AuthGuard'
 
 import {
   Collapse,
@@ -14,7 +16,8 @@ import {
   DropdownItem
 } from 'reactstrap';
 
-export default class Example extends React.Component {
+
+class Navigation extends React.Component {
   constructor(props) {
     super(props);
 
@@ -76,3 +79,4 @@ export default class Example extends React.Component {
   }
 }
 
+export default withAuthGuard(Navigation)
