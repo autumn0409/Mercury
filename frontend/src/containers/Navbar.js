@@ -55,7 +55,9 @@ export default class Example extends React.Component {
                       <NavLink href="/login">Login</NavLink>
                   </DropdownItem>
                   <DropdownItem>
-                    My profile
+                    <NavItem>
+                      <NavLink href="/myProfile">My Profile</NavLink>
+                    </NavItem>
                   </DropdownItem>
                   <DropdownItem>
                     My Posts
