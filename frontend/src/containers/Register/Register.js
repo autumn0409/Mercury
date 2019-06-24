@@ -14,8 +14,9 @@ class Register extends Component {
 	render() {
 		const { client, history, isAuth, loading: authHint } = this.props
 
-		if (isAuth) return <Redirect to="/frontpage" />
-
+		if (isAuth) {
+			return <Redirect to="/frontpage" />
+		}
 		return (
 			<Mutation
 				mutation={REGISTER_MUTATION}

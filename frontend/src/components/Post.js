@@ -2,16 +2,7 @@ import React from 'react';
 import { Mutation, Subscription } from 'react-apollo'
 import { LIKES_SUBSCRIPTION, CREATE_LIKE_MUTATION, DELETE_LIKE_MUTATION } from '../lib/graphql'
 
-import {
-  Card,
-  CardHeader,
-  CardFooter,
-  CardBody,
-  ListGroupItem
-} from 'reactstrap'
-
 import './Post.css';
-import Author from './Author';
 
 class Post extends React.Component {
 
@@ -100,45 +91,45 @@ class Post extends React.Component {
         })
       }
     })
+
+    handleDislike = () => {
+      this.createLike({
+        variables: {
+          post: this.props.id,
+          like: false,
+        }
+      }).catch(e => {
+        const message = e.graphQLErrors[0].message;
+
+        if (message.includes("Like exists")) {
+          const likeId = message.replace('Like exists: ', '');
+          this.deleteLike({
+            variables: {
+              id: likeId,
+            }
+          })
+        } else if (message.includes("Change like")) {
+          const likeId = message.replace('Change like: ', '');
+          this.deleteLike({
+            variables: {
+              id: likeId,
+            }
+          })
+          this.createLike({
+            variables: {
+              post: this.props.id,
+              like: false,
+            }
+          })
+        }
+      })
+    }
   }
-
-  handleDislike = () => {
-    this.createLike({
-      variables: {
-        post: this.props.id,
-        like: false,
-      }
-    }).catch(e => {
-      const message = e.graphQLErrors[0].message;
-
-      if (message.includes("Like exists")) {
-        const likeId = message.replace('Like exists: ', '');
-        this.deleteLike({
-          variables: {
-            id: likeId,
-          }
-        })
-      } else if (message.includes("Change like")) {
-        const likeId = message.replace('Change like: ', '');
-        this.deleteLike({
-          variables: {
-            id: likeId,
-          }
-        })
-        this.createLike({
-          variables: {
-            post: this.props.id,
-            like: false,
-          }
-        })
-      }
-    })
-  }
-
-  routeChange = () => {
+  /*
+  routeChange = () =>{
     let path = `newPath`;
     this.props.history.push(path);
-  }
+  }*/
 
   render() {
     const { id, title, body, author } = this.props;

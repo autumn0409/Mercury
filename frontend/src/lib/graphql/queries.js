@@ -51,3 +51,14 @@ export const ME_QUERY = gql`
 		}
 	}
 `
+export const SUBS_QUERY = gql`
+  query{
+    subs{
+      name
+      id
+      posts{
+        title 
+      }
+    }
+  }
+`

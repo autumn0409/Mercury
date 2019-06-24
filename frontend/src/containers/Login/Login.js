@@ -16,8 +16,9 @@ class Login extends Component {
     render() {
         const { client, history, isAuth, loading: authHint } = this.props
 
-        if (isAuth) return <Redirect to="/chat" />
-
+        if (isAuth) {
+            return <Redirect to="/frontPage" />
+        }
         return (
             <Mutation
                 mutation={LOGIN_MUTATION}
@@ -29,7 +30,7 @@ class Login extends Component {
                     // Force a reload of all current queries now that user is
                     // logged in
                     client.cache.reset().then(() => {
-                        history.push('/chat')
+                        history.push('/frontPage')
                     })
                 }}
                 onError={error => console.error(error)}

@@ -122,7 +122,7 @@ class App extends Component {
                 <Route path='/login' component={Login} />
                 <Route path='/register' component={RegisterPage} />
                 <Route path='/myProfile' component={Profile} />
-                <Redirect from="/" to="/frontPage" />
+  
               </Switch>
             </Col>
           </Row>
