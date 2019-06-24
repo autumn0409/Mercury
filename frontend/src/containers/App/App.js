@@ -10,15 +10,15 @@ import { Redirect,BrowserRouter as Router, Route, Link,Switch } from "react-rout
 import Login from '../Login/Login'
 
 
-
+/*
 import {
   USERS_QUERY,
   CREATE_POST_MUTATION,
   POSTS_SUBSCRIPTION,
 } from '../../lib/graphql'
-
+*/
 //import { Redirect, BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
-import { Query, Mutation } from 'react-apollo'
+//import { Query, Mutation } from 'react-apollo'
 import {
   Container,
   Row,
@@ -28,7 +28,7 @@ import {
 } from 'reactstrap'
 
 
-let unsubscribe = null
+//let unsubscribe = null
 
 class App extends Component {
   constructor(props) {

@@ -49,14 +49,10 @@ export default class Example extends React.Component {
                 </DropdownToggle>
                 <DropdownMenu right>
                   <DropdownItem>
-                    <NavItem>
                       <NavLink href="/register">Register</NavLink>
-                    </NavItem>
                   </DropdownItem>
                   <DropdownItem>
-                    <NavItem>
                       <NavLink href="/login">Login</NavLink>
-                    </NavItem>
                   </DropdownItem>
                   <DropdownItem>
                     My profile

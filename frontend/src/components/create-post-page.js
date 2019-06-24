@@ -163,45 +163,6 @@ class CreatePost extends Component {
               }}
             </Mutation>
           </Col>
-          <Col xs="6">
-            <Query query={USERS_QUERY} onCompleted={data => this.setUsers(data.users)}>
-              {({ loading, error, data, subscribeToMore }) => {
-                if (loading) return <p>Loading...</p>;
-                if (error) return <p>Error :(((</p>;
-
-                const authors = data.users.map((user) => (
-                  <Author {...user} key={user.id} />
-                ))
-
-                if (!unsubscribe)
-                  unsubscribe = subscribeToMore({
-                    document: POSTS_SUBSCRIPTION,
-                    updateQuery: (prev, { subscriptionData }) => {
-                      if (!subscriptionData.data) return prev;
-
-                      const NewPost = subscriptionData.data.post.data;
-
-                      const NewUsers = prev.users.map(user => {
-                        if (user.name === NewPost.author.name) {
-                          return {
-                            ...user,
-                            posts: [NewPost, ...(user.posts)],
-                          };
-                        }
-                        else
-                          return user;
-                      });
-
-                      return {
-                        users: NewUsers,
-                      };
-                    }
-                  })
-
-                return <div>{authors}</div>
-              }}
-            </Query>
-          </Col>
         </Row>
       </Container>
     )

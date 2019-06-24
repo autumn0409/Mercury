@@ -4,23 +4,18 @@ import {
   Container,
   Row,
   Col,
-  Form,
-  FormGroup,
-  Label,
-  Input,
-  Button,
-  ButtonDropdown,
-  DropdownToggle,
-  DropdownMenu,
   DropdownItem,
+  ListGroup
 } from 'reactstrap'
 
 import {
+  POSTS_QUERY,
   USERS_QUERY,
   CREATE_POST_MUTATION,
   POSTS_SUBSCRIPTION,
 } from '../lib/graphql'
 
+import Post from '../components/Post'
 import Author from '../components/Author'
 import Navbar from "../containers/Navbar"
 import classes from '../containers/App/App.module.css'
@@ -105,41 +100,32 @@ class PostPage extends Component {
         <Row>
 
           <Col xs="6">
-            <Query query={USERS_QUERY} onCompleted={data => this.setUsers(data.users)}>
+          <Query query={POSTS_QUERY}>
               {({ loading, error, data, subscribeToMore }) => {
-                if (loading) return <p>Loading...</p>;
-                if (error) return <p>Error :(((</p>;
-
-                const authors = data.users.map((user) => (
-                  <Author {...user} key={user.id} />
+                if (loading) return <p>Loading...</p>
+                if (error) return <p>Error :(((</p>
+                
+                console.log(data.posts)
+                const posts = data.posts.map((post, id) => (
+                  <Post data={post} key={id} />
                 ))
-
                 if (!unsubscribe)
                   unsubscribe = subscribeToMore({
                     document: POSTS_SUBSCRIPTION,
                     updateQuery: (prev, { subscriptionData }) => {
-                      if (!subscriptionData.data) return prev;
-
-                      const NewPost = subscriptionData.data.post.data;
-
-                      const NewUsers = prev.users.map(user => {
-                        if (user.name === NewPost.author.name) {
-                          return {
-                            ...user,
-                            posts: [NewPost, ...(user.posts)],
-                          };
-                        }
-                        else
-                          return user;
-                      });
+                      if (!subscriptionData.data) return prev
+                      const newPost = subscriptionData.data.post.data
 
                       return {
-                        users: NewUsers,
-                      };
+                        ...prev,
+                        posts: [newPost, ...prev.posts]
+                      }
                     }
                   })
-
-                return <div>{authors}</div>
+                  return (<ul class="list-group list-group-flush" style={{width:"100%"}}>
+                {posts}
+                </ul>)
+               // return <ListGroup>{posts}</ListGroup>
               }}
             </Query>
           </Col>
