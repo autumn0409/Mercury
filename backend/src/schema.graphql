@@ -81,6 +81,7 @@ input UpdateCommentInput {
 
 input CreateLikeInput {
   post: ID!
+  like: Boolean!
 }
 
 type User {
@@ -120,6 +121,7 @@ type Like {
   id: ID!
   user: User!
   post: Post!
+  like: Boolean!
 }
 
 type AuthPayload {

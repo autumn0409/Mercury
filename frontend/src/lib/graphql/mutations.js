@@ -30,13 +30,13 @@ export const CREATE_POST_MUTATION = gql`
 
 export const CREATE_LIKE_MUTATION = gql`
   mutation createLike(
-    $user: ID!
     $post: ID!
+    $like: Boolean!
   ) {
     createLike(
       data: {
-        user: $user
         post: $post
+        like: $like
       }
     ) {
       id
@@ -45,8 +45,25 @@ export const CREATE_LIKE_MUTATION = gql`
         body
       }
       user {
-        name
+        username
       }
+      like
+    }
+  }
+`
+
+export const DELETE_LIKE_MUTATION = gql`
+  mutation deleteLike($id: ID!) {
+    deleteLike(id: $id) {
+      id
+      post {
+        title 
+        body
+      }
+      user {
+        username
+      }
+      like
     }
   }
 `
@@ -97,21 +114,21 @@ export const DELETE_ALL_MESSAGES_MUTATION = gql`
  * Validation Schemas
  */
 export const REGISTER_SCHEMA = Yup.object().shape({
-	username: Yup.string()
-		.min(3)
-		.required('Username is required.'),
-	password: Yup.string()
-		.min(8)
+  username: Yup.string()
+    .min(3)
+    .required('Username is required.'),
+  password: Yup.string()
+    .min(8)
     .required('Password is required.'),
   email: Yup.string()
     .email()
     .required('Email is required'),
   age: Yup.number().required("age is required")
-    
-    
+
+
 })
 
 export const LOGIN_SCHEMA = Yup.object().shape({
-	username: Yup.string().required('Username is required.'),
-	password: Yup.string().required('Password is required.')
+  username: Yup.string().required('Username is required.'),
+  password: Yup.string().required('Password is required.')
 })

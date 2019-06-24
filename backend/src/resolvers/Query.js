@@ -50,7 +50,10 @@ const Query = {
     if (!user)
       throw Error('Not logged in.');
 
-    let myLikes = await db.collection('likes').find({ user: user.id });
+    let myLikes = await db.collection('likes').find({
+      $and: [
+        { user: user.id }, { like: true }]
+    });
     myLikes = await myLikes.toArray();
 
     const myFavoritePosts = myLikes.map(like => {

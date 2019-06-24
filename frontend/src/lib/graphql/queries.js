@@ -16,6 +16,7 @@ export const USERS_QUERY = gql`
           user {
             username
           }
+          like
         }
       }
     }
@@ -35,7 +36,7 @@ query {
       user {
         username
       }
-    
+      like
     }
 }
 }
