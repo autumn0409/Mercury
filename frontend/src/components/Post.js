@@ -2,16 +2,7 @@ import React from 'react';
 import { Mutation, Subscription } from 'react-apollo'
 import { LIKES_SUBSCRIPTION, CREATE_LIKE_MUTATION } from '../lib/graphql'
 
-import {
-  Card,
-  CardHeader,
-  CardFooter,
-  CardBody,
-  ListGroupItem
-} from 'reactstrap'
-
 import './Post.css';
-import Author from './Author';
 
 const ME = "8fd7c19a-98ae-4d3a-aac1-d26b417a665e"; // Andrew
 class Post extends React.Component {
@@ -55,11 +46,11 @@ class Post extends React.Component {
     this.setState({
       likeNum: this.state.likeNum + 1,
     });
-  this.handleDislike = () =>{
+  }
+  handleDislike = () =>{
     this.setState({
       likeNum: this.state.likeNum - 1
     })
-  }
 
     this.createLike({
       variables: {
@@ -68,10 +59,11 @@ class Post extends React.Component {
       }
     });
   }
+  /*
   routeChange = () =>{
     let path = `newPath`;
     this.props.history.push(path);
-  }
+  }*/
 
   render() {
     console.log(this.props.data)

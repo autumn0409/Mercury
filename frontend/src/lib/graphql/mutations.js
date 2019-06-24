@@ -6,21 +6,18 @@ export const CREATE_POST_MUTATION = gql`
     $title: String!
     $body: String!
     $published: Boolean!
-    $authorId: ID!
+    $sub: ID!
   ) {
     createPost(
       data: {
         title: $title
         body: $body
         published: $published
-        author: $authorId
+        sub: $sub
       }
     ) {
       title
       body
-      author {
-        name
-      }
       published
     }
   }

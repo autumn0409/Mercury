@@ -16,13 +16,12 @@ import {
 } from 'reactstrap'
 
 import {
-  USERS_QUERY,
+  SUBS_QUERY,
   CREATE_POST_MUTATION,
   POSTS_SUBSCRIPTION,
 } from '../lib/graphql'
 
 import Author from './Author'
-import Navbar from "../containers/Navbar"
 import classes from '../containers/App/App.module.css'
 
 let unsubscribe = null
@@ -32,42 +31,43 @@ class CreatePost extends Component {
     formTitle: '',
     formBody: '',
     dropdownOpen: false,
-    dropdownAuthor: '',
-    authorList: []
+    dropdownSub: '',
+    subList: []
   }
 
-  setUsers = (users) => {
+  setUsers = (subs) => {
+    console.log("set Subs",subs)
     this.setState({
-      authorList: users.map(user => ({
-        id: user.id,
-        name: user.name,
+      subList: subs.map(sub => ({
+        id: sub.id,
+        name: sub.name,
       }))
     });
   }
 
   nameToId = (name) => {
-    const targetAuthor = this.state.authorList.find(author => {
-      return author.name === name;
+    const targetSub = this.state.subList.find(sub => {
+      return sub.name === name;
     });
-
-    return targetAuthor.id;
+    return targetSub.id;
   }
 
   handleFormSubmit = e => {
     e.preventDefault()
 
-    const { formTitle, formBody, dropdownAuthor } = this.state
+    const { formTitle, formBody, dropdownSub} = this.state
 
-    if (!formTitle || !formBody || !dropdownAuthor) return
-
+    if (!formTitle || !formBody || !dropdownSub) return
     this.createPost({
       variables: {
         title: formTitle,
         body: formBody,
         published: true,
-        authorId: this.nameToId(dropdownAuthor),
+        sub: this.nameToId(dropdownSub)
       }
     })
+
+    console.log(formTitle,formBody,true,this.nameToId(dropdownSub))
 
     this.setState({
       formTitle: '',
@@ -81,47 +81,44 @@ class CreatePost extends Component {
     });
   }
 
-  handleDropdownSelect = (authorName) => {
+  handleDropdownSelect = (subName) => {
     this.setState({
-      dropdownAuthor: authorName,
+      dropdownSub: subName,
       dropdownOpen: false,
     });
   }
 
   render() {
-    const { authorList } = this.state;
-
-    const authorMenu = authorList.map((author, id) => (
+    const { subList } = this.state;
+    const subMenu = subList.map((sub, id) => (
       <DropdownItem
         key={id}
-        onClick={() => { this.handleDropdownSelect(author.name) }}>
-        {author.name}
+        onClick={() => { this.handleDropdownSelect(sub.name) }}>
+        {sub.name}
       </DropdownItem>
     ));
 
     return (
       <Container  >
-
         <Row>
           <Col xs="6" className={classes.form}>
             <Mutation mutation={CREATE_POST_MUTATION}>
               {createPost => {
                 this.createPost = createPost
-
                 return (
                   <Form onSubmit={this.handleFormSubmit}>
-                    <FormGroup row>
-                      <Label for="author" sm={2}>
-                        Author
+                     <FormGroup row>
+                      <Label for="sub" sm={2}>
+                        choose a sub
                       </Label>
                       <Col sm={10}>
                         <ButtonDropdown isOpen={this.state.dropdownOpen} toggle={this.handleDropdownToggle}>
                           <DropdownToggle caret outline>
-                            {this.state.dropdownAuthor === '' ?
-                              'Select an author' : this.state.dropdownAuthor}
+                            {this.state.dropdownSub === '' ?
+                              'Select an sub' : this.state.dropdownSub}
                           </DropdownToggle>
                           <DropdownMenu>
-                            {authorMenu}
+                            {subMenu}
                           </DropdownMenu>
                         </ButtonDropdown>
                       </Col>
@@ -143,7 +140,7 @@ class CreatePost extends Component {
                       </Col>
                     </FormGroup>
                     <FormGroup>
-                      <Label for="body">Body</Label>
+                      <Label for="body">Content:</Label>
                       <Input
                         type="textarea"
                         name="body"
@@ -162,6 +159,46 @@ class CreatePost extends Component {
                 )
               }}
             </Mutation>
+          </Col>
+          <Col>
+          <Query query={SUBS_QUERY} onCompleted={data =>this.setUsers(data.subs)}>
+              {({ loading, error, data, subscribeToMore }) => {
+                if (loading) return <p>Loading...</p>;
+                if (error) return <p>Error :(((</p>;
+     //             console.log("data",data)
+                
+                const authors = data.subs.map((sub) => (
+                  <Author {...sub} key={sub.id} />
+                ))
+
+                if (!unsubscribe)
+                  unsubscribe = subscribeToMore({
+                    document: POSTS_SUBSCRIPTION,
+                    updateQuery: (prev, { subscriptionData }) => {
+                      if (!subscriptionData.data) return prev;
+
+                      const NewPost = subscriptionData.data.post.data;
+
+                      const NewUsers = prev.users.map(user => {
+                        if (user.name === NewPost.author.name) {
+                          return {
+                            ...user,
+                            posts: [NewPost, ...(user.posts)],
+                          };
+                        }
+                        else
+                          return user;
+                      });
+
+                      return {
+                        users: NewUsers,
+                      };
+                    }
+                  })
+
+                return <div></div>
+              }}
+            </Query>
           </Col>
         </Row>
       </Container>
