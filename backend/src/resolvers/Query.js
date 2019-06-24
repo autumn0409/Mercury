@@ -35,6 +35,15 @@ const Query = {
       }).toArray();
   },
 
+  findPostById: async (parent, args, { db }) => {
+    const post = await db.collection('posts').findOne({ id: args.id });
+
+    if (!post)
+      throw Error('Post not found.');
+
+    return post;
+  },
+
   favoritePosts: async (parent, args, { db, request }) => {
     const userId = getUserId(request);
     const user = await db.collection('users').findOne({ id: userId });
