@@ -35,6 +35,22 @@ const Query = {
       }).toArray();
   },
 
+  favoritePosts: async (parent, args, { db, request }) => {
+    const userId = getUserId(request);
+    const user = await db.collection('users').findOne({ id: userId });
+    if (!user)
+      throw Error('Not logged in.');
+
+    let myLikes = await db.collection('likes').find({ user: user.id });
+    myLikes = await myLikes.toArray();
+
+    const myFavoritePosts = myLikes.map(like => {
+      return db.collection('posts').findOne({ id: like.post });
+    })
+
+    return myFavoritePosts;
+  },
+
   comments: (parent, args, { db }, info) => {
     return db.collection('comments').find().toArray();
   },
@@ -44,7 +60,7 @@ const Query = {
   },
 
   me: async (parent, args, { db, request }) => {
-    const id = getUserId(request)
+    const id = getUserId(request);
 
     const me = await db.collection('users').findOne({ id: id });
 

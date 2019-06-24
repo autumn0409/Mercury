@@ -2,6 +2,7 @@ type Query {
   users(query: String): [User!]!
   subs(query: String): [Sub!]!
   posts(query: String): [Post!]!
+  favoritePosts: [Post!]!
   comments: [Comment!]!
   likes: [Like!]!
   me: User!
