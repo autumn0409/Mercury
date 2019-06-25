@@ -38,3 +38,21 @@ export const LIKES_SUBSCRIPTION = gql`
     }
   }
 `
+
+export const COMMENTS_SUBSCRIPTION = gql`
+  subscription comment($postId: ID!) {
+    comment(postId: $postId) {
+      mutation
+      data {
+        id
+        author {
+          username
+        }
+        post {
+          id
+        }
+        text
+      }
+    }
+  }
+`

@@ -7,7 +7,7 @@ import PostPage from '../../containers/PostPage'
 import FrontPage from "../../components/front-page"
 import Register from "../Register/Register"
 import Profile from '../../components/Profile'
-import postContent from '../Post-Content'
+import PostContent from '../Post-Content'
 import { Redirect, BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Login from '../Login/Login'
 import Logout from '../Logout/Logout'
@@ -27,7 +27,7 @@ class App extends Component {
           <Row>
             <Col>
               <Switch>
-                <Route path='/posts/:id' id={":id"} component={postContent} />
+                <Route path='/posts/:id' id={":id"} component={PostContent} />
                 <Route path='/posts' component={PostPage} />
                 <Route path='/createPost' component={CreatePost} />
                 <Route path='/frontPage' component={FrontPage} />
