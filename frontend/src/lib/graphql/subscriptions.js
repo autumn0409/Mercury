@@ -9,10 +9,12 @@ export const POSTS_SUBSCRIPTION = gql`
         title
         body
         author {
+          id
           username
         }
         likes {
           user {
+            id
             username
           }
         }
@@ -28,10 +30,8 @@ export const LIKES_SUBSCRIPTION = gql`
       data {
         id
         user {
-          username
-        }
-        post {
           id
+          username
         }
         like
       }
@@ -46,10 +46,8 @@ export const COMMENTS_SUBSCRIPTION = gql`
       data {
         id
         author {
-          username
-        }
-        post {
           id
+          username
         }
         text
       }
