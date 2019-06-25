@@ -118,7 +118,7 @@ class App extends Component {
             <Col>
               <Switch>
                 
-              <Route path = '/posts/:id' component={postContent}/>
+                <Route path = '/posts/:id' id={":id"} component={postContent}/>
                 <Route path='/posts' component={postPage} />
                 <Route path='/createPost' component={createPost} />
                 <Route path='/frontPage' component={frontPage} />

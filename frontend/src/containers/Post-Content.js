@@ -1,20 +1,62 @@
-import React from 'react';
-import { Jumbotron, Button } from 'reactstrap';
+import React,{Component} from 'react';
+import { Query } from 'react-apollo'
+import {FIND_POST_QUERY,POSTS_SUBSCRIPTION}from '../lib/graphql'
+import{Jumbotron,Button} from 'reactstrap'
+let unsubscribe = null
 
-const Example = (props) => {
-  return (
-    <div>
-      <Jumbotron>
-        <h4 className="display-10">Hello, world!</h4>
-        <p className="lead">This is a simple hero unit, a simple Jumbotron-style component for calling extra attention to featured content or information.</p>
-        <hr className="my-1" />
-        <p>It uses utility classes for typography and spacing to space content out within the larger container.</p>
-        <p className="lead">
-          <Button color="primary">Learn More</Button>
-        </p>
-      </Jumbotron>
-    </div>
-  );
+class Example extends Component{
+  constructor(props){
+    super(props);
+
+  }
+  render(){
+  console.log(this.props.match.params.id)
+      return (
+        <div>
+          <Query 
+          query={FIND_POST_QUERY}
+          variables={{ id:this.props.match.params.id }}>
+              {({ loading, error, data, subscribeToMore }) => {
+                if (loading) return <p>Loading...</p>
+                if (error) return <p>Error :(((</p>
+
+                console.log(data.findPostById)
+                const post = data.findPostById
+                
+
+                if (!unsubscribe)
+                  unsubscribe = subscribeToMore({
+                    document: POSTS_SUBSCRIPTION,
+                    updateQuery: (prev, { subscriptionData }) => {
+                      if (!subscriptionData.data) return prev
+                      const newPost = subscriptionData.data.post.data
+
+                      return {
+                        ...prev,
+                        posts: [newPost, ...prev.posts]
+                      }
+                    }
+                  })
+                return (
+                  <Jumbotron>
+                  <h4 className="display-6">{post.title}</h4>
+                  <small>posted by {post.author.username}</small>
+                  <hr className="my-1" />
+                  <p></p>
+                  <p className="lead">{post.body}</p>
+                  <hr className="my-1" />
+                  <p className="lead">
+                    <Button color="primary">Learn More</Button>
+                  </p>
+                </Jumbotron>
+                )
+              }}
+            </Query>
+         
+        </div>
+      );
+  }
+
 };
 
 export default Example;

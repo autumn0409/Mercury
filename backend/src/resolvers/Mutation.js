@@ -18,12 +18,12 @@ const Mutation = {
 
     const emailTaken = await checkEmailTaken(db, args.data.email);
     if (emailTaken) {
-      throw new Error('Email taken');
+      throw Error('Email taken');
     }
 
     const usernameTaken = await checkUsernameTaken(db, args.data.username);
     if (usernameTaken) {
-      throw new Error('Username taken');
+      throw Error('Username taken');
     }
 
     const password = await hashPassword(args.data.password);
@@ -45,10 +45,10 @@ const Mutation = {
   },
   login: async (parent, args, { db }) => {
     const user = await db.collection('users').findOne({ username: args.data.username })
-    if (!user) throw new Error('Unable to login.')
+    if (!user) throw Error('Unable to login.')
 
     const isMatch = await bcrypt.compare(args.data.password, user.password)
-    if (!isMatch) throw new Error('Invalid credentials.')
+    if (!isMatch) throw Error('Invalid credentials.')
 
     return {
       user,
@@ -106,7 +106,7 @@ const Mutation = {
       const emailTaken = await checkEmailTaken(db, data.email);
 
       if (emailTaken) {
-        throw new Error('Email taken')
+        throw Error('Email taken')
       }
 
       db.collection('users').updateOne({ id: userId }, { $set: { email: data.email } });
@@ -117,7 +117,7 @@ const Mutation = {
       const usernameTaken = await checkUsernameTaken(db, data.username);
 
       if (usernameTaken) {
-        throw new Error('Username taken')
+        throw Error('Username taken')
       }
 
       db.collection('users').updateOne({ id: userId }, { $set: { username: data.username } });
@@ -135,7 +135,7 @@ const Mutation = {
 
     const subExists = await db.collection('subs').findOne({ name: args.data.name });
     if (subExists) {
-      throw new Error('Sub exists')
+      throw Error('Sub exists')
     }
 
     const sub = {
@@ -197,10 +197,10 @@ const Mutation = {
     const post = await db.collection('posts').findOne({ id: args.id });
 
     if (!post) {
-      throw new Error('Post not found');
+      throw Error('Post not found');
     }
     if (post.author !== userId) {
-      throw new Error('No authorization');
+      throw Error('No authorization');
     }
 
     db.collection('posts').deleteOne({ id: args.id });
@@ -238,10 +238,10 @@ const Mutation = {
     const originalPost = { ...post }
 
     if (!post) {
-      throw new Error('Post not found');
+      throw Error('Post not found');
     }
     if (post.author !== userId) {
-      throw new Error('No authorization');
+      throw Error('No authorization');
     }
 
     if (typeof data.title === 'string') {
@@ -294,7 +294,7 @@ const Mutation = {
     const postExists = await checkPostExists(db, args.data.post);
 
     if (!postExists) {
-      throw new Error('Unable to find post');
+      throw Error('Unable to find post');
     }
 
     const comment = {
@@ -331,10 +331,10 @@ const Mutation = {
     const comment = await db.collection('comments').findOne({ id: args.id });
 
     if (!comment) {
-      throw new Error('Comment not found')
+      throw Error('Comment not found')
     }
     if (comment.author !== userId) {
-      throw new Error('No authorization');
+      throw Error('No authorization');
     }
 
     db.collection('comments').deleteOne({ id: args.id });
@@ -359,10 +359,10 @@ const Mutation = {
     const comment = await db.collection('comments').findOne({ id: id });
 
     if (!comment) {
-      throw new Error('Comment not found')
+      throw Error('Comment not found')
     }
     if (comment.author !== userId) {
-      throw new Error('No authorization');
+      throw Error('No authorization');
     }
 
     if (typeof data.text === 'string') {
@@ -389,7 +389,24 @@ const Mutation = {
     const postExists = await checkPostExists(db, args.data.post);
 
     if (!postExists) {
-      throw new Error('Unable to find post');
+      throw Error('Unable to find post');
+    }
+
+    const hasLikedOrDisLiked = await db.collection('likes').findOne({
+      $and: [
+        { user: userId }, { post: args.data.post }]
+    })
+
+    const sameLike = await db.collection('likes').findOne({
+      $and: [
+        { user: userId }, { post: args.data.post }, { like: args.data.like }]
+    })
+
+    if (hasLikedOrDisLiked) {
+      if (sameLike)
+        throw new Error(`Like exists: ${hasLikedOrDisLiked.id}`);
+      else
+        throw new Error(`Change like: ${hasLikedOrDisLiked.id}`);
     }
 
     const like = {
@@ -402,6 +419,7 @@ const Mutation = {
       id: like.id,
       user: like.user,
       post: like.post,
+      like: like.like,
     })
 
     newLikeData.save();
@@ -425,10 +443,10 @@ const Mutation = {
     const like = await db.collection('likes').findOne({ id: args.id });
 
     if (!like) {
-      throw new Error('Like not found')
+      throw Error('Like not found')
     }
     if (like.user !== userId) {
-      throw new Error('No authorization');
+      throw Error('No authorization');
     }
 
     db.collection('likes').deleteOne({ id: args.id });

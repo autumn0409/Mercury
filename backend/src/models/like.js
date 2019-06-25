@@ -13,6 +13,10 @@ const LikeSchema = new Schema({
     post: {
         type: String,
         required: true,
+    },
+    like: {
+        type: Boolean,
+        required: true,
     }
 });
 

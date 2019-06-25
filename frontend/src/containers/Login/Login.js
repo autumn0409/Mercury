@@ -30,7 +30,7 @@ class Login extends Component {
                     // Force a reload of all current queries now that user is
                     // logged in
                     client.cache.reset().then(() => {
-                        history.push('/frontPage')
+                        window.location.reload();
                     })
                 }}
                 onError={error => console.error(error)}

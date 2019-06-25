@@ -99,14 +99,14 @@ class PostPage extends Component {
 
         <Row>
           <Col xs="6">
-          <Query query={POSTS_QUERY}>
+            <Query query={POSTS_QUERY}>
               {({ loading, error, data, subscribeToMore }) => {
                 if (loading) return <p>Loading...</p>
                 if (error) return <p>Error :(((</p>
-                
+
                 console.log(data.posts)
                 const posts = data.posts.map((post, id) => (
-                  <Post data={post} key={id} />
+                  <Post {...post} key={id} />
                 ))
                 if (!unsubscribe)
                   unsubscribe = subscribeToMore({
@@ -121,10 +121,10 @@ class PostPage extends Component {
                       }
                     }
                   })
-                  return (<ul class="list-group list-group-flush" style={{width:"100%"}}>
-                {posts}
+                return (<ul className="list-group list-group-flush" style={{ width: "100%" }}>
+                  {posts}
                 </ul>)
-               // return <ListGroup>{posts}</ListGroup>
+                // return <ListGroup>{posts}</ListGroup>
               }}
             </Query>
           </Col>

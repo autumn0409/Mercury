@@ -1,6 +1,6 @@
 import React from 'react';
+import { withRouter } from 'react-router-dom'
 import withAuthGuard from '../hoc/AuthGuard/AuthGuard'
-//'../../hoc/AuthGuard/AuthGuard'
 
 import {
   Collapse,
@@ -32,18 +32,20 @@ class Navigation extends React.Component {
     });
   }
   render() {
+    const { isAuth, history } = this.props;
+
     return (
       <div>
         <Navbar color="light" light expand="md">
-          <NavbarBrand href="/frontPage">Reddit Clone</NavbarBrand>
+          <NavbarBrand onClick={() => history.push("/frontPage")}>Reddit Clone</NavbarBrand>
           <NavbarToggler onClick={this.toggle} />
           <Collapse isOpen={this.state.isOpen} navbar>
             <Nav className="ml-auto" navbar>
               <NavItem>
-                <NavLink href="/createPost/">Post Something!</NavLink>
+                <NavLink onClick={() => history.push("/createPost/")}>Post Something!</NavLink>
               </NavItem>
               <NavItem>
-                <NavLink href="/posts/">What's new?</NavLink>
+                <NavLink onClick={() => history.push("/posts/")}>What's new?</NavLink>
               </NavItem>
 
               <UncontrolledDropdown nav inNavbar>
@@ -51,24 +53,34 @@ class Navigation extends React.Component {
                   Settings
                 </DropdownToggle>
                 <DropdownMenu right>
-                  <DropdownItem>
-                      <NavLink href="/register">Register</NavLink>
-                  </DropdownItem>
-                  <DropdownItem>
-                      <NavLink href="/login">Login</NavLink>
-                  </DropdownItem>
-                  <DropdownItem>
-                    <NavItem>
-                      <NavLink href="/myProfile">My Profile</NavLink>
-                    </NavItem>
-                  </DropdownItem>
-                  <DropdownItem>
-                    My Posts
-                  </DropdownItem>
-                  <DropdownItem divider />
-                  <DropdownItem>
-                    Favorites
-                  </DropdownItem>
+
+                  {
+                    isAuth ? (
+                      <React.Fragment>
+                        <DropdownItem>
+                          <NavLink onClick={() => history.push("/myProfile")}>My Profile</NavLink>
+                        </DropdownItem>
+                        <DropdownItem>
+                          My Posts
+                        </DropdownItem>
+                        <DropdownItem>
+                          Favorites
+                        </DropdownItem>
+                        <DropdownItem divider />
+                        <DropdownItem>
+                          <NavLink onClick={() => history.push('/logout')}>Logout</NavLink>
+                        </DropdownItem>
+                      </React.Fragment>
+                    ) : (
+                        <React.Fragment>
+                          <DropdownItem>
+                            <NavLink onClick={() => history.push("/login")}>Login</NavLink>
+                          </DropdownItem>
+                          <DropdownItem>
+                            <NavLink onClick={() => history.push("/register")}>Register</NavLink>
+                          </DropdownItem>
+                        </React.Fragment>
+                      )}
                 </DropdownMenu>
               </UncontrolledDropdown>
             </Nav>
@@ -79,4 +91,4 @@ class Navigation extends React.Component {
   }
 }
 
-export default withAuthGuard(Navigation)
+export default withAuthGuard(withRouter(Navigation))
