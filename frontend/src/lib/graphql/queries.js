@@ -62,3 +62,23 @@ export const SUBS_QUERY = gql`
     }
   }
 `
+
+export const FIND_POST_QUERY = gql`
+query findPostById($id:ID!){
+  findPostById(
+    id:$id
+  )
+    {
+    title
+    author{username}
+    body
+    likes{
+      like
+      user{username}
+    }
+    comments{
+      id
+    }
+  }
+}
+`

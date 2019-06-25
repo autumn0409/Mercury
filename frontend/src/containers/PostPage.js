@@ -98,7 +98,6 @@ class PostPage extends Component {
       <Container  >
 
         <Row>
-
           <Col xs="6">
             <Query query={POSTS_QUERY}>
               {({ loading, error, data, subscribeToMore }) => {
