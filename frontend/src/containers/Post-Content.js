@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { Query } from 'react-apollo'
-import { FIND_POST_QUERY, COMMENTS_SUBSCRIPTION } from '../lib/graphql'
+import { FIND_POST_QUERY, COMMENTS_SUBSCRIPTION, LIKES_SUBSCRIPTION } from '../lib/graphql'
 import { Jumbotron, Button } from 'reactstrap'
-let unsubscribe = null
+let unsubscribeComments = null;
+let unsubscribeLikes = null;
 
 class Example extends Component {
 
@@ -19,10 +20,9 @@ class Example extends Component {
             if (error) return <p>Error :(((</p>
 
             const post = data.findPostById;
-            console.log(post);
 
-            if (!unsubscribe)
-              unsubscribe = subscribeToMore({
+            if (!unsubscribeComments)
+              unsubscribeComments = subscribeToMore({
                 document: COMMENTS_SUBSCRIPTION,
                 variables: { postId: id },
                 updateQuery: (prev, { subscriptionData }) => {
@@ -69,6 +69,43 @@ class Example extends Component {
                       findPostById: {
                         ...originalPost,
                         comments: updatedComments,
+                      }
+                    }
+                  }
+                }
+              })
+
+            if (!unsubscribeLikes)
+              unsubscribeLikes = subscribeToMore({
+                document: LIKES_SUBSCRIPTION,
+                variables: { postId: id },
+                updateQuery: (prev, { subscriptionData }) => {
+                  if (!subscriptionData.data) return prev;
+
+                  const { mutation, data } = subscriptionData.data.like;
+                  const originalPost = prev.findPostById;
+
+                  if (mutation === "CREATED") {
+                    const newLike = data;
+
+                    return {
+                      findPostById: {
+                        ...originalPost,
+                        likes: [...originalPost.likes, newLike],
+                      }
+                    }
+                  }
+
+                  else {
+                    const deletedLike = data;
+                    const updatedLikes = originalPost.likes.filter(like => {
+                      return like.id !== deletedLike.id;
+                    });
+
+                    return {
+                      findPostById: {
+                        ...originalPost,
+                        likes: updatedLikes,
                       }
                     }
                   }

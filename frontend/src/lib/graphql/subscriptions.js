@@ -26,8 +26,8 @@ export const LIKES_SUBSCRIPTION = gql`
     like(postId: $postId) {
       mutation
       data {
+        id
         user {
-          id
           username
         }
         post {
