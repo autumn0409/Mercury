@@ -66,7 +66,8 @@ class Post extends React.Component {
   }*/
 
   render() {
-    console.log(this.props.data)
+    console.log("my id",this.props)
+    
     const { id, title, body } = this.props.data;
     const username = this.props.data.author.username
     return (

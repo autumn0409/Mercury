@@ -109,7 +109,7 @@ class CreatePost extends Component {
                   <Form onSubmit={this.handleFormSubmit}>
                      <FormGroup row>
                       <Label for="sub" sm={2}>
-                        choose a sub
+                        Sub
                       </Label>
                       <Col sm={10}>
                         <ButtonDropdown isOpen={this.state.dropdownOpen} toggle={this.handleDropdownToggle}>

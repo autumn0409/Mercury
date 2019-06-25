@@ -7,6 +7,7 @@ import postPage from '../../containers/PostPage'
 import frontPage from "../../components/front-page"
 import RegisterPage from "../Register/Register"
 import Profile from '../../components/Profile'
+import postContent from '../Post-Content'
 import { Redirect, BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
 import Login from '../Login/Login'
 
@@ -116,13 +117,16 @@ class App extends Component {
           <Row>
             <Col>
               <Switch>
+                
+              <Route path = '/posts/:id' component={postContent}/>
                 <Route path='/posts' component={postPage} />
                 <Route path='/createPost' component={createPost} />
                 <Route path='/frontPage' component={frontPage} />
                 <Route path='/login' component={Login} />
                 <Route path='/register' component={RegisterPage} />
                 <Route path='/myProfile' component={Profile} />
-  
+                <Redirect from="/" to='frontPage'/>
+                
               </Switch>
             </Col>
           </Row>
