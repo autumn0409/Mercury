@@ -1,4 +1,5 @@
 import React from 'react';
+import { NavLink } from 'react-router-dom'
 import { Mutation, Subscription } from 'react-apollo'
 import { LIKES_SUBSCRIPTION, CREATE_LIKE_MUTATION, DELETE_LIKE_MUTATION } from '../lib/graphql'
 
@@ -126,12 +127,6 @@ class Post extends React.Component {
     })
   }
 
-  /*
-  routeChange = () =>{
-    let path = `newPath`;
-    this.props.history.push(path);
-  }*/
-
   render() {
     const { id, title, body, author } = this.props;
     const username = author.username;
@@ -139,9 +134,9 @@ class Post extends React.Component {
       <div>
         <div className="list-group-item list-group-item-action" style={{ width: "210%" }}>
           <div >
-            <a className=" list-group-item-action" href={id}>
+            <NavLink className=" list-group-item-action" to={id}>
               <h5 className="mb-1">{title}</h5>
-            </a>
+            </NavLink>
 
             <small className="text-muted">posted by {username}</small>
           </div>
