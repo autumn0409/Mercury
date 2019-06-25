@@ -9,7 +9,7 @@ import RegisterPage from "../Register/Register"
 import Profile from '../../components/Profile'
 import { Redirect, BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
 import Login from '../Login/Login'
-
+import Logout from '../Logout/Logout'
 
 /*
 import {
@@ -120,9 +120,10 @@ class App extends Component {
                 <Route path='/createPost' component={createPost} />
                 <Route path='/frontPage' component={frontPage} />
                 <Route path='/login' component={Login} />
+                <Route path='/logout' component={Logout} />
                 <Route path='/register' component={RegisterPage} />
                 <Route path='/myProfile' component={Profile} />
-  
+
               </Switch>
             </Col>
           </Row>
