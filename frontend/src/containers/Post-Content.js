@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Query } from 'react-apollo'
 import { FIND_POST_QUERY, COMMENTS_SUBSCRIPTION, LIKES_SUBSCRIPTION } from '../lib/graphql'
 import { Jumbotron, Button } from 'reactstrap'
-import Comments from '../components/Comments'
+import CommentList from './CommentList/CommentList'
 
 let unsubscribeComments = null;
 let unsubscribeLikes = null;
@@ -127,7 +127,7 @@ class Example extends Component {
                   <Button color="primary">Learn More</Button>
                 </p>
               </Jumbotron>
-              <Comments comments={post.comments} />
+              <CommentList comments={post.comments} />
             </React.Fragment>
           )
         }}

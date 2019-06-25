@@ -1,6 +1,6 @@
 import React from 'react';
 
-class Comments extends React.Component {
+class CommentList extends React.Component {
 
     render() {
         const { comments } = this.props;
@@ -17,4 +17,4 @@ class Comments extends React.Component {
     }
 }
 
-export default Comments;
+export default CommentList;
