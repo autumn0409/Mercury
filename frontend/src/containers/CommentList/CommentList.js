@@ -1,5 +1,6 @@
 import React from 'react';
 
+import Comment from '../../components/Comment'
 class CommentList extends React.Component {
 
     render() {
@@ -7,12 +8,13 @@ class CommentList extends React.Component {
 
         const commentList = comments.map(comment => {
             return (
-                <div>
-                    {comment.author.username}: {comment.text}
-                </div>
+                <Comment
+                    username={comment.author.username}
+                    text={comment.text}
+                    key={comment.id}
+                />
             )
         })
-
         return commentList;
     }
 }
