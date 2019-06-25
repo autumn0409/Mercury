@@ -2,10 +2,10 @@
 import React, { Component } from 'react'
 
 import Navbar from "../../containers/Navbar"
-import createPost from '../../components/create-post-page'
-import postPage from '../../containers/PostPage'
-import frontPage from "../../components/front-page"
-import RegisterPage from "../Register/Register"
+import CreatePost from '../../components/create-post-page'
+import PostPage from '../../containers/PostPage'
+import FrontPage from "../../components/front-page"
+import Register from "../Register/Register"
 import Profile from '../../components/Profile'
 import postContent from '../Post-Content'
 import { Redirect, BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
@@ -25,10 +25,8 @@ import {
   Container,
   Row,
   Col,
-
   DropdownItem
 } from 'reactstrap'
-
 
 //let unsubscribe = null
 
@@ -113,17 +111,17 @@ class App extends Component {
 
       <Container>
         <Router>
-          <Navbar></Navbar>
+          <Navbar />
           <Row>
             <Col>
-              <Switch>
-                
+              <Switch>             
                 <Route path = '/posts/:id' id={":id"} component={postContent}/>
-                <Route path='/posts' component={postPage} />
-                <Route path='/createPost' component={createPost} />
-                <Route path='/frontPage' component={frontPage} />
+                <Route path='/posts' component={PostPage} />
+                <Route path='/createPost' component={CreatePost} />
+                <Route path='/frontPage' component={FrontPage} />
                 <Route path='/login' component={Login} />
-                <Route path='/register' component={RegisterPage} />
+                <Route path='/logout' component={Logout} />
+                <Route path='/register' component={Register} />
                 <Route path='/myProfile' component={Profile} />
                 <Redirect from="/" to='frontPage'/>
                 
