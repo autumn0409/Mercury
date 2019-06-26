@@ -1,5 +1,5 @@
-
 import React, { Component } from 'react'
+import { Redirect, BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 import Navbar from "../../containers/Navbar"
 import CreatePost from '../../components/create-post-page'
@@ -7,10 +7,11 @@ import PostPage from '../../containers/PostPage'
 import FrontPage from "../../components/front-page"
 import Register from "../Register/Register"
 import Profile from '../../components/Profile'
-import PostContent from '../Post-Content'
-import { Redirect, BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import Login from '../Login/Login'
+import Subs from '../../components/Subs'
+import SubPage from '../../containers/SubPage'
 import Logout from '../Logout/Logout'
+import Login from '../Login/Login'
+import PostContent from '../Post-Content'
 
 import {
   Container,
@@ -23,7 +24,11 @@ class App extends Component {
     return (
       <Container>
         <Router>
-          <Navbar />
+        <div style={{display:"flex"}}>
+            <Subs style={{background:"black",align:"left",float:"left"}}></Subs>
+             <Navbar></Navbar>
+          </div>
+         
           <Row>
             <Col>
               <Switch>
@@ -35,8 +40,8 @@ class App extends Component {
                 <Route path='/logout' component={Logout} />
                 <Route path='/register' component={Register} />
                 <Route path='/myProfile' component={Profile} />
-                <Redirect from="/" to='frontPage' />
-
+                <Route path='/sub/:id' name={":id"} component={SubPage} />             
+                <Redirect from="/" to='frontPage'/>           
               </Switch>
             </Col>
           </Row>
