@@ -2,21 +2,50 @@ import React, { Component } from 'react';
 import { Query, Mutation } from 'react-apollo'
 import {
   FIND_POST_QUERY,
+  CREATE_COMMENT_MUTATION,
   CREATE_LIKE_MUTATION,
   DELETE_LIKE_MUTATION,
   COMMENTS_SUBSCRIPTION,
   LIKES_SUBSCRIPTION
 } from '../lib/graphql'
-import { Jumbotron } from 'reactstrap'
+import { Jumbotron, Input, Button } from 'reactstrap'
 import CommentList from './CommentList/CommentList'
 
 let unsubscribeComments;
 let unsubscribeLikes;
 
 class Example extends Component {
+  constructor(props) {
+    super(props);
+    this.inputEl = null;
+    this.state = {
+      inputText: ""
+    }
+  }
+
   componentWillMount = () => {
     unsubscribeComments = null;
     unsubscribeLikes = null;
+  }
+
+  handleInputChange = (e) => {
+    this.setState({
+      inputText: e.target.value
+    })
+  }
+
+  handleCreateComment = () => {
+    const { postId } = this.props.match.params;
+    this.createComment({
+      variables: {
+        text: this.state.inputText,
+        post: postId,
+      }
+    }).then(() => {
+      this.setState({
+        inputText: ""
+      })
+    })
   }
 
   handleLike = () => {
@@ -222,11 +251,29 @@ class Example extends Component {
                     {dislikeNum}
                   </p>
                 </Jumbotron>
+                <div className='d-flex flex-column'>
+                  <Input
+                    type='textarea'
+                    placeholder="Write down your comment:"
+                    innerRef={el => { this.inputEl = el }}
+                    value={this.state.inputText}
+                    onChange={this.handleInputChange}
+                  />
+                  <Button
+                    className='align-self-end'
+                    onClick={this.handleCreateComment}>Send</Button>
+                </div>
                 <CommentList comments={post.comments} />
               </React.Fragment>
             )
           }}
         </Query>
+        <Mutation mutation={CREATE_COMMENT_MUTATION}>
+          {createComment => {
+            this.createComment = createComment;
+            return null;
+          }}
+        </Mutation>
         <Mutation mutation={CREATE_LIKE_MUTATION}>
           {createLike => {
             this.createLike = createLike;

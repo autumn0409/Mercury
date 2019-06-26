@@ -70,6 +70,30 @@ export const DELETE_LIKE_MUTATION = gql`
   }
 `
 
+export const CREATE_COMMENT_MUTATION = gql`
+  mutation createComment(
+    $text: String!
+    $post: ID!
+    ) {
+    createComment(data: {
+      text: $text,
+      post: $post
+    }) {
+      id
+      post {
+        id
+        title 
+        body
+      }
+      author {
+        id
+        username
+      }
+      text
+    }
+  }
+`
+
 export const DELETE_COMMENT_MUTATION = gql`
   mutation deleteComment($id: ID!) {
     deleteComment(id: $id) {
