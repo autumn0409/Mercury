@@ -83,6 +83,29 @@ export const DELETE_COMMENT_MUTATION = gql`
         id
         username
       }
+      text
+    }
+  }
+`
+
+export const EDIT_COMMENT_MUTATION = gql`
+  mutation editComment($id: ID!, $text: String) {
+    updateComment(
+      id: $id, 
+      data: {
+        text: $text
+      }) {
+      id
+      post {
+        id
+        title 
+        body
+      }
+      author {
+        id
+        username
+      }
+      text
     }
   }
 `
