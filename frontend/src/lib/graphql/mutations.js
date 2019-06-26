@@ -70,6 +70,111 @@ export const DELETE_LIKE_MUTATION = gql`
   }
 `
 
+export const CREATE_COMMENT_MUTATION = gql`
+  mutation createComment(
+    $text: String!
+    $post: ID!
+    ) {
+    createComment(data: {
+      text: $text,
+      post: $post
+    }) {
+      id
+      post {
+        id
+        title 
+        body
+      }
+      author {
+        id
+        username
+      }
+      text
+    }
+  }
+`
+
+export const DELETE_COMMENT_MUTATION = gql`
+  mutation deleteComment($id: ID!) {
+    deleteComment(id: $id) {
+      id
+      post {
+        id
+        title 
+        body
+      }
+      author {
+        id
+        username
+      }
+      text
+    }
+  }
+`
+
+export const EDIT_COMMENT_MUTATION = gql`
+  mutation editComment($id: ID!, $text: String) {
+    updateComment(
+      id: $id, 
+      data: {
+        text: $text
+      }) {
+      id
+      post {
+        id
+        title 
+        body
+      }
+      author {
+        id
+        username
+      }
+      text
+    }
+  }
+`
+
+export const CREATE_COMMENTVOTE_MUTATION = gql`
+  mutation createCommentVote(
+    $comment: ID!
+    $like: Boolean!
+  ) {
+    createCommentVote(
+      data: {
+        comment: $comment
+        like: $like
+      }
+    ) {
+      id
+      comment {
+        id
+        text
+      }
+      user {
+        id
+        username
+      }
+      like
+    }
+  }
+`
+
+export const DELETE_COMMENTVOTE_MUTATION = gql`
+  mutation deleteCommentVote($id: ID!) {
+    deleteCommentVote(id: $id) {
+      id
+      comment {
+        id
+        text
+      }
+      user {
+        id
+        username
+      }
+      like
+    }
+  }
+`
 
 
 /**

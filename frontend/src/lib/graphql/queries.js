@@ -65,10 +65,17 @@ export const SUBS_QUERY = gql`
       posts{
         id
         title 
-        author{username}
+        author{
+          id
+          username
+        }
         body
         likes{
-          user{username}
+          id
+          user{
+            id
+            username
+          }
           like
         }
       }
@@ -103,6 +110,14 @@ query findPostById($id: ID!){
         username
       }
       text
+      commentVotes {
+        id
+        like
+        user {
+          id
+          username
+        }
+      }
     }
   }
 }

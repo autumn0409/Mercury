@@ -50,6 +50,30 @@ export const COMMENTS_SUBSCRIPTION = gql`
           username
         }
         text
+        commentVotes {
+          id
+          like
+          user {
+            id
+            username
+          }
+        }
+      }
+    }
+  }
+`
+
+export const COMMENTVOTES_SUBSCRIPTION = gql`
+  subscription commentVote($commentId: ID!) {
+    commentVote(commentId: $commentId) {
+      mutation
+      data {
+        id
+        user {
+          id
+          username
+        }
+        like
       }
     }
   }

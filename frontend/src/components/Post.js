@@ -132,18 +132,22 @@ class Post extends React.Component {
   }
 
   render() {
-    const { id, title, body, author ,subName} = this.props;
-    console.log("thisProps",this.props)
+    const { id, title, body, author, subName } = this.props;
+    console.log("thisProps", this.props)
     const username = author.username;
     return (
       <div>
         <div className="list-group-item list-group-item-action" style={{ width: "210%" }}>
           <div >
 <<<<<<< HEAD
+<<<<<<< HEAD
             <a className=" list-group-item-action" href={subName+"/"+id}>
 =======
             <NavLink className=" list-group-item-action" to={id}>
 >>>>>>> 1793d69163179db6bfb62d7a28f0080d0a5e0c8e
+=======
+            <NavLink className=" list-group-item-action" to={subName + "/" + id}>
+>>>>>>> 1911c9c83251dd48cd243c0c5e768ad9122b2241
               <h5 className="mb-1">{title}</h5>
             </NavLink>
 

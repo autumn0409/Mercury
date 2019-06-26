@@ -1,23 +1,17 @@
 import React, { Component } from 'react'
-import { Query, Mutation } from 'react-apollo'
+import { Query } from 'react-apollo'
 import {
   Container,
   Row,
   Col,
-  DropdownItem,
-  ListGroup
 } from 'reactstrap'
 
 import {
-  POSTS_QUERY,
   SUBS_QUERY,
   POSTS_SUBSCRIPTION,
 } from '../lib/graphql'
 
 import Post from '../components/Post'
-import Author from '../components/Author'
-import Navbar from "../containers/Navbar"
-import classes from '../containers/App/App.module.css'
 
 let unsubscribe = null
 
@@ -83,34 +77,23 @@ class SubPage extends Component {
   }
 
   render() {
-    const { authorList } = this.state;
-
-    const authorMenu = authorList.map((author, id) => (
-      <DropdownItem
-        key={id}
-        onClick={() => { this.handleDropdownSelect(author.name) }}>
-        {author.name}
-      </DropdownItem>
-    ));
-
     return (
       <Container  >
-
         <Row>
           <Col xs="6">
-            <Query query={SUBS_QUERY}>
+            <Query query={SUBS_QUERY} fetchPolicy={"cache-and-network"}>
               {({ loading, error, data, subscribeToMore }) => {
                 if (loading) return <p>Loading...</p>
                 if (error) return <p>Error :(((</p>
 
-                const subName = this.props.match.params.id;
+                const subName = this.props.match.params.subName;
                 let sub_object;
-                data.subs.map(sub=>{
+                data.subs.map(sub => {
                   console.log(sub.name, subName)
-                  if(sub.name == subName)
-                  sub_object = sub 
-    
-                  })
+                  if (sub.name === subName)
+                    sub_object = sub
+                  return null;
+                })
 
                 console.log(sub_object)
                 const posts = sub_object.posts.map((post, id) => (
@@ -130,7 +113,7 @@ class SubPage extends Component {
                     }
                   })
                 return (<ul className="list-group list-group-flush" style={{ width: "100%" }}>
-                 {posts}
+                  {posts}
                 </ul>)
                 // return <ListGroup>{posts}</ListGroup>
               }}

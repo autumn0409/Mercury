@@ -12,6 +12,8 @@ class CommentList extends React.Component {
                     username={comment.author.username}
                     text={comment.text}
                     key={comment.id}
+                    id={comment.id}
+                    commentVotes={comment.commentVotes}
                 />
             )
         })

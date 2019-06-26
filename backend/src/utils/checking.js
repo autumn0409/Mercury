@@ -31,3 +31,14 @@ export const checkPostExists = (db, post) => {
         });
     })
 }
+
+export const checkCommentExists = (db, comment) => {
+    return new Promise((resolve, reject) => {
+        db.collection('comments').findOne({ id: comment }, (err, result) => {
+            if (err)
+                throw err;
+            else
+                resolve(result !== null);
+        });
+    })
+}
