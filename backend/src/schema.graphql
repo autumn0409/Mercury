@@ -27,11 +27,15 @@ type Mutation {
 
   createLike(data: CreateLikeInput!): Like!
   deleteLike(id: ID!): Like!
+
+  createCommentVote(data: CreateCommentVoteInput!): CommentVote!
+  deleteCommentVote(id: ID!): CommentVote!
 }
 
 type Subscription {
   comment(postId: ID!): CommentSubscriptionPayload!
   like(postId: ID!): LikeSubscriptionPayload!
+  commentVote(commentId: ID!): CommentVoteSubscriptionPayload!
   post: PostSubscriptionPayload!
 }
 
@@ -84,6 +88,11 @@ input CreateLikeInput {
   like: Boolean!
 }
 
+input CreateCommentVoteInput {
+  comment: ID!
+  like: Boolean!
+}
+
 type User {
   id: ID!
   username: String!
@@ -124,6 +133,13 @@ type Like {
   like: Boolean!
 }
 
+type CommentVote {
+  id: ID!
+  user: User!
+  comment: Comment!
+  like: Boolean!
+}
+
 type AuthPayload {
 	token: String!
 	user: User!
@@ -148,4 +164,9 @@ type CommentSubscriptionPayload {
 type LikeSubscriptionPayload {
   mutation: MutationType!
   data: Like!
+}
+
+type CommentVoteSubscriptionPayload {
+  mutation: MutationType!
+  data: CommentVote!
 }

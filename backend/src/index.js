@@ -7,6 +7,7 @@ import Sub from './resolvers/Sub'
 import Post from './resolvers/Post'
 import Comment from './resolvers/Comment'
 import Like from './resolvers/Like'
+import CommentVote from './resolvers/CommentVote'
 
 import mongoose from 'mongoose';
 
@@ -38,6 +39,7 @@ const server = new GraphQLServer({
     Post,
     Comment,
     Like,
+    CommentVote,
   },
   context(request) {
     return {

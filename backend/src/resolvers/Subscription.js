@@ -1,4 +1,4 @@
-import { checkPostExists } from '../utils/checking';
+import { checkPostExists, checkCommentExists } from '../utils/checking';
 
 const Subscription = {
   comment: {
@@ -21,6 +21,17 @@ const Subscription = {
       }
 
       return pubsub.asyncIterator(`like ${postId}`)
+    }
+  },
+  commentVote: {
+    async subscribe(parent, { commentId }, { db, pubsub }, info) {
+      const comment = await checkCommentExists(db, commentId);
+
+      if (!comment) {
+        throw new Error('Comment not found')
+      }
+
+      return pubsub.asyncIterator(`commentVote ${commentId}`)
     }
   },
   post: {

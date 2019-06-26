@@ -6,12 +6,13 @@ import Sub from '../models/sub';
 import Post from '../models/post';
 import Comment from '../models/comment';
 import Like from '../models/like';
+import CommentVote from '../models/commentVote';
 
 import hashPassword from '../utils/hashPassword'
 import generateToken from '../utils/generateToken'
 import getUserId from '../utils/getUserId'
 
-import { checkPostExists, checkEmailTaken, checkUsernameTaken } from '../utils/checking';
+import { checkPostExists, checkCommentExists, checkEmailTaken, checkUsernameTaken } from '../utils/checking';
 
 const Mutation = {
   createUser: async (parent, args, { db }, info) => {
@@ -459,6 +460,88 @@ const Mutation = {
     })
 
     return like;
+  },
+
+  createCommentVote: async (parent, args, { db, pubsub, request }, info) => {
+
+    const userId = getUserId(request);
+    const user = await User.findOne({ id: userId });
+    if (!user)
+      throw Error('Not logged in.');;
+
+    const commentExists = await checkCommentExists(db, args.data.comment);
+
+    if (!commentExists) {
+      throw Error('Unable to find comment');
+    }
+
+    const hasUpVoteOrDownVote = await db.collection('commentVotes').findOne({
+      $and: [
+        { user: userId }, { comment: args.data.comment }]
+    })
+
+    const sameVote = await db.collection('commentVotes').findOne({
+      $and: [
+        { user: userId }, { comment: args.data.comment }, { like: args.data.like }]
+    })
+
+    if (hasUpVoteOrDownVote) {
+      if (sameVote)
+        throw new Error(`CommentVote exists: ${hasUpVoteOrDownVote.id}`);
+      else
+        throw new Error(`Change commentVote: ${hasUpVoteOrDownVote.id}`);
+    }
+
+    const commentVote = {
+      id: uuidv4(),
+      user: userId,
+      ...args.data
+    }
+
+    const newCommentVoteData = new CommentVote({
+      id: commentVote.id,
+      user: commentVote.user,
+      comment: commentVote.comment,
+      like: commentVote.like,
+    })
+
+    newCommentVoteData.save();
+
+    pubsub.publish(`commentVote ${args.data.comment}`, {
+      commentVote: {
+        mutation: 'CREATED',
+        data: commentVote
+      }
+    });
+
+    return commentVote;
+  },
+  deleteCommentVote: async (parent, args, { db, pubsub, request }, info) => {
+
+    const userId = getUserId(request);
+    const user = await User.findOne({ id: userId });
+    if (!user)
+      throw Error('Not logged in.');
+
+    const commentVote = await db.collection('commentvotes').findOne({ id: args.id });
+
+    if (!commentVote) {
+      throw Error('CommentVote not found')
+    }
+    if (commentVote.user !== userId) {
+      throw Error('No authorization');
+    }
+
+    db.collection('commentvotes').deleteOne({ id: args.id });
+
+    pubsub.publish(`commentVote ${commentVote.comment}`, {
+      commentVote: {
+        mutation: 'DELETED',
+        data: commentVote
+      }
+    })
+
+    return commentVote;
   },
 }
 
