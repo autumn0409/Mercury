@@ -127,7 +127,8 @@ class Example extends Component {
       <React.Fragment>
         <Query
           query={FIND_POST_QUERY}
-          variables={{ id: postId }}>
+          variables={{ id: postId }}
+          fetchPolicy={"cache-and-network"}>
           {({ loading, error, data, subscribeToMore }) => {
             if (loading) return <p>Loading...</p>
             if (error) return <p>Error :(((</p>

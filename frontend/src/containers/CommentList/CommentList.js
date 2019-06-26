@@ -13,6 +13,7 @@ class CommentList extends React.Component {
                     text={comment.text}
                     key={comment.id}
                     id={comment.id}
+                    commentVotes={comment.commentVotes}
                 />
             )
         })

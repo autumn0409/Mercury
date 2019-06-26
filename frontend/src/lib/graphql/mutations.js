@@ -134,6 +134,48 @@ export const EDIT_COMMENT_MUTATION = gql`
   }
 `
 
+export const CREATE_COMMENTVOTE_MUTATION = gql`
+  mutation createCommentVote(
+    $comment: ID!
+    $like: Boolean!
+  ) {
+    createCommentVote(
+      data: {
+        comment: $comment
+        like: $like
+      }
+    ) {
+      id
+      comment {
+        id
+        text
+      }
+      user {
+        id
+        username
+      }
+      like
+    }
+  }
+`
+
+export const DELETE_COMMENTVOTE_MUTATION = gql`
+  mutation deleteCommentVote($id: ID!) {
+    deleteCommentVote(id: $id) {
+      id
+      comment {
+        id
+        text
+      }
+      user {
+        id
+        username
+      }
+      like
+    }
+  }
+`
+
 
 /**
  * Mutations

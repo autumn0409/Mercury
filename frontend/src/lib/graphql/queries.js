@@ -110,6 +110,14 @@ query findPostById($id: ID!){
         username
       }
       text
+      commentVotes {
+        id
+        like
+        user {
+          id
+          username
+        }
+      }
     }
   }
 }

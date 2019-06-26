@@ -56,45 +56,45 @@ const Mutation = {
       token: generateToken(user.id)
     }
   },
-  deleteUser: async (parent, args, { db, request }, info) => {
-    const userId = getUserId(request);
-    const user = await User.findOne({ id: userId });
-    if (!user)
-      throw Error('Not logged in.');
+  // deleteUser: async (parent, args, { db, request }, info) => {
+  //   const userId = getUserId(request);
+  //   const user = await User.findOne({ id: userId });
+  //   if (!user)
+  //     throw Error('Not logged in.');
 
-    while (true) {
-      const deleteResult = await db.collection('posts').findOneAndDelete({ author: userId });
-      const deletedPost = deleteResult.value;
+  //   while (true) {
+  //     const deleteResult = await db.collection('posts').findOneAndDelete({ author: userId });
+  //     const deletedPost = deleteResult.value;
 
-      if (deletedPost === null) {
-        break;
-      } else {
-        db.collection('comments').deleteMany({ post: deletedPost.id }, (err, result) => {
-          if (err)
-            throw err;
-        })
+  //     if (deletedPost === null) {
+  //       break;
+  //     } else {
+  //       db.collection('comments').deleteMany({ post: deletedPost.id }, (err, result) => {
+  //         if (err)
+  //           throw err;
+  //       })
 
-        db.collection('likes').deleteMany({ post: deletedPost.id }, (err, result) => {
-          if (err)
-            throw err;
-        })
-      }
-    }
+  //       db.collection('likes').deleteMany({ post: deletedPost.id }, (err, result) => {
+  //         if (err)
+  //           throw err;
+  //       })
+  //     }
+  //   }
 
-    db.collection('comments').deleteMany({ author: userId }, (err, result) => {
-      if (err)
-        throw err;
-    })
+  //   db.collection('comments').deleteMany({ author: userId }, (err, result) => {
+  //     if (err)
+  //       throw err;
+  //   })
 
-    db.collection('likes').deleteMany({ user: userId }, (err, result) => {
-      if (err)
-        throw err;
-    })
+  //   db.collection('likes').deleteMany({ user: userId }, (err, result) => {
+  //     if (err)
+  //       throw err;
+  //   })
 
-    db.collection('users').deleteOne({ id: userId });
+  //   db.collection('users').deleteOne({ id: userId });
 
-    return user;
-  },
+  //   return user;
+  // },
   updateUser: async (parent, args, { db, request }, info) => {
     const { data } = args;
 
@@ -204,12 +204,21 @@ const Mutation = {
       throw Error('No authorization');
     }
 
-    db.collection('posts').deleteOne({ id: args.id });
+    while (true) {
+      const deleteResult = await db.collection('comments').findOneAndDelete({ post: args.id });
+      const deletedComment = deleteResult.value;
 
-    db.collection('comments').deleteMany({ post: args.id }, (err, result) => {
-      if (err)
-        throw err;
-    })
+      if (deletedComment === null) {
+        break;
+      } else {
+        db.collection('commentvotes').deleteMany({ comment: deletedComment.id }, (err, result) => {
+          if (err)
+            throw err;
+        })
+      }
+    }
+
+    db.collection('posts').deleteOne({ id: args.id });
 
     db.collection('likes').deleteMany({ post: args.id }, (err, result) => {
       if (err)
@@ -337,6 +346,11 @@ const Mutation = {
     if (comment.author !== userId) {
       throw Error('No authorization');
     }
+
+    db.collection('commentvotes').deleteMany({ comment: args.id }, (err, result) => {
+      if (err)
+        throw err;
+    })
 
     db.collection('comments').deleteOne({ id: args.id });
 
@@ -475,12 +489,12 @@ const Mutation = {
       throw Error('Unable to find comment');
     }
 
-    const hasUpVoteOrDownVote = await db.collection('commentVotes').findOne({
+    const hasUpVoteOrDownVote = await db.collection('commentvotes').findOne({
       $and: [
         { user: userId }, { comment: args.data.comment }]
     })
 
-    const sameVote = await db.collection('commentVotes').findOne({
+    const sameVote = await db.collection('commentvotes').findOne({
       $and: [
         { user: userId }, { comment: args.data.comment }, { like: args.data.like }]
     })

@@ -9,6 +9,11 @@ const Comment = {
       { "id": parent.post }
     );
   },
+  commentVotes(parent, args, { db }, info) {
+    return db.collection('commentvotes').find(
+      { "comment": parent.id }
+    ).toArray();
+  }
 }
 
 export { Comment as default }
