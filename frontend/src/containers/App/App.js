@@ -1,14 +1,16 @@
-
 import React, { Component } from 'react'
-
 import Navbar from "../../containers/Navbar"
 import createPost from '../../components/create-post-page'
+import Subs from '../../components/Subs'
+import SubPage from '../SubPage';
 import postPage from '../../containers/PostPage'
 import frontPage from "../../components/front-page"
 import RegisterPage from "../Register/Register"
 import Profile from '../../components/Profile'
 import postContent from '../Post-Content'
-import { Redirect, BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
+import { BrowserHistory,Redirect, BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
+//import { browserHistory, IndexRoute } from 'react-router';
+
 import Login from '../Login/Login'
 
 
@@ -28,6 +30,7 @@ import {
 
   DropdownItem
 } from 'reactstrap'
+
 
 
 //let unsubscribe = null
@@ -108,24 +111,33 @@ class App extends Component {
         {author.name}
       </DropdownItem>
     ));
+    console.log("app props",this.props)
 
     return (
 
       <Container>
         <Router>
-          <Navbar></Navbar>
+          <div style={{display:"flex"}}>
+            <Subs style={{background:"black",align:"left",float:"left"}}></Subs>
+             <Navbar></Navbar>
+          </div>
+         
+          
           <Row>
             <Col>
               <Switch>
                 
-                <Route path = '/posts/:id' id={":id"} component={postContent}/>
+                <Route path = '/sub/:name/:id' subName =  {":name"} id={":id"} component={postContent}/>
                 <Route path='/posts' component={postPage} />
                 <Route path='/createPost' component={createPost} />
                 <Route path='/frontPage' component={frontPage} />
                 <Route path='/login' component={Login} />
                 <Route path='/register' component={RegisterPage} />
                 <Route path='/myProfile' component={Profile} />
+                <Route path='/sub/:id' name={":id"} component={SubPage} />
+                
                 <Redirect from="/" to='frontPage'/>
+
                 
               </Switch>
             </Col>

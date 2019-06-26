@@ -1,7 +1,7 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom'
 import withAuthGuard from '../hoc/AuthGuard/AuthGuard'
-
+import Subs from '../components/Subs'
 import {
   Collapse,
   Navbar,
@@ -25,10 +25,20 @@ class Navigation extends React.Component {
     this.state = {
       isOpen: false
     };
+
+    this.toggleNavbar = this.toggleNavbar.bind(this);
+    this.state = {
+      collapsed: true
+    };
   }
   toggle() {
     this.setState({
       isOpen: !this.state.isOpen
+    });
+  }
+  toggleNavbar() {
+    this.setState({
+      collapsed: !this.state.collapsed
     });
   }
   render() {
@@ -37,8 +47,12 @@ class Navigation extends React.Component {
     return (
       <div>
         <Navbar color="light" light expand="md">
+
+        <NavbarToggler onClick={this.toggle} />
+        
           <NavbarBrand onClick={() => history.push("/frontPage")}>Reddit Clone</NavbarBrand>
-          <NavbarToggler onClick={this.toggle} />
+          
+          <NavbarToggler onClick={this.toggleNavbar}/>
           <Collapse isOpen={this.state.isOpen} navbar>
             <Nav className="ml-auto" navbar>
               <NavItem>

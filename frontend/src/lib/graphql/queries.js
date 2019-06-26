@@ -57,7 +57,14 @@ export const SUBS_QUERY = gql`
       name
       id
       posts{
+        id
         title 
+        author{username}
+        body
+        likes{
+          user{username}
+          like
+        }
       }
     }
   }
