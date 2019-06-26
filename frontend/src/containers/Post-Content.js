@@ -172,7 +172,6 @@ class Example extends Component {
                 document: LIKES_SUBSCRIPTION,
                 variables: { postId: id },
                 updateQuery: (prev, { subscriptionData }) => {
-                  console.log(subscriptionData.data)
                   if (!subscriptionData.data) return prev;
 
                   const { mutation, data } = subscriptionData.data.like;
