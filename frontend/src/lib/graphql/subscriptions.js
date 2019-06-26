@@ -9,10 +9,12 @@ export const POSTS_SUBSCRIPTION = gql`
         title
         body
         author {
+          id
           username
         }
         likes {
           user {
+            id
             username
           }
         }
@@ -26,14 +28,28 @@ export const LIKES_SUBSCRIPTION = gql`
     like(postId: $postId) {
       mutation
       data {
+        id
         user {
           id
           username
         }
-        post {
-          id
-        }
         like
+      }
+    }
+  }
+`
+
+export const COMMENTS_SUBSCRIPTION = gql`
+  subscription comment($postId: ID!) {
+    comment(postId: $postId) {
+      mutation
+      data {
+        id
+        author {
+          id
+          username
+        }
+        text
       }
     }
   }

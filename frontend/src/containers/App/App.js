@@ -5,6 +5,7 @@ import PostPage from '../../containers/PostPage'
 import FrontPage from "../../components/front-page"
 import Register from "../Register/Register"
 import Profile from '../../components/Profile'
+<<<<<<< HEAD
 import postContent from '../Post-Content'
 import Subs from '../../components/Subs'
 import SubPage from '../../containers/SubPage'
@@ -12,94 +13,22 @@ import Logout from '../Logout/Logout'
 import { BrowserHistory,Redirect, BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
 //import { browserHistory, IndexRoute } from 'react-router';
 
+=======
+import PostContent from '../Post-Content'
+import { Redirect, BrowserRouter as Router, Route, Switch } from "react-router-dom";
+>>>>>>> 1793d69163179db6bfb62d7a28f0080d0a5e0c8e
 import Login from '../Login/Login'
+import Logout from '../Logout/Logout'
 
-
-/*
-import {
-  USERS_QUERY,
-  CREATE_POST_MUTATION,
-  POSTS_SUBSCRIPTION,
-} from '../../lib/graphql'
-*/
-//import { Redirect, BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
-//import { Query, Mutation } from 'react-apollo'
 import {
   Container,
   Row,
   Col,
-  DropdownItem
 } from 'reactstrap'
 
-//let unsubscribe = null
-
 class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      activeIndex: 0,
-      formTitle: '',
-      formBody: '',
-      dropdownOpen: false,
-      dropdownAuthor: '',
-      authorList: []
-    };
-  }
-
-
-  setUsers = (users) => {
-    this.setState({
-      authorList: users.map(user => ({
-        id: user.id,
-        name: user.name,
-      }))
-    });
-  }
-
-  nameToId = (name) => {
-    const targetAuthor = this.state.authorList.find(author => {
-      return author.name === name;
-    });
-
-    return targetAuthor.id;
-  }
-
-  handleFormSubmit = e => {
-    e.preventDefault()
-
-    const { formTitle, formBody, dropdownAuthor } = this.state
-
-    if (!formTitle || !formBody || !dropdownAuthor) return
-
-    this.createPost({
-      variables: {
-        title: formTitle,
-        body: formBody,
-        published: true,
-        authorId: this.nameToId(dropdownAuthor),
-      }
-    })
-
-    this.setState({
-      formTitle: '',
-      formBody: ''
-    })
-  }
-
-  handleDropdownToggle = () => {
-    this.setState({
-      dropdownOpen: !this.state.dropdownOpen
-    });
-  }
-
-  handleDropdownSelect = (authorName) => {
-    this.setState({
-      dropdownAuthor: authorName,
-      dropdownOpen: false,
-    });
-  }
-
   render() {
+<<<<<<< HEAD
     const { authorList } = this.state;
 
     const authorMenu = authorList.map((author, id) => (
@@ -111,8 +40,9 @@ class App extends Component {
     ));
     console.log("app props",this.props)
 
+=======
+>>>>>>> 1793d69163179db6bfb62d7a28f0080d0a5e0c8e
     return (
-
       <Container>
         <Router>
         <div style={{display:"flex"}}>
@@ -122,8 +52,8 @@ class App extends Component {
          
           <Row>
             <Col>
-              <Switch>             
-                <Route path = '/posts/:id' id={":id"} component={postContent}/>
+              <Switch>
+                <Route path='/posts/:id' id={":id"} component={PostContent} />
                 <Route path='/posts' component={PostPage} />
                 <Route path='/createPost' component={CreatePost} />
                 <Route path='/frontPage' component={FrontPage} />
@@ -131,11 +61,16 @@ class App extends Component {
                 <Route path='/logout' component={Logout} />
                 <Route path='/register' component={Register} />
                 <Route path='/myProfile' component={Profile} />
+<<<<<<< HEAD
                 <Route path='/sub/:id' name={":id"} component={SubPage} />
                 
                 <Redirect from="/" to='frontPage'/>
 
                 
+=======
+                <Redirect from="/" to='frontPage' />
+
+>>>>>>> 1793d69163179db6bfb62d7a28f0080d0a5e0c8e
               </Switch>
             </Col>
           </Row>

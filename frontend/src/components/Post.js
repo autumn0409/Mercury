@@ -1,4 +1,5 @@
 import React from 'react';
+import { NavLink } from 'react-router-dom'
 import { Mutation, Subscription } from 'react-apollo'
 import { LIKES_SUBSCRIPTION, CREATE_LIKE_MUTATION, DELETE_LIKE_MUTATION } from '../lib/graphql'
 
@@ -68,27 +69,29 @@ class Post extends React.Component {
         like: true,
       }
     }).catch(e => {
-      const message = e.graphQLErrors[0].message;
-      if (message.includes("Like exists")) {
-        const likeId = message.replace('Like exists: ', '');
-        this.deleteLike({
-          variables: {
-            id: likeId,
-          }
-        })
-      } else if (message.includes("Change like")) {
-        const likeId = message.replace('Change like: ', '');
-        this.deleteLike({
-          variables: {
-            id: likeId,
-          }
-        })
-        this.createLike({
-          variables: {
-            post: this.props.id,
-            like: true,
-          }
-        })
+      if (e.graphQLErrors) {
+        const message = e.graphQLErrors[0].message;
+        if (message.includes("Like exists")) {
+          const likeId = message.replace('Like exists: ', '');
+          this.deleteLike({
+            variables: {
+              id: likeId,
+            }
+          })
+        } else if (message.includes("Change like")) {
+          const likeId = message.replace('Change like: ', '');
+          this.deleteLike({
+            variables: {
+              id: likeId,
+            }
+          })
+          this.createLike({
+            variables: {
+              post: this.props.id,
+              like: true,
+            }
+          })
+        }
       }
     })
   }
@@ -100,37 +103,33 @@ class Post extends React.Component {
         like: false,
       }
     }).catch(e => {
-      const message = e.graphQLErrors[0].message;
+      if (e.graphQLErrors) {
+        const message = e.graphQLErrors[0].message;
 
-      if (message.includes("Like exists")) {
-        const likeId = message.replace('Like exists: ', '');
-        this.deleteLike({
-          variables: {
-            id: likeId,
-          }
-        })
-      } else if (message.includes("Change like")) {
-        const likeId = message.replace('Change like: ', '');
-        this.deleteLike({
-          variables: {
-            id: likeId,
-          }
-        })
-        this.createLike({
-          variables: {
-            post: this.props.id,
-            like: false,
-          }
-        })
+        if (message.includes("Like exists")) {
+          const likeId = message.replace('Like exists: ', '');
+          this.deleteLike({
+            variables: {
+              id: likeId,
+            }
+          })
+        } else if (message.includes("Change like")) {
+          const likeId = message.replace('Change like: ', '');
+          this.deleteLike({
+            variables: {
+              id: likeId,
+            }
+          })
+          this.createLike({
+            variables: {
+              post: this.props.id,
+              like: false,
+            }
+          })
+        }
       }
     })
   }
-
-  /*
-  routeChange = () =>{
-    let path = `newPath`;
-    this.props.history.push(path);
-  }*/
 
   render() {
     const { id, title, body, author ,subName} = this.props;
@@ -140,9 +139,13 @@ class Post extends React.Component {
       <div>
         <div className="list-group-item list-group-item-action" style={{ width: "210%" }}>
           <div >
+<<<<<<< HEAD
             <a className=" list-group-item-action" href={subName+"/"+id}>
+=======
+            <NavLink className=" list-group-item-action" to={id}>
+>>>>>>> 1793d69163179db6bfb62d7a28f0080d0a5e0c8e
               <h5 className="mb-1">{title}</h5>
-            </a>
+            </NavLink>
 
             <small className="text-muted">posted by {username}</small>
           </div>
