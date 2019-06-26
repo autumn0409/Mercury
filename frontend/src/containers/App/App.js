@@ -24,24 +24,23 @@ class App extends Component {
     return (
       <Container>
         <Router>
-        <div style={{display:"flex"}}>
-            <Subs style={{background:"black",align:"left",float:"left"}}></Subs>
-             <Navbar></Navbar>
+          <div style={{ display: "flex" }}>
+            <Subs style={{ background: "black", align: "left", float: "left" }}></Subs>
+            <Navbar></Navbar>
           </div>
-         
+
           <Row>
             <Col>
               <Switch>
-                <Route path='/posts/:id' id={":id"} component={PostContent} />
-                <Route path='/posts' component={PostPage} />
                 <Route path='/createPost' component={CreatePost} />
                 <Route path='/frontPage' component={FrontPage} />
                 <Route path='/login' component={Login} />
                 <Route path='/logout' component={Logout} />
                 <Route path='/register' component={Register} />
                 <Route path='/myProfile' component={Profile} />
-                <Route path='/sub/:id' name={":id"} component={SubPage} />             
-                <Redirect from="/" to='frontPage'/>           
+                <Route exact path='/sub/:subName' component={SubPage} />
+                <Route path='/sub/:subName/:postId' component={PostContent} />
+                <Redirect from="/" to='frontPage' />
               </Switch>
             </Col>
           </Row>

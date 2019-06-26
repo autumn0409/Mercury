@@ -157,7 +157,7 @@ class CreatePost extends Component {
             </Mutation>
           </Col>
         </Row>
-        <Query query={SUBS_QUERY} onCompleted={data => this.setSubs(data.subs)} />
+        <Query query={SUBS_QUERY} onCompleted={data => this.setSubs(data.subs)} children={() => { return null }} />
       </Container>
     )
   }

@@ -48,18 +48,15 @@ class Navigation extends React.Component {
       <div>
         <Navbar color="light" light expand="md">
 
-        <NavbarToggler onClick={this.toggle} />
-        
+          <NavbarToggler onClick={this.toggle} />
+
           <NavbarBrand onClick={() => history.push("/frontPage")}>Reddit Clone</NavbarBrand>
-          
-          <NavbarToggler onClick={this.toggleNavbar}/>
+
+          <NavbarToggler onClick={this.toggleNavbar} />
           <Collapse isOpen={this.state.isOpen} navbar>
             <Nav className="ml-auto" navbar>
               <NavItem>
                 <NavLink onClick={() => history.push("/createPost/")}>Post Something!</NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink onClick={() => history.push("/posts/")}>What's new?</NavLink>
               </NavItem>
 
               <UncontrolledDropdown nav inNavbar>
