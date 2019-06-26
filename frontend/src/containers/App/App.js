@@ -1,13 +1,14 @@
 import React, { Component } from 'react'
 import Navbar from "../../containers/Navbar"
-import createPost from '../../components/create-post-page'
-import Subs from '../../components/Subs'
-import SubPage from '../SubPage';
-import postPage from '../../containers/PostPage'
-import frontPage from "../../components/front-page"
-import RegisterPage from "../Register/Register"
+import CreatePost from '../../components/create-post-page'
+import PostPage from '../../containers/PostPage'
+import FrontPage from "../../components/front-page"
+import Register from "../Register/Register"
 import Profile from '../../components/Profile'
 import postContent from '../Post-Content'
+import Subs from '../../components/Subs'
+import SubPage from '../../containers/SubPage'
+import Logout from '../Logout/Logout'
 import { BrowserHistory,Redirect, BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
 //import { browserHistory, IndexRoute } from 'react-router';
 
@@ -27,11 +28,8 @@ import {
   Container,
   Row,
   Col,
-
   DropdownItem
 } from 'reactstrap'
-
-
 
 //let unsubscribe = null
 
@@ -117,22 +115,21 @@ class App extends Component {
 
       <Container>
         <Router>
-          <div style={{display:"flex"}}>
+        <div style={{display:"flex"}}>
             <Subs style={{background:"black",align:"left",float:"left"}}></Subs>
              <Navbar></Navbar>
           </div>
          
-          
           <Row>
             <Col>
-              <Switch>
-                
-                <Route path = '/sub/:name/:id' subName =  {":name"} id={":id"} component={postContent}/>
-                <Route path='/posts' component={postPage} />
-                <Route path='/createPost' component={createPost} />
-                <Route path='/frontPage' component={frontPage} />
+              <Switch>             
+                <Route path = '/posts/:id' id={":id"} component={postContent}/>
+                <Route path='/posts' component={PostPage} />
+                <Route path='/createPost' component={CreatePost} />
+                <Route path='/frontPage' component={FrontPage} />
                 <Route path='/login' component={Login} />
-                <Route path='/register' component={RegisterPage} />
+                <Route path='/logout' component={Logout} />
+                <Route path='/register' component={Register} />
                 <Route path='/myProfile' component={Profile} />
                 <Route path='/sub/:id' name={":id"} component={SubPage} />
                 
