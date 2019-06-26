@@ -16,6 +16,7 @@ export const CREATE_POST_MUTATION = gql`
         sub: $sub
       }
     ) {
+      id
       title
       body
       published
@@ -38,10 +39,12 @@ export const CREATE_LIKE_MUTATION = gql`
     ) {
       id
       post {
+        id
         title 
         body
       }
       user {
+        id
         username
       }
       like
@@ -54,10 +57,12 @@ export const DELETE_LIKE_MUTATION = gql`
     deleteLike(id: $id) {
       id
       post {
+        id
         title 
         body
       }
       user {
+        id
         username
       }
       like
@@ -65,6 +70,45 @@ export const DELETE_LIKE_MUTATION = gql`
   }
 `
 
+export const DELETE_COMMENT_MUTATION = gql`
+  mutation deleteComment($id: ID!) {
+    deleteComment(id: $id) {
+      id
+      post {
+        id
+        title 
+        body
+      }
+      author {
+        id
+        username
+      }
+      text
+    }
+  }
+`
+
+export const EDIT_COMMENT_MUTATION = gql`
+  mutation editComment($id: ID!, $text: String) {
+    updateComment(
+      id: $id, 
+      data: {
+        text: $text
+      }) {
+      id
+      post {
+        id
+        title 
+        body
+      }
+      author {
+        id
+        username
+      }
+      text
+    }
+  }
+`
 
 
 /**
@@ -90,20 +134,6 @@ export const LOGIN_MUTATION = gql`
 		login(data: { username: $username, password: $password }) {
 			token
 		}
-	}
-`
-
-export const CREATE_MESSAGE_MUTATION = gql`
-	mutation CreateMessage($body: String!, $sentAt: String!) {
-		createMessage(data: { body: $body, sentAt: $sentAt }) {
-			body
-		}
-	}
-`
-
-export const DELETE_ALL_MESSAGES_MUTATION = gql`
-	mutation DeleteAll {
-		deleteAll
 	}
 `
 

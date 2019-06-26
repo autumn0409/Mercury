@@ -10,10 +10,13 @@ export const USERS_QUERY = gql`
         title
         body
         author {
+          id
           username
         }
         likes {
+          id
           user {
+            id
             username
           }
           like
@@ -30,21 +33,24 @@ query {
     title
     body
     author {
+      id
       username
     }
     likes {
       user {
+        id
         username
       }
       like
     }
-}
+  }
 }
 `
 
 export const ME_QUERY = gql`
 	query Me {
 		me {
+      id
       username
       age
       email
@@ -71,20 +77,32 @@ export const SUBS_QUERY = gql`
 `
 
 export const FIND_POST_QUERY = gql`
-query findPostById($id:ID!){
+query findPostById($id: ID!){
   findPostById(
-    id:$id
-  )
-    {
+    id: $id
+  ){
+    id
     title
-    author{username}
+    author{
+      id
+      username
+    }
     body
     likes{
+      id
       like
-      user{username}
+      user{
+        id
+        username
+      }
     }
     comments{
       id
+      author {
+        id
+        username
+      }
+      text
     }
   }
 }

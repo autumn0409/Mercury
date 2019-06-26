@@ -15,11 +15,11 @@ const withAuthGuard = WrappedComponent => {
 							console.error(error.message)
 					}}>
 					{({ data, loading, error }) => {
-						if (loading) return <WrappedComponent loading={true} />
-						if (error) return <WrappedComponent isAuth={false} />
+						if (loading) return <WrappedComponent loading={true} {...this.props} />
+						if (error) return <WrappedComponent isAuth={false} {...this.props} />
 
 						return (
-							<WrappedComponent isAuth={true} username={data.me.username} />
+							<WrappedComponent isAuth={true} me={data.me} {...this.props} />
 						)
 					}}
 				</Query>
