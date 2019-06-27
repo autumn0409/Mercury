@@ -1,15 +1,19 @@
 import React, { Component } from 'react';
 import { Query, Mutation } from 'react-apollo'
+import { Jumbotron, Input, Button } from 'reactstrap'
+import { withRouter } from 'react-router-dom'
+
 import {
   FIND_POST_QUERY,
+  DELETE_POST_MUTATION,
   CREATE_COMMENT_MUTATION,
   CREATE_LIKE_MUTATION,
   DELETE_LIKE_MUTATION,
   COMMENTS_SUBSCRIPTION,
   LIKES_SUBSCRIPTION
 } from '../lib/graphql'
-import { Jumbotron, Input, Button } from 'reactstrap'
 import CommentList from './CommentList/CommentList'
+import withAuthGuard from '../hoc/AuthGuard/AuthGuard'
 
 let unsubscribeComments;
 let unsubscribeLikes;
@@ -121,8 +125,21 @@ class Example extends Component {
     })
   }
 
+  handleDeletePost = () => {
+    const { postId } = this.props.match.params;
+    this.deletePost({
+      variables: {
+        id: postId
+      }
+    }).then(() => {
+      this.props.history.goBack();
+    })
+  }
+
   render() {
     const { postId } = this.props.match.params;
+    const { isAuth, me } = this.props;
+
     return (
       <React.Fragment>
         <Query
@@ -235,8 +252,23 @@ class Example extends Component {
             return (
               <React.Fragment>
                 <Jumbotron>
-                  <h4 className="display-6">{post.title}</h4>
-                  <small>posted by {post.author.username}</small>
+                  <div className='d-flex justify-content-between'>
+                    <div>
+                      <h4 className="display-6">{post.title}</h4>
+                      <small>posted by {post.author.username}</small>
+                    </div>{isAuth ?
+                      <div>
+                        {
+                          post.author.username === me.username ?
+                            <React.Fragment>
+                              <Button className='mr-3'>edit</Button>
+                              <Button onClick={this.handleDeletePost}>delete</Button>
+                            </React.Fragment>
+                            : <div />
+                        }
+                      </div> : <div />
+                    }
+                  </div>
                   <hr className="my-1" />
                   <p></p>
                   <p className="lead">{post.body}</p>
@@ -269,6 +301,12 @@ class Example extends Component {
             )
           }}
         </Query>
+        <Mutation mutation={DELETE_POST_MUTATION}>
+          {deletePost => {
+            this.deletePost = deletePost;
+            return null;
+          }}
+        </Mutation>
         <Mutation mutation={CREATE_COMMENT_MUTATION}>
           {createComment => {
             this.createComment = createComment;
@@ -293,4 +331,4 @@ class Example extends Component {
 
 };
 
-export default Example;
+export default withAuthGuard(withRouter(Example));
