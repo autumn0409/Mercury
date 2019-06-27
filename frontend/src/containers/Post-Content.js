@@ -136,6 +136,11 @@ class Example extends Component {
     })
   }
 
+  handleEditPost = () => {
+    const { postId } = this.props.match.params;
+    this.props.history.push(`/edit/${postId}`);
+  }
+
   render() {
     const { postId } = this.props.match.params;
     const { isAuth, me } = this.props;
@@ -261,7 +266,7 @@ class Example extends Component {
                         {
                           post.author.username === me.username ?
                             <React.Fragment>
-                              <Button className='mr-3'>edit</Button>
+                              <Button onClick={this.handleEditPost} className='mr-3'>edit</Button>
                               <Button onClick={this.handleDeletePost}>delete</Button>
                             </React.Fragment>
                             : <div />

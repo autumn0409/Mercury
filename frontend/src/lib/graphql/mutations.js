@@ -35,7 +35,27 @@ export const DELETE_POST_MUTATION = gql`
   }
 `
 
+export const UPDATE_POST_MUTATION = gql`
+  mutation updatePost(
+    $id: ID!
+    $title: String
+    $body: String
+  ) {
+    updatePost(
+      id: $id
+      data: {
+        title: $title,
+        body: $body
+      }
+    ) {
+      id
+      title
+      body
+      published
+    }
+  }
 
+`
 
 export const CREATE_LIKE_MUTATION = gql`
   mutation createLike(
