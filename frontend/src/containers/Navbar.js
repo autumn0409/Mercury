@@ -56,7 +56,12 @@ class Navigation extends React.Component {
           <Collapse isOpen={this.state.isOpen} navbar>
             <Nav className="ml-auto" navbar>
               <NavItem>
-                <NavLink onClick={() => history.push("/createPost/")}>Post Something!</NavLink>
+                <NavLink onClick={() => {
+                  if (!isAuth)
+                    alert("Please login first.")
+                  else
+                    history.push("/createPost/")
+                }}>Post Something!</NavLink>
               </NavItem>
 
               <UncontrolledDropdown nav inNavbar>
