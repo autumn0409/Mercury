@@ -138,7 +138,7 @@ class Post extends React.Component {
     return (
       <div>
         <div className="list-group-item list-group-item-action" style={{ width: "210%" }}>
-          <div >
+          <div>
             <NavLink className=" list-group-item-action" to={subName + "/" + id}>
               <h5 className="mb-1">{title}</h5>
             </NavLink>
