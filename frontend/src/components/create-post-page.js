@@ -20,6 +20,9 @@ import {
   CREATE_POST_MUTATION,
 } from '../lib/graphql'
 
+import withAuthGuard from '../hoc/AuthGuard/AuthGuard'
+import { withRouter } from 'react-router-dom'
+
 import classes from '../containers/App/App.module.css'
 
 class CreatePost extends Component {
@@ -29,6 +32,13 @@ class CreatePost extends Component {
     dropdownOpen: false,
     dropdownSub: '',
     subList: []
+  }
+
+  componentWillMount = () => {
+    if (!this.props.isAuth) {
+      alert("Please login first.")
+      this.props.history.goBack();
+    }
   }
 
   setSubs = (subs) => {
@@ -167,4 +177,4 @@ class CreatePost extends Component {
   }
 }
 
-export default CreatePost
+export default withAuthGuard(withRouter(CreatePost));
