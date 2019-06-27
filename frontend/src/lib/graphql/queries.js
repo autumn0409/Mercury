@@ -54,6 +54,17 @@ export const ME_QUERY = gql`
       username
       age
       email
+      posts{
+        title
+        body
+        author{
+          username
+        }
+        likes{
+          like
+          id
+        }
+      }
 		}
 	}
 `
