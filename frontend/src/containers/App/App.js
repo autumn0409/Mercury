@@ -5,7 +5,6 @@ import PostPage from '../../containers/PostPage'
 import FrontPage from "../../components/front-page"
 import Register from "../Register/Register"
 import Profile from '../../components/Profile'
-import PostContent from '../Post-Content'
 import Subs from '../../components/Subs'
 import SubPage from '../../containers/SubPage'
 import Logout from '../Logout/Logout'
