@@ -12,6 +12,8 @@ import Logout from '../Logout/Logout'
 import { Redirect, BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 import Login from '../Login/Login'
+import PostContent from '../Post-Content'
+import EditPost from '../../components/EditPost'
 
 import {
   Container,
@@ -40,11 +42,10 @@ class App extends Component {
                 <Route path='/logout' component={Logout} />
                 <Route path='/register' component={Register} />
                 <Route path='/myProfile' component={Profile} />
-                <Route path='/sub/:id' name={":id"} component={SubPage} />
-                
-                <Redirect from="/" to='frontPage'/>
-
-                
+                <Route exact path='/sub/:subName' component={SubPage} />
+                <Route path='/sub/:subName/:postId' component={PostContent} />
+                <Route path='/edit/:postId' component={EditPost} />
+                <Redirect from="/" to='frontPage' />
               </Switch>
             </Col>
           </Row>
