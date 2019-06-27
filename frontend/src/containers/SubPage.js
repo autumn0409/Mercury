@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Query } from 'react-apollo'
+import { Query,Subscription } from 'react-apollo'
 import {
   Container,
   Row,
@@ -9,6 +9,7 @@ import {
 import {
   SUBS_QUERY,
   POSTS_SUBSCRIPTION,
+  LIKES_SUBSCRIPTION
 } from '../lib/graphql'
 
 import Post from '../components/Post'
@@ -118,6 +119,10 @@ class SubPage extends Component {
                 // return <ListGroup>{posts}</ListGroup>
               }}
             </Query>
+            <Subscription
+            subscription={POSTS_SUBSCRIPTION}
+            onSubscriptionData={({ subscriptionData }) => this.updateLikeNum(subscriptionData.data.like)}>
+          </Subscription>
           </Col>
         </Row>
       </Container>
