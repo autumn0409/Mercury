@@ -26,27 +26,6 @@ export const USERS_QUERY = gql`
   }
 `
 
-export const POSTS_QUERY = gql` 
-query {
-  posts {
-    id
-    title
-    body
-    author {
-      id
-      username
-    }
-    likes {
-      user {
-        id
-        username
-      }
-      like
-    }
-  }
-}
-`
-
 export const ME_QUERY = gql`
 	query Me {
 		me {
@@ -69,12 +48,27 @@ export const ME_QUERY = gql`
 	}
 `
 export const SUBS_QUERY = gql`
-  query{
-    subs{
+  query {
+    subs {
+      name
+      id
+    }
+  }
+`
+
+export const SUB_QUERY = gql`
+  query sub($query: String){
+    sub(
+      query: $query
+    ){
       name
       id
       posts{
         id
+        sub {
+          id
+          name
+        }
         title 
         author{
           id

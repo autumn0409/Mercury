@@ -1,6 +1,7 @@
 type Query {
   users(query: String): [User!]!
-  subs(query: String): [Sub!]!
+  subs: [Sub!]!
+  sub(query: String): Sub!
   posts(query: String): [Post!]!
   findPostById(id: ID!): Post!
   favoritePosts: [Post!]!

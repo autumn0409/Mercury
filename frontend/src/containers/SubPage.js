@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Query,Subscription } from 'react-apollo'
+import { Query } from 'react-apollo'
 import {
   Container,
   Row,
@@ -7,13 +7,13 @@ import {
 } from 'reactstrap'
 
 import {
-  SUBS_QUERY,
+  SUB_QUERY,
   POSTS_SUBSCRIPTION
 } from '../lib/graphql'
 
 import Post from '../components/Post'
 
-let unsubscribe = null
+let unsubscribePosts = null
 
 class SubPage extends Component {
   state = {
@@ -77,38 +77,74 @@ class SubPage extends Component {
   }
 
   render() {
+    const subName = this.props.match.params.subName;
+
     return (
       <Container  >
         <Row>
           <Col xs="6">
-            <Query query={SUBS_QUERY} fetchPolicy={"cache-and-network"}>
+            <Query query={SUB_QUERY} fetchPolicy={"cache-and-network"} variables={{ query: subName }}>
               {({ loading, error, data, subscribeToMore }) => {
                 if (loading) return <p>Loading...</p>
                 if (error) return <p>Error :(((</p>
 
-                const subName = this.props.match.params.subName;
-                let sub_object;
-                data.subs.map(sub => {
-                  console.log(sub.name, subName)
-                  if (sub.name === subName)
-                    sub_object = sub
-                  return null;
-                })
+                const sub_object = data.sub;
 
-                console.log(sub_object)
                 const posts = sub_object.posts.map((post, id) => (
                   <Post {...post} subName={subName} key={id} />
                 ))
-                if (!unsubscribe)
-                  unsubscribe = subscribeToMore({
+
+                if (!unsubscribePosts)
+                  unsubscribePosts = subscribeToMore({
                     document: POSTS_SUBSCRIPTION,
                     updateQuery: (prev, { subscriptionData }) => {
-                      if (!subscriptionData.data) return prev
-                      const newPost = subscriptionData.data.post.data
+                      if (!subscriptionData.data) return prev;
 
-                      return {
-                        ...prev,
-                        posts: [newPost, ...prev.posts]
+                      const { mutation, data } = subscriptionData.data.post;
+                      const originalSubData = prev.sub;
+
+                      if (data.sub.name !== subName) return prev;
+
+                      if (mutation === "CREATED") {
+                        const newPost = data;
+
+                        return {
+                          sub: {
+                            ...originalSubData,
+                            posts: [...originalSubData.posts, newPost],
+                          }
+                        }
+                      }
+                      else if (mutation === "UPDATED") {
+                        const updatedPost = data;
+                        const oldPost = originalSubData.posts.find(post => post.id === updatedPost.id);
+                        const oldPostIndex = originalSubData.posts.indexOf(oldPost);
+                        const updatedPosts = originalSubData.posts.map((post, index) => {
+                          if (index === oldPostIndex)
+                            return updatedPost;
+                          else
+                            return post;
+                        })
+
+                        return {
+                          sub: {
+                            ...originalSubData,
+                            posts: updatedPosts,
+                          }
+                        }
+                      }
+                      else {
+                        const deletedPost = data;
+                        const updatedPosts = originalSubData.posts.filter(post => {
+                          return post.id !== deletedPost.id;
+                        });
+
+                        return {
+                          sub: {
+                            ...originalSubData,
+                            posts: updatedPosts,
+                          }
+                        }
                       }
                     }
                   })
@@ -118,10 +154,6 @@ class SubPage extends Component {
                 // return <ListGroup>{posts}</ListGroup>
               }}
             </Query>
-            <Subscription
-            subscription={POSTS_SUBSCRIPTION}
-            onSubscriptionData={({ subscriptionData }) => this.updateLikeNum(subscriptionData.data.like)}>
-          </Subscription>
           </Col>
         </Row>
       </Container>

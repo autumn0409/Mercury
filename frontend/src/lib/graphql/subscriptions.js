@@ -6,17 +6,23 @@ export const POSTS_SUBSCRIPTION = gql`
       mutation
       data {
         id
-        title
-        body
-        author {
+        sub {
+          id
+          name
+        }
+        title 
+        author{
           id
           username
         }
-        likes {
-          user {
+        body
+        likes{
+          id
+          user{
             id
             username
           }
+          like
         }
       }
     }

@@ -133,8 +133,8 @@ class Post extends React.Component {
 
   render() {
     const { id, title, body, author, subName } = this.props;
-    console.log("thisProps", this.props)
     const username = author.username;
+
     return (
       <div>
         <div className="list-group-item list-group-item-action" style={{ width: "210%" }}>

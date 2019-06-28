@@ -12,13 +12,12 @@ const Query = {
   },
 
   subs: (parent, args, { db }, info) => {
-    if (!args.query) {
-      return db.collection('subs').find().toArray();
-    }
-
-    return db.collection('subs').find(
+    return db.collection('subs').find().toArray();
+  },
+  sub: (parent, args, { db }, info) => {
+    return db.collection('subs').findOne(
       { name: { $regex: new RegExp("^" + args.query.toLowerCase(), "i") } }
-    ).toArray();
+    );
   },
 
   posts: (parent, args, { db }, info) => {
