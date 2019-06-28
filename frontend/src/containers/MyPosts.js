@@ -7,7 +7,7 @@ import {
 } from 'reactstrap'
 
 import {
-  SUBS_QUERY,
+  ME_QUERY,
   POSTS_SUBSCRIPTION
 } from '../lib/graphql'
 
@@ -81,43 +81,41 @@ class SubPage extends Component {
       <Container  >
         <Row>
           <Col xs="6">
-            <Query query={SUBS_QUERY} fetchPolicy={"cache-and-network"}>
-              {({ loading, error, data, subscribeToMore }) => {
-                if (loading) return <p>Loading...</p>
-                if (error) return <p>Error :(((</p>
+          <Query query={ME_QUERY}>
+                    {({ loading, error, data, subscribeToMore }) => {
+                        if (loading) return <p>Loading...</p>;
+                        if (error) return <p>Error :(((</p>;
 
-                const subName = this.props.match.params.subName;
-                let sub_object;
-                data.subs.map(sub => {
-                  console.log(sub.name, subName)
-                  if (sub.name === subName)
-                    sub_object = sub
-                  return null;
-                })
-
-                console.log(sub_object)
-                const posts = sub_object.posts.map((post, id) => (
-                  <Post {...post} subName={subName} key={id} />
-                ))
-                if (!unsubscribe)
-                  unsubscribe = subscribeToMore({
-                    document: POSTS_SUBSCRIPTION,
-                    updateQuery: (prev, { subscriptionData }) => {
-                      if (!subscriptionData.data) return prev
-                      const newPost = subscriptionData.data.post.data
-
-                      return {
-                        ...prev,
-                        posts: [newPost, ...prev.posts]
-                      }
-                    }
-                  })
-                return (<ul className="list-group list-group-flush" style={{ width: "100%" }}>
-                  {posts}
-                </ul>)
-                // return <ListGroup>{posts}</ListGroup>
-              }}
-            </Query>
+                        const me = data.me;
+                        console.log(data)
+                        const posts = me.posts.map((post,id)=>(
+                            <Post {...post} key={id} />
+                        ))
+                        if (!unsubscribe)
+                        unsubscribe = subscribeToMore({
+                          document: POSTS_SUBSCRIPTION,
+                          updateQuery: (prev, { subscriptionData }) => {
+                            if (!subscriptionData.data) return prev
+                            const newPost = subscriptionData.data.post.data
+      
+                            return {
+                              ...prev,
+                              posts: [newPost, ...prev.posts]
+                            }
+                          }
+                        })
+                      return (
+                        <React.Fragment>
+                        <h6>Posts by {me.username}</h6>
+                        <ul className="list-group list-group-flush" style={{ width: "100%" }}>
+                        {posts}
+                      </ul>) 
+                        </React.Fragment>
+                      
+                      // return <ListGroup>{posts}</ListGroup>
+                      )
+                    }}
+                </Query>
             <Subscription
             subscription={POSTS_SUBSCRIPTION}
             onSubscriptionData={({ subscriptionData }) => this.updateLikeNum(subscriptionData.data.like)}>

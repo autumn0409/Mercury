@@ -77,7 +77,7 @@ class Navigation extends React.Component {
                           <NavLink onClick={() => history.push("/myProfile")}>My Profile</NavLink>
                         </DropdownItem>
                         <DropdownItem>
-                          My Posts
+                          <NavLink onClick={() => history.push("/myPosts")}>My Posts</NavLink>
                         </DropdownItem>
                         <DropdownItem>
                           Favorites
