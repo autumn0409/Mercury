@@ -6,7 +6,8 @@ import {
   CarouselItem,
   CarouselControl,
   CarouselIndicators,
-  CarouselCaption
+  CarouselCaption,
+  NavLink
 } from 'reactstrap';
 
 import mj_1 from '../images/mj (1).jpg'
@@ -70,8 +71,11 @@ class FrontPage extends Component {
 
   render() {
     const { activeIndex } = this.state;
+    
 
     const slides = items.map((item) => {
+      const caption = (<a href={"/sub/"+item.caption}
+                          style={{color:"white"}} >{item.caption}</a>)
       return (
         <CarouselItem
           onExiting={this.onExiting}
@@ -79,9 +83,9 @@ class FrontPage extends Component {
           key={item.src}
         >
           <img src={item.src} alt={item.altText} href={"/"+item.caption}/>
-
-          <CarouselCaption  captionText={item.caption} captionHeader={item.caption} />
+          <CarouselCaption  captionText={caption} captionHeader={caption} ></CarouselCaption>
         </CarouselItem>
+ 
       );
     });
 
@@ -93,7 +97,9 @@ class FrontPage extends Component {
                 previous={this.previous}
             >
                 <CarouselIndicators items={items} activeIndex={activeIndex} onClickHandler={this.goToIndex} />
+               
                 {slides}
+                
                 <CarouselControl direction="prev" directionText="Previous" onClickHandler={this.previous} />
                 <CarouselControl direction="next" directionText="Next" onClickHandler={this.next} />
             </Carousel>
