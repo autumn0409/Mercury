@@ -13,6 +13,7 @@ import Login from '../Login/Login'
 import PostContent from '../Post-Content'
 import EditPost from '../../components/EditPost'
 import MyPosts from '../MyPosts'
+import FavoritePosts from '../FavoritePosts'
 
 import {
   Container,
@@ -40,7 +41,8 @@ class App extends Component {
                 <Route path='/register' component={Register} />
                 <Route path='/myProfile' component={Profile} />
                 <Route exact path='/sub/:subName' component={SubPage} />
-                <Route path = "/myPosts" component={MyPosts}/>
+                <Route path="/myPosts" component={MyPosts} />
+                <Route path='/favoritePosts' component={FavoritePosts} />
                 <Route path='/sub/:subName/:postId' component={PostContent} />
                 <Route path='/edit/:postId' component={EditPost} />
                 <Redirect from="/" to='frontPage' />
