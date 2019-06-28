@@ -23,11 +23,11 @@ import {
 class App extends Component {
   render() {
     return (
-      <Container>
+      <Container style={{width:"100%"}}>
         <Router>
-          <div style={{ display: "flex" }}>
+          <div  style={{ width:"100%",display: "flex" }}>
             <Subs style={{ background: "black", align: "left", float: "left" }}></Subs>
-            <Navbar></Navbar>
+            <Navbar style = {{width:"100%"}}></Navbar>
           </div>
 
           <Row>
