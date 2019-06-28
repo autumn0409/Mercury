@@ -137,3 +137,29 @@ query findPostById($id: ID!){
   }
 }
 `
+
+export const FAVORITE_POSTS_QUERY = gql`
+	query {
+		favoritePosts {
+      id
+      sub {
+        id
+        name
+      }
+      title 
+      author{
+        id
+        username
+      }
+      body
+      likes{
+        id
+        user{
+          id
+          username
+        }
+        like
+      }
+    }
+	}
+`
