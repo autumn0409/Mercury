@@ -1,4 +1,5 @@
 import React from 'react';
+import withAuthGuard from '../hoc/AuthGuard/AuthGuard'
 import { NavLink } from 'react-router-dom'
 import { Mutation, Subscription } from 'react-apollo'
 import { LIKES_SUBSCRIPTION, CREATE_LIKE_MUTATION, DELETE_LIKE_MUTATION } from '../lib/graphql'
@@ -12,10 +13,14 @@ class Post extends React.Component {
     this.state = {
       likeNum: 0,
       dislikeNum: 0,
+      hasLikedBefore: false,
+      hasDislikedBefore: false,
+      myLikeId: '',
     };
   }
 
-  componentDidMount = () => {
+  componentWillMount = () => {
+    const { isAuth, me } = this.props;
     const postLikes = this.props.likes;
 
     const likeCnt = postLikes.filter(likeItem => {
@@ -30,10 +35,35 @@ class Post extends React.Component {
       likeNum: likeCnt,
       dislikeNum: dislikeCnt,
     })
+
+    if (isAuth) {
+      const myLikeOfThisPost = postLikes.filter(likeItem => {
+        return (likeItem.user.username === me.username && likeItem.like === true)
+      })
+
+      const myDislikeOfThisPost = postLikes.filter(likeItem => {
+        return (likeItem.user.username === me.username && likeItem.like === false)
+      })
+
+      const hasLikedThisPost = (myLikeOfThisPost.length > 0);
+      const hasDislikedThisPost = (myDislikeOfThisPost.length > 0);
+
+      if (hasLikedThisPost) {
+        this.setState({
+          hasLikedBefore: true,
+          myLikeId: myLikeOfThisPost[0].id,
+        })
+      }
+      else if (hasDislikedThisPost) {
+        this.setState({
+          hasDislikedBefore: true,
+          myLikeId: myDislikeOfThisPost[0].id,
+        })
+      }
+    }
   }
 
   updateLikeNum = (like) => {
-
     const mutation = like.mutation;
     const likeOrNot = like.data.like;
 
@@ -63,72 +93,103 @@ class Post extends React.Component {
 
 
   handleLike = () => {
-    this.createLike({
-      variables: {
-        post: this.props.id,
-        like: true,
-      }
-    }).catch(e => {
-      if (e.graphQLErrors) {
-        const message = e.graphQLErrors[0].message;
-        if (message.includes("Like exists")) {
-          const likeId = message.replace('Like exists: ', '');
-          this.deleteLike({
-            variables: {
-              id: likeId,
-            }
-          })
-        } else if (message.includes("Change like")) {
-          const likeId = message.replace('Change like: ', '');
-          this.deleteLike({
-            variables: {
-              id: likeId,
-            }
-          })
-          this.createLike({
-            variables: {
-              post: this.props.id,
-              like: true,
-            }
-          })
+    if (!this.props.isAuth)
+      return;
+
+    if (this.state.hasLikedBefore) {
+      this.deleteLike({
+        variables: {
+          id: this.state.myLikeId,
         }
-      }
-    })
+      }).then(() => {
+        this.setState({
+          hasLikedBefore: false,
+          myLikeId: ''
+        })
+      })
+    } else if (this.state.hasDislikedBefore) {
+      this.deleteLike({
+        variables: {
+          id: this.state.myLikeId,
+        }
+      }).then(() => {
+        this.createLike({
+          variables: {
+            post: this.props.id,
+            like: true,
+          }
+        }).then((res => {
+          this.setState({
+            hasLikedBefore: true,
+            hasDislikedBefore: false,
+            myLikeId: res.data.createLike.id,
+          })
+        }))
+      })
+    } else {
+      this.createLike({
+        variables: {
+          post: this.props.id,
+          like: true,
+        }
+      }).then((res => {
+        this.setState({
+          hasLikedBefore: true,
+          hasDislikedBefore: false,
+          myLikeId: res.data.createLike.id,
+        })
+      }))
+    }
   }
 
   handleDislike = () => {
-    this.createLike({
-      variables: {
-        post: this.props.id,
-        like: false,
-      }
-    }).catch(e => {
-      if (e.graphQLErrors) {
-        const message = e.graphQLErrors[0].message;
+    if (!this.props.isAuth)
+      return;
 
-        if (message.includes("Like exists")) {
-          const likeId = message.replace('Like exists: ', '');
-          this.deleteLike({
-            variables: {
-              id: likeId,
-            }
-          })
-        } else if (message.includes("Change like")) {
-          const likeId = message.replace('Change like: ', '');
-          this.deleteLike({
-            variables: {
-              id: likeId,
-            }
-          })
-          this.createLike({
-            variables: {
-              post: this.props.id,
-              like: false,
-            }
-          })
+    if (this.state.hasDislikedBefore) {
+      this.deleteLike({
+        variables: {
+          id: this.state.myLikeId,
         }
-      }
-    })
+      }).then(() => {
+        this.setState({
+          hasDislikedBefore: false,
+          myLikeId: ''
+        })
+      })
+    } else if (this.state.hasLikedBefore) {
+      this.deleteLike({
+        variables: {
+          id: this.state.myLikeId,
+        }
+      }).then(() => {
+        this.createLike({
+          variables: {
+            post: this.props.id,
+            like: false,
+          }
+        }).then((res => {
+          this.setState({
+            hasLikedBefore: false,
+            hasDislikedBefore: true,
+            myLikeId: res.data.createLike.id,
+          })
+        }))
+      })
+    } else {
+      this.createLike({
+        variables: {
+          post: this.props.id,
+          like: false,
+        }
+      }).then((res => {
+        this.setState({
+          hasLikedBefore: false,
+          hasDislikedBefore: true,
+          myLikeId: res.data.createLike.id,
+        })
+      }))
+    }
   }
 
   render() {
@@ -182,4 +243,4 @@ class Post extends React.Component {
   }
 }
 
-export default Post
+export default withAuthGuard(Post)

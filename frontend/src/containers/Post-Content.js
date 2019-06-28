@@ -11,26 +11,31 @@ import {
   CREATE_LIKE_MUTATION,
   DELETE_LIKE_MUTATION,
   COMMENTS_SUBSCRIPTION,
-  LIKES_SUBSCRIPTION
+  LIKES_SUBSCRIPTION,
 } from '../lib/graphql'
 import CommentList from './CommentList/CommentList'
 import withAuthGuard from '../hoc/AuthGuard/AuthGuard'
 
 let unsubscribeComments;
 let unsubscribeLikes;
+let unsubscribePost;
 
 class Example extends Component {
   constructor(props) {
     super(props);
     this.inputEl = null;
     this.state = {
-      inputText: ""
+      inputText: "",
+      hasLikedBefore: false,
+      hasDislikedBefore: false,
+      myLikeId: '',
     }
   }
 
   componentWillMount = () => {
     unsubscribeComments = null;
     unsubscribeLikes = null;
+    unsubscribePost = null;
   }
 
   handleInputChange = (e) => {
@@ -54,76 +59,107 @@ class Example extends Component {
   }
 
   handleLike = () => {
+    if (!this.props.isAuth)
+      return;
+
     const { postId } = this.props.match.params;
 
-    this.createLike({
-      variables: {
-        post: postId,
-        like: true,
-      }
-    }).catch(e => {
-      if (e.graphQLErrors) {
-        const message = e.graphQLErrors[0].message;
-        if (message.includes("Like exists")) {
-          const likeId = message.replace('Like exists: ', '');
-          this.deleteLike({
-            variables: {
-              id: likeId,
-            }
-          })
-        } else if (message.includes("Change like")) {
-          const likeId = message.replace('Change like: ', '');
-          this.deleteLike({
-            variables: {
-              id: likeId,
-            }
-          })
-          this.createLike({
-            variables: {
-              post: postId,
-              like: true,
-            }
-          })
+    if (this.state.hasLikedBefore) {
+      this.deleteLike({
+        variables: {
+          id: this.state.myLikeId,
         }
-      }
-    })
+      }).then(() => {
+        this.setState({
+          hasLikedBefore: false,
+          myLikeId: ''
+        })
+      })
+    } else if (this.state.hasDislikedBefore) {
+      this.deleteLike({
+        variables: {
+          id: this.state.myLikeId,
+        }
+      }).then(() => {
+        this.createLike({
+          variables: {
+            post: postId,
+            like: true,
+          }
+        }).then((res => {
+          this.setState({
+            hasLikedBefore: true,
+            hasDislikedBefore: false,
+            myLikeId: res.data.createLike.id,
+          })
+        }))
+      })
+    } else {
+      this.createLike({
+        variables: {
+          post: postId,
+          like: true,
+        }
+      }).then((res => {
+        this.setState({
+          hasLikedBefore: true,
+          hasDislikedBefore: false,
+          myLikeId: res.data.createLike.id,
+        })
+      }))
+    }
   }
 
   handleDislike = () => {
+    if (!this.props.isAuth)
+      return;
+
     const { postId } = this.props.match.params;
 
-    this.createLike({
-      variables: {
-        post: postId,
-        like: false,
-      }
-    }).catch(e => {
-      if (e.graphQLErrors) {
-        const message = e.graphQLErrors[0].message;
-
-        if (message.includes("Like exists")) {
-          const likeId = message.replace('Like exists: ', '');
-          this.deleteLike({
-            variables: {
-              id: likeId,
-            }
-          })
-        } else if (message.includes("Change like")) {
-          const likeId = message.replace('Change like: ', '');
-          this.deleteLike({
-            variables: {
-              id: likeId,
-            }
-          })
-          this.createLike({
-            variables: {
-              post: postId,
-              like: false,
-            }
-          })
+    if (this.state.hasDislikedBefore) {
+      this.deleteLike({
+        variables: {
+          id: this.state.myLikeId,
         }
-      }
-    })
+      }).then(() => {
+        this.setState({
+          hasDislikedBefore: false,
+          myLikeId: ''
+        })
+      })
+    } else if (this.state.hasLikedBefore) {
+      this.deleteLike({
+        variables: {
+          id: this.state.myLikeId,
+        }
+      }).then(() => {
+        this.createLike({
+          variables: {
+            post: postId,
+            like: false,
+          }
+        }).then((res => {
+          this.setState({
+            hasLikedBefore: false,
+            hasDislikedBefore: true,
+            myLikeId: res.data.createLike.id,
+          })
+        }))
+      })
+    } else {
+      this.createLike({
+        variables: {
+          post: postId,
+          like: false,
+        }
+      }).then((res => {
+        this.setState({
+          hasLikedBefore: false,
+          hasDislikedBefore: true,
+          myLikeId: res.data.createLike.id,
+        })
+      }))
+    }
   }
 
   handleDeletePost = () => {
@@ -142,6 +178,36 @@ class Example extends Component {
     this.props.history.push(`/edit/${postId}`);
   }
 
+  setLikeHistory = likes => {
+    const { isAuth, me } = this.props;
+
+    if (isAuth) {
+      const myLikeOfThisPost = likes.filter(likeItem => {
+        return (likeItem.user.username === me.username && likeItem.like === true)
+      })
+
+      const myDislikeOfThisPost = likes.filter(likeItem => {
+        return (likeItem.user.username === me.username && likeItem.like === false)
+      })
+
+      const hasLikedThisPost = (myLikeOfThisPost.length > 0);
+      const hasDislikedThisPost = (myDislikeOfThisPost.length > 0);
+
+      if (hasLikedThisPost) {
+        this.setState({
+          hasLikedBefore: true,
+          myLikeId: myLikeOfThisPost[0].id,
+        })
+      }
+      else if (hasDislikedThisPost) {
+        this.setState({
+          hasDislikedBefore: true,
+          myLikeId: myDislikeOfThisPost[0].id,
+        })
+      }
+    }
+  }
+
   render() {
     const { postId } = this.props.match.params;
     const { isAuth, me } = this.props;
@@ -151,7 +217,8 @@ class Example extends Component {
         <Query
           query={FIND_POST_QUERY}
           variables={{ id: postId }}
-          fetchPolicy={"cache-and-network"}>
+          fetchPolicy={"cache-and-network"}
+          onCompleted={data => this.setLikeHistory(data.findPostById.likes)}>
           {({ loading, error, data, subscribeToMore }) => {
             if (loading) return <p>Loading...</p>
             if (error) return <p>Error :(((</p>
