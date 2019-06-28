@@ -13,24 +13,54 @@ import {
 import mj_1 from '../images/mj (1).jpg'
 import mj_2 from "../images/mj (2).jpg"
 import mj_3 from '../images/mj (3).jpg'
+import gossiping_img from'../images/gossip.jpg'
+import sport_img from '../images/sports.jpg'
+import news_img from '../images/media.jpg'
+import react_img from '../images/react.png'
+import beauty_img from '../images/beauty.jpg'
+import trump_img from '../images/donaldTrump.jpg'
+import MEGA_img from '../images/MEGA.jpg'
 
 
 const items = [
     {
-      src: mj_1,
+      src: gossiping_img,
       altText: 'Slide 1',
       caption: 'Gossiping'
     },
+
     {
-      src: mj_2,
-      altText: 'Slide 2',
-      caption: 'Sports'
-    },
-    {
-      src: mj_3,
+      src: news_img,
       altText: 'Slide 3',
       caption: 'News'
+    },
+    {
+      src: react_img,
+      altText: 'Slide 4',
+      caption: 'React'
+    },
+    {
+      src: mj_1,
+      altText: 'Slide 5',
+      caption: 'Music'
+    },
+    {
+      src: beauty_img,
+      altText: 'Slide 6',
+      caption: 'Beauty'
+    },
+    {
+      src: trump_img,
+      altText: 'Slide 7',
+      caption: 'DonaldTrumpSupporters'
+    },
+    {
+      src: MEGA_img,
+      altText: 'Slide 8',
+      caption: 'MEGA'
     }
+
+
   ];
 
 class FrontPage extends Component {
@@ -82,7 +112,7 @@ class FrontPage extends Component {
           onExited={this.onExited}
           key={item.src}
         >
-          <img src={item.src} alt={item.altText} href={"/"+item.caption}/>
+          <img src={item.src} alt={item.altText} href={"/"+item.caption} style={{ width:"100%"}}/>
           <CarouselCaption  captionText={caption} captionHeader={caption} ></CarouselCaption>
         </CarouselItem>
  
