@@ -16,65 +16,6 @@ import Post from '../components/Post'
 let unsubscribePosts = null
 
 class SubPage extends Component {
-  state = {
-    formTitle: '',
-    formBody: '',
-    dropdownOpen: false,
-    dropdownAuthor: '',
-    authorList: []
-  }
-
-  setUsers = (users) => {
-    this.setState({
-      authorList: users.map(user => ({
-        id: user.id,
-        name: user.name,
-      }))
-    });
-  }
-
-  nameToId = (name) => {
-    const targetAuthor = this.state.authorList.find(author => {
-      return author.name === name;
-    });
-
-    return targetAuthor.id;
-  }
-
-  handleFormSubmit = e => {
-    e.preventDefault()
-
-    const { formTitle, formBody, dropdownAuthor } = this.state
-
-    if (!formTitle || !formBody || !dropdownAuthor) return
-
-    this.createPost({
-      variables: {
-        title: formTitle,
-        body: formBody,
-        published: true,
-        authorId: this.nameToId(dropdownAuthor),
-      }
-    })
-
-    this.setState({
-      formTitle: '',
-      formBody: ''
-    })
-  }
-
-  handleDropdownToggle = () => {
-    this.setState({
-      dropdownOpen: !this.state.dropdownOpen
-    });
-  }
-
-  handleDropdownSelect = (authorName) => {
-    this.setState({
-      dropdownAuthor: authorName,
-      dropdownOpen: false,
-    });
-  }
 
   render() {
     const subName = this.props.match.params.subName;
@@ -148,10 +89,10 @@ class SubPage extends Component {
                       }
                     }
                   })
-                return (<ul className="list-group list-group-flush" style={{ width: "100%" }}>
-                  {posts}
-                </ul>)
-                // return <ListGroup>{posts}</ListGroup>
+                return (
+                  <ul className="list-group list-group-flush" style={{ width: "100%" }}>
+                    {posts}
+                  </ul>)
               }}
             </Query>
           </Col>

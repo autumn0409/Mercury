@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Query,Subscription } from 'react-apollo'
+import { Query } from 'react-apollo'
 import {
   Container,
   Row,
@@ -13,113 +13,89 @@ import {
 
 import Post from '../components/Post'
 
-let unsubscribe = null
+let unsubscribeMyPosts = null
 
-class SubPage extends Component {
-  state = {
-    formTitle: '',
-    formBody: '',
-    dropdownOpen: false,
-    dropdownAuthor: '',
-    authorList: []
-  }
-
-  setUsers = (users) => {
-    this.setState({
-      authorList: users.map(user => ({
-        id: user.id,
-        name: user.name,
-      }))
-    });
-  }
-
-  nameToId = (name) => {
-    const targetAuthor = this.state.authorList.find(author => {
-      return author.name === name;
-    });
-
-    return targetAuthor.id;
-  }
-
-  handleFormSubmit = e => {
-    e.preventDefault()
-
-    const { formTitle, formBody, dropdownAuthor } = this.state
-
-    if (!formTitle || !formBody || !dropdownAuthor) return
-
-    this.createPost({
-      variables: {
-        title: formTitle,
-        body: formBody,
-        published: true,
-        authorId: this.nameToId(dropdownAuthor),
-      }
-    })
-
-    this.setState({
-      formTitle: '',
-      formBody: ''
-    })
-  }
-
-  handleDropdownToggle = () => {
-    this.setState({
-      dropdownOpen: !this.state.dropdownOpen
-    });
-  }
-
-  handleDropdownSelect = (authorName) => {
-    this.setState({
-      dropdownAuthor: authorName,
-      dropdownOpen: false,
-    });
-  }
+class MyPosts extends Component {
 
   render() {
     return (
       <Container  >
         <Row>
           <Col xs="6">
-          <Query query={ME_QUERY}>
-                    {({ loading, error, data, subscribeToMore }) => {
-                        if (loading) return <p>Loading...</p>;
-                        if (error) return <p>Error :(((</p>;
+            <Query query={ME_QUERY} fetchPolicy={"cache-and-network"}>
+              {({ loading, error, data, subscribeToMore }) => {
+                if (loading) return <p>Loading...</p>;
+                if (error) return <p>Error :(((</p>;
 
-                        const me = data.me;
-                        console.log(data)
-                        const posts = me.posts.map((post,id)=>(
-                            <Post {...post} key={id} />
-                        ))
-                        if (!unsubscribe)
-                        unsubscribe = subscribeToMore({
-                          document: POSTS_SUBSCRIPTION,
-                          updateQuery: (prev, { subscriptionData }) => {
-                            if (!subscriptionData.data) return prev
-                            const newPost = subscriptionData.data.post.data
-      
-                            return {
-                              ...prev,
-                              posts: [newPost, ...prev.posts]
-                            }
+                const me = data.me;
+                const posts = me.posts.map((post, id) => (
+                  <Post {...post} subName={post.sub.name} key={id} />
+                ))
+
+                if (!unsubscribeMyPosts)
+                  unsubscribeMyPosts = subscribeToMore({
+                    document: POSTS_SUBSCRIPTION,
+                    updateQuery: (prev, { subscriptionData }) => {
+                      if (!subscriptionData.data) return prev;
+
+                      const { mutation, data } = subscriptionData.data.post;
+                      const originalMyPostsData = prev.me;
+
+                      if (data.author.username !== me.username) return prev;
+
+                      if (mutation === "CREATED") {
+                        const newPost = data;
+
+                        return {
+                          me: {
+                            ...originalMyPostsData,
+                            posts: [...originalMyPostsData.posts, newPost],
                           }
+                        }
+                      }
+                      else if (mutation === "UPDATED") {
+                        const updatedPost = data;
+                        const oldPost = originalMyPostsData.posts.find(post => post.id === updatedPost.id);
+                        const oldPostIndex = originalMyPostsData.posts.indexOf(oldPost);
+                        const updatedPosts = originalMyPostsData.posts.map((post, index) => {
+                          if (index === oldPostIndex)
+                            return updatedPost;
+                          else
+                            return post;
                         })
-                      return (
-                        <React.Fragment>
-                        <h6>Posts by {me.username}</h6>
-                        <ul className="list-group list-group-flush" style={{ width: "100%" }}>
-                        {posts}
-                      </ul>) 
-                        </React.Fragment>
-                      
-                      // return <ListGroup>{posts}</ListGroup>
-                      )
-                    }}
-                </Query>
-            <Subscription
-            subscription={POSTS_SUBSCRIPTION}
-            onSubscriptionData={({ subscriptionData }) => this.updateLikeNum(subscriptionData.data.like)}>
-          </Subscription>
+
+                        return {
+                          me: {
+                            ...originalMyPostsData,
+                            posts: updatedPosts,
+                          }
+                        }
+                      }
+                      else {
+                        const deletedPost = data;
+                        const updatedPosts = originalMyPostsData.posts.filter(post => {
+                          return post.id !== deletedPost.id;
+                        });
+
+                        return {
+                          me: {
+                            ...originalMyPostsData,
+                            posts: updatedPosts,
+                          }
+                        }
+                      }
+                    }
+                  })
+                return (
+                  <React.Fragment>
+                    <h6>Posts by {me.username}</h6>
+                    <ul className="list-group list-group-flush" style={{ width: "100%" }}>
+                      {posts}
+                    </ul>
+                  </React.Fragment>
+                )
+              }}
+            </Query>
           </Col>
         </Row>
       </Container>
@@ -127,4 +103,4 @@ class SubPage extends Component {
   }
 }
 
-export default SubPage
+export default MyPosts
