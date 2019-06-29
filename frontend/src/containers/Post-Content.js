@@ -30,6 +30,7 @@ class Example extends Component {
       hasLikedBefore: false,
       hasDislikedBefore: false,
       myLikeId: '',
+      isAuth:false
     }
   }
 
@@ -359,16 +360,24 @@ class Example extends Component {
                   </p>
                 </Jumbotron>
                 <div className='d-flex flex-column'>
-                  <Input
+                  {
+                    isAuth?
+                    <>
+                    <Input
                     type='textarea'
                     placeholder="Write down your comment:"
                     innerRef={el => { this.inputEl = el }}
                     value={this.state.inputText}
                     onChange={this.handleInputChange}
-                  />
-                  <Button
+                    />
+                    <Button
                     className='align-self-end'
                     onClick={this.handleCreateComment}>Send</Button>
+                    </> 
+                    :<p>Please <a href="/Login">login</a> or <a href='/Register'>register </a>to share your thoughts!</p>
+                  }
+                  
+                  
                 </div>
                 <CommentList comments={post.comments} />
               </React.Fragment>
@@ -382,7 +391,8 @@ class Example extends Component {
           }}
         </Mutation>
         <Mutation mutation={CREATE_COMMENT_MUTATION}>
-          {createComment => {
+          { 
+            createComment => {
             this.createComment = createComment;
             return null;
           }}
