@@ -1,6 +1,6 @@
 import React from 'react';
 import withAuthGuard from '../hoc/AuthGuard/AuthGuard'
-
+import nl2br from 'react-newline-to-break';
 import {
   EDIT_COMMENT_MUTATION,
   DELETE_COMMENT_MUTATION,
@@ -262,7 +262,7 @@ class Comment extends React.Component {
               </div>
             </small>
             <div>
-              {username}: {this.state.editInputToggled ?
+              <small>{username}:<br/></small> {this.state.editInputToggled ?
                 <React.Fragment>
                   <Input
                     type='textarea'
@@ -274,7 +274,7 @@ class Comment extends React.Component {
                     <button type="button" className="btn btn-info btn-sm mb-0 mt-2" onClick={this.handleEditComment}>Edit</button>
                     <button type="button" className="btn btn-info btn-sm mb-0 ml-1 mt-2" onClick={this.handleCancelEditComment}>Cancel</button>
                   </div>
-                </React.Fragment> : text}
+                </React.Fragment> : nl2br(text)}
             </div>
           </div>
           {isAuth ?

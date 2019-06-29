@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { Query, Mutation } from 'react-apollo'
 import { Jumbotron, Input, Button } from 'reactstrap'
 import { withRouter } from 'react-router-dom'
+import nl2br from 'react-newline-to-break'; 
 
 import {
   FIND_POST_QUERY,
@@ -344,7 +345,7 @@ class Example extends Component {
                   </div>
                   <hr className="my-1" />
                   <p></p>
-                  <p className="lead">{post.body}</p>
+                  <p className="lead">{nl2br(post.body)}</p>
                   <hr className="my-1" />
                   <p className="lead">
                     <svg className="like" version="1.1" width="50" height="24" viewBox="0 0 24 24" onClick={this.handleLike}>
