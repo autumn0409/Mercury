@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import ResizeImage from 'react-resize-image'
 import { BrowserRouter as Router} from "react-router-dom";
 import {
   Carousel,
@@ -112,7 +112,7 @@ class FrontPage extends Component {
           onExited={this.onExited}
           key={item.src}
         >
-          <img src={item.src} alt={item.altText} href={"/"+item.caption} style={{ width:"100%"}}/>
+      <img src={item.src} alt={item.altText} href={"/"+item.caption} style={{ width:"100%",height:"100%"}}/>
           <CarouselCaption  captionText={caption} captionHeader={caption} ></CarouselCaption>
         </CarouselItem>
  
