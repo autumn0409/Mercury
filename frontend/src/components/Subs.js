@@ -75,6 +75,24 @@ class Subs extends React.Component {
                                 Beauty
                             </NavText>
                         </NavItem>
+                        <NavItem eventKey="ImGoingToHellForThis">
+                            <NavIcon>
+                            <i class="fas fa-skull-crossbones"style={{ fontSize: '1.75em' }} ></i>
+                              
+                            </NavIcon>
+                            <NavText>
+                            ImGoingToHellForThis
+                            </NavText>
+                        </NavItem>
+                        <NavItem eventKey="DigiCurrency">
+                            <NavIcon>
+                            <i class="fab fa-btc"style={{ fontSize: '1.75em' }} ></i>
+                              
+                            </NavIcon>
+                            <NavText>
+                            DigiCurrency
+                            </NavText>
+                        </NavItem>
                         <NavItem eventKey="DonaldTrumpSupporters">
                             <NavIcon>
                                 <i className="fas fa-fist-raised" style={{ fontSize: '1.75em' }}></i>

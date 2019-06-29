@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import ResizeImage from 'react-resize-image'
 import { BrowserRouter as Router} from "react-router-dom";
 import {
   Carousel,
@@ -20,6 +20,8 @@ import react_img from '../images/react.png'
 import beauty_img from '../images/beauty.jpg'
 import trump_img from '../images/donaldTrump.jpg'
 import MEGA_img from '../images/MEGA.jpg'
+import hell_img from '../images/hell.png'
+import btc_img from '../images/btc.jpeg'
 
 
 const items = [
@@ -48,6 +50,16 @@ const items = [
       src: beauty_img,
       altText: 'Slide 6',
       caption: 'Beauty'
+    },
+    {
+      src: hell_img,
+      altText: 'Slide 1',
+      caption: 'ImGoingToHellForThis'
+    },
+    {
+      src: btc_img,
+      altText: 'Slide 1',
+      caption: 'DigiCurrency'
     },
     {
       src: trump_img,
@@ -112,7 +124,7 @@ class FrontPage extends Component {
           onExited={this.onExited}
           key={item.src}
         >
-          <img src={item.src} alt={item.altText} href={"/"+item.caption} style={{ width:"100%"}}/>
+      <img src={item.src} alt={item.altText} href={"/"+item.caption} style={{ width:"100%",height:"100%gi"}}/>
           <CarouselCaption  captionText={caption} captionHeader={caption} ></CarouselCaption>
         </CarouselItem>
  
