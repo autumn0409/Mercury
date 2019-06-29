@@ -156,7 +156,8 @@ class Comment extends React.Component {
       }).then(() => {
         this.setState({
           hasUpVotedBefore: false,
-          myVoteId: ''
+          myVoteId: '',
+          likeColor:"dimgrey"
         })
       })
     } else if (this.state.hasDownVotedBefore) {
@@ -175,6 +176,8 @@ class Comment extends React.Component {
             hasUpVotedBefore: true,
             hasDownVotedBefore: false,
             myVoteId: res.data.createCommentVote.id,
+            likeColor: "green",
+            dislikeColor:"dimgrey"
           })
         }))
       })
@@ -189,6 +192,7 @@ class Comment extends React.Component {
           hasUpVotedBefore: true,
           hasDownVotedBefore: false,
           myVoteId: res.data.createCommentVote.id,
+          likeColor:"green"
         })
       }))
     }
@@ -225,6 +229,8 @@ class Comment extends React.Component {
             hasUpVotedBefore: false,
             hasDownVotedBefore: true,
             myVoteId: res.data.createCommentVote.id,
+            dislikeColor:"crimson",
+            likeColor:"dimgrey"
           })
         }))
       })
@@ -239,6 +245,7 @@ class Comment extends React.Component {
           hasUpVotedBefore: false,
           hasDownVotedBefore: true,
           myVoteId: res.data.createCommentVote.id,
+          dislikeColor:"crimson"
         })
       }))
     }
@@ -249,7 +256,7 @@ class Comment extends React.Component {
 
     return (
       <React.Fragment>
-        <div className='d-flex justify-content-between'>
+        <div className='d-flex justify-content-between' style={{padding:"30px"}}>
           <div className='d-flex'>
               <div style={{display:"flex",flexDirection:"column",padding:"5px"}}>
                 <div>
