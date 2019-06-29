@@ -1,4 +1,14 @@
-.likes i:hover {
+.like :hover  {
     cursor: pointer;
-    color: rgb(0, 109, 251);
+    fill: green;
+}
+.like {
+    cursor: pointer;
+    fill:dimgrey ;
+}
+
+
+.dislike :hover  {
+    cursor: pointer;
+    fill:crimson;
 }
