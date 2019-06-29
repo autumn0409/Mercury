@@ -45,8 +45,8 @@ class Navigation extends React.Component {
     const { isAuth, history } = this.props;
 
     return (
-      <div>
-        <Navbar color="light" light expand="md">
+      <div className="NavBarr" style={{width:"100%"}}>
+        <Navbar color="light" light expand="sm">
 
           <NavbarToggler onClick={this.toggle} />
 

@@ -23,7 +23,7 @@ class SubPage extends Component {
     return (
       <Container  >
         <Row>
-          <Col xs="6">
+          <Col>
             <Query query={SUB_QUERY} fetchPolicy={"cache-and-network"} variables={{ query: subName }}>
               {({ loading, error, data, subscribeToMore }) => {
                 if (loading) return <p>Loading...</p>
