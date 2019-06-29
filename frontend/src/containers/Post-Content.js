@@ -134,7 +134,9 @@ class Example extends Component {
       }).then(() => {
         this.setState({
           hasDislikedBefore: false,
-          myLikeId: ''
+          myLikeId: '',
+          likeColor:"dimgrey",
+          dislikeColor:"dimgrey"
         })
       })
     } else if (this.state.hasLikedBefore) {
@@ -153,6 +155,8 @@ class Example extends Component {
             hasLikedBefore: false,
             hasDislikedBefore: true,
             myLikeId: res.data.createLike.id,
+            likeColor:"dimgrey",
+            dislikeColor:"crimson"
           })
         }))
       })
@@ -167,6 +171,8 @@ class Example extends Component {
           hasLikedBefore: false,
           hasDislikedBefore: true,
           myLikeId: res.data.createLike.id,
+          likeColor:"dimgrey",
+          dislikeColor:"crimson"
         })
       }))
     }
