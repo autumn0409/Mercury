@@ -9,8 +9,7 @@ import {
   COMMENTVOTES_SUBSCRIPTION,
 } from '../lib/graphql'
 import { Mutation, Subscription } from 'react-apollo'
-import { Input } from 'reactstrap';
-
+import { Button,ButtonGroup,Input } from 'reactstrap';
 class Comment extends React.Component {
 
   constructor(props) {
@@ -282,9 +281,11 @@ class Comment extends React.Component {
           {isAuth ?
             <div>
               {username === me.username ?
-                <div>
-                  <span className='mr-2' onClick={this.handleEditInputToggled}>edit</span>
-                  <span onClick={this.handleDeleteComment}>delete</span>
+                <div style={{display:"flex"}} >
+                  <ButtonGroup>
+                  <Button color="primary" className='mr-2' style={{width: '50px' ,padding:"3px"}} onClick={this.handleEditInputToggled}><small>edit</small></Button>
+                  <Button color="primary" style={{width: '60px',padding:"3px"}} onClick={this.handleDeleteComment}><small>delete</small></Button>
+                  </ButtonGroup>
                 </div> :
                 <div />
               }
