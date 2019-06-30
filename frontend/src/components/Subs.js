@@ -22,7 +22,7 @@ class Subs extends React.Component {
     render() {
         return (
             <div>
-                <SideNav style={{ background: "black" }}
+                <SideNav style={{ height:"220%", background: "black" }}
                     onSelect={this.onSelect}
                 >
                     <SideNav.Toggle />
