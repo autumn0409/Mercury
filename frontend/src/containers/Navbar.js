@@ -2,6 +2,9 @@ import React from 'react';
 import { withRouter } from 'react-router-dom'
 import withAuthGuard from '../hoc/AuthGuard/AuthGuard'
 import Subs from '../components/Subs'
+import SearchField from 'react-search-field';
+
+
 import {
   Collapse,
   Navbar,
@@ -51,6 +54,14 @@ class Navigation extends React.Component {
           <NavbarToggler onClick={this.toggle} />
 
           <NavbarBrand onClick={() => history.push("/frontPage")}>Reddit Clone</NavbarBrand>
+
+          <SearchField onSearchClick={
+            (e) => {
+              console.log(e)
+              const str = e 
+              history.push("/search/"+str)
+            }
+          } placeholder='Search posts'/>
 
           <NavbarToggler onClick={this.toggleNavbar} />
           <Collapse isOpen={this.state.isOpen} navbar>

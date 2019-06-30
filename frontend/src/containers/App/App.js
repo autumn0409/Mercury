@@ -14,6 +14,7 @@ import PostContent from '../Post-Content'
 import EditPost from '../../components/EditPost'
 import MyPosts from '../MyPosts'
 import FavoritePosts from '../FavoritePosts'
+import Search from '../Search'
 
 import {
   Container,
@@ -45,6 +46,7 @@ class App extends Component {
                 <Route path='/favoritePosts' component={FavoritePosts} />
                 <Route path='/sub/:subName/:postId' component={PostContent} />
                 <Route path='/edit/:postId' component={EditPost} />
+                <Route path='/search/:name' component={Search}/>
                 <Redirect from="/" to='frontPage' />
               </Switch>
             </Col>
