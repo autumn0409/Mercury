@@ -40,6 +40,13 @@ class SubPage extends Component {
                         {result.push(post)
                     }
                 })
+                if(result.length == 0){
+                    return <React.Fragment>
+                        <h1>OOPS...</h1>
+                        <h6>No post found</h6>
+                        <h6>try another keyword</h6>
+                    </React.Fragment>
+                }
                 
                 console.log(result)   
                 const posts = result.map((post, id) => (
