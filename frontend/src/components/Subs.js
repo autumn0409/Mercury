@@ -35,7 +35,7 @@ class Subs extends React.Component {
         return (
             <div>
                 <SideNav
-                    style={{background: "black" }}
+                    style={{background: "black",height:"200%" }}
                     onSelect={this.onSelect}
                     expanded={this.state.isOpen}
                     onToggle={this.handleToggle}
