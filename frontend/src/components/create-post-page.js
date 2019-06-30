@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import { Query, Mutation } from 'react-apollo'
+import { withRouter } from 'react-router-dom'
+
 import {
   Container,
   Row,
@@ -61,14 +63,11 @@ class CreatePost extends Component {
         published: true,
         sub: this.nameToId(dropdownSub)
       }
+    }).then(() => {
+      this.props.history.push(`/sub/${dropdownSub}`)
     })
 
-    console.log(formTitle, formBody, true, this.nameToId(dropdownSub))
 
-    this.setState({
-      formTitle: '',
-      formBody: ''
-    })
   }
 
   handleDropdownToggle = () => {
@@ -167,4 +166,4 @@ class CreatePost extends Component {
   }
 }
 
-export default CreatePost;
+export default withRouter(CreatePost);

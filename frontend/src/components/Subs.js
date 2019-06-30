@@ -6,24 +6,39 @@ import '@trendmicro/react-sidenav/dist/react-sidenav.css';
 
 class Subs extends React.Component {
 
+    state = {
+        isOpen: false,
+    }
+
     onSelect = (selected) => {
-        console.log(selected, this.props);
         let to = '/sub/' + selected;
+
         if (selected === "Home") {
             to = '/frontPage';
         }
 
-        console.log(to)
         if (window.location.pathname !== to) {
             this.props.history.push(to);
         }
+        this.setState({
+            isOpen: false
+        })
+    }
+
+    handleToggle = () => {
+        this.setState({
+            isOpen: !this.state.isOpen
+        })
     }
 
     render() {
         return (
             <div>
-                <SideNav style={{ height:"220%", background: "black" }}
+                <SideNav
+                    style={{ height: "220%", background: "black" }}
                     onSelect={this.onSelect}
+                    expanded={this.state.isOpen}
+                    onToggle={this.handleToggle}
                 >
                     <SideNav.Toggle />
                     <SideNav.Nav defaultSelected="Home">
@@ -77,20 +92,20 @@ class Subs extends React.Component {
                         </NavItem>
                         <NavItem eventKey="ImGoingToHellForThis">
                             <NavIcon>
-                            <i class="fas fa-skull-crossbones"style={{ fontSize: '1.75em' }} ></i>
-                              
+                                <i class="fas fa-skull-crossbones" style={{ fontSize: '1.75em' }} ></i>
+
                             </NavIcon>
                             <NavText>
-                            ImGoingToHellForThis
+                                ImGoingToHellForThis
                             </NavText>
                         </NavItem>
                         <NavItem eventKey="DigiCurrency">
                             <NavIcon>
-                            <i class="fab fa-btc"style={{ fontSize: '1.75em' }} ></i>
-                              
+                                <i class="fab fa-btc" style={{ fontSize: '1.75em' }} ></i>
+
                             </NavIcon>
                             <NavText>
-                            DigiCurrency
+                                DigiCurrency
                             </NavText>
                         </NavItem>
                         <NavItem eventKey="DonaldTrumpSupporters">

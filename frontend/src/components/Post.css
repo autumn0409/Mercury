@@ -2,11 +2,6 @@
     cursor: pointer;
     fill: green;
 }
-.like {
-    cursor: pointer;
-    fill:dimgrey ;
-}
-
 
 .dislike :hover  {
     cursor: pointer;
