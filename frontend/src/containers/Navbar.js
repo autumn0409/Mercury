@@ -20,6 +20,8 @@ import {
   DropdownItem
 } from 'reactstrap';
 
+import './Navbar.css'
+
 
 class Navigation extends React.Component {
   constructor(props) {
@@ -36,9 +38,9 @@ class Navigation extends React.Component {
       collapsed: true
     };
   }
-  toggelHover(){
-    this.setState({hover: !this.state.hover})
-    console.log("hover",this.state.hover)
+  toggelHover() {
+    this.setState({ hover: !this.state.hover })
+    console.log("hover", this.state.hover)
   }
   toggle() {
     this.setState({
@@ -52,34 +54,34 @@ class Navigation extends React.Component {
   }
   render() {
     const { isAuth, history } = this.props;
-    const hoverStyle={
-       curser:"pointer"
+    const hoverStyle = {
+      curser: "pointer"
     }
     const style = {}
-    if(this.state.hover){
-      
+    if (this.state.hover) {
+
     }
 
     return (
-      <div className="NavBarr" style={{width:"100%"}}>
+      <div className="NavBarr" style={{ width: "100%" }}>
         <Navbar color="light" light expand="sm">
 
           <NavbarToggler onClick={this.toggle} />
 
-          <NavbarBrand style={{curser:"pointer"}} onMouseEnter={ this.toggelHover.bind(this)} onClick={() => history.push("/frontPage")}>Reddit Clone</NavbarBrand>
+          <NavbarBrand className='navbar-item' onMouseEnter={this.toggelHover.bind(this)} onClick={() => history.push("/frontPage")}>Reddit Clone</NavbarBrand>
 
           <SearchField onSearchClick={
             (e) => {
               console.log(e)
-              const str = e 
-              history.push("/search/"+str)
+              const str = e
+              history.push("/search/" + str)
             }
-          } placeholder='Search posts'/>
+          } placeholder='Search posts' />
 
           <NavbarToggler onClick={this.toggleNavbar} />
           <Collapse isOpen={this.state.isOpen} navbar>
             <Nav className="ml-auto" navbar>
-              <NavItem>
+              <NavItem className='navbar-item'>
                 <NavLink onClick={() => {
                   if (!isAuth)
                     alert("Please login first.")
@@ -89,16 +91,16 @@ class Navigation extends React.Component {
               </NavItem>
 
               <UncontrolledDropdown nav inNavbar>
-                
-                  <Query query={ME_QUERY}>
-                    {({ loading, error, data, subscribeToMore }) => {
-                        if (loading) return <p>Loading...</p>;
-                        if (error) return <DropdownToggle nav caret>Login</DropdownToggle>;
-                        const me = data.me;
-                        return (
-                            <DropdownToggle nav caret>{me.username}</DropdownToggle>
-                        )
-                    }}
+
+                <Query query={ME_QUERY}>
+                  {({ loading, error, data, subscribeToMore }) => {
+                    if (loading) return <p>Loading...</p>;
+                    if (error) return <DropdownToggle nav caret>Login</DropdownToggle>;
+                    const me = data.me;
+                    return (
+                      <DropdownToggle nav caret>{me.username}</DropdownToggle>
+                    )
+                  }}
                 </Query>
                 <DropdownMenu right>
 
