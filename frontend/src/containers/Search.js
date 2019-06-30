@@ -23,7 +23,7 @@ class SubPage extends Component {
     console.log(subName)
     return (
 
-      <Container  >
+      <Container style={{ width: "100%", padding: "0" }} >
         <Row>
           <Col>
             <Query query={POSTS_QUERY} fetchPolicy={"cache-and-network"} variables={{ query: subName }}>
@@ -31,23 +31,23 @@ class SubPage extends Component {
                 if (loading) return <p>Loading...</p>
                 if (error) return <p>Error :(((</p>
                 console.log(data.posts)
-                const result = data.posts.filter(post =>{
-                    post.title.toLowerCase().includes(target)
+                const result = data.posts.filter(post => {
+                  post.title.toLowerCase().includes(target)
                 });
 
-                data.posts.map((post,id)=>{
-                    if(post.title.toLowerCase().includes(target))
-                        {result.push(post)
-                    }
+                data.posts.map((post, id) => {
+                  if (post.title.toLowerCase().includes(target)) {
+                    result.push(post)
+                  }
                 })
-                if(result.length == 0){
-                    return <React.Fragment>
-                        <h1>OOPS...</h1>
-                        <h6>No post found</h6>
-                        <h6>try another keyword</h6>
-                    </React.Fragment>
+                if (result.length == 0) {
+                  return <React.Fragment>
+                    <h1>OOPS...</h1>
+                    <h6>No post found</h6>
+                    <h6>try another keyword</h6>
+                  </React.Fragment>
                 }
-                
+
                 const posts = result.map((post, id) => (
                   <Post {...post} key={id} />
                 ))

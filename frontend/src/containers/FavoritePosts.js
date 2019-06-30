@@ -23,7 +23,7 @@ class FavoritePosts extends Component {
     const { isAuth, me } = this.props;
 
     return (
-      <Container  >
+      <Container style={{ width: "100%", padding: "0" }} >
         <Row>
           <Col xs="6">
             <Query query={FAVORITE_POSTS_QUERY} fetchPolicy={"cache-and-network"}>
