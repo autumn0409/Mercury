@@ -2,7 +2,7 @@ import React from 'react';
 import { Query } from 'react-apollo'
 import { Jumbotron, Container } from 'reactstrap';
 import { ME_QUERY } from '../lib/graphql'
-import { Redirect,Link } from "react-router-dom"
+import {Link } from "react-router-dom"
 
 class Profile extends React.Component {
 

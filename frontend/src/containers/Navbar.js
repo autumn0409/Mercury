@@ -1,7 +1,8 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom'
+import { Query } from 'react-apollo'
 import withAuthGuard from '../hoc/AuthGuard/AuthGuard'
-import Subs from '../components/Subs'
+import { ME_QUERY } from '../lib/graphql'
 import SearchField from 'react-search-field';
 
 
@@ -76,9 +77,17 @@ class Navigation extends React.Component {
               </NavItem>
 
               <UncontrolledDropdown nav inNavbar>
-                <DropdownToggle nav caret>
-                  Settings
-                </DropdownToggle>
+                
+                  <Query query={ME_QUERY}>
+                    {({ loading, error, data, subscribeToMore }) => {
+                        if (loading) return <p>Loading...</p>;
+                        if (error) return <p>Error :(((</p>;
+                        const me = data.me;
+                        return (
+                            <DropdownToggle nav caret>{me.username}</DropdownToggle>
+                        )
+                    }}
+                </Query>
                 <DropdownMenu right>
 
                   {

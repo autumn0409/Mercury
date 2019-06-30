@@ -5,7 +5,7 @@ import {
   Row,
   Col,
 } from 'reactstrap'
-
+import {Link } from "react-router-dom"
 import {
   SUB_QUERY,
   POSTS_SUBSCRIPTION
@@ -34,6 +34,15 @@ class SubPage extends Component {
                 const posts = sub_object.posts.map((post, id) => (
                   <Post {...post} subName={subName} key={id} />
                 ))
+
+                if(posts.length == 0){
+                  return <div>
+                    <h1>oops</h1>
+                    <h6>seems that there's no post in this sub</h6>
+                    <hr></hr>
+                    <h5><Link style={{color:"dimgrey"}} to='/createPost'>share your thoughts NOW!</Link></h5>
+                  </div>
+                }
 
                 if (!unsubscribePosts)
                   unsubscribePosts = subscribeToMore({

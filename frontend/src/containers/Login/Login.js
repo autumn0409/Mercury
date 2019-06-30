@@ -31,6 +31,7 @@ class Login extends Component {
                     // logged in
                     client.cache.reset().then(() => {
                         window.location.reload();
+                        window.history.push('/frontPage')
                     })
                 }}
                 onError={error => console.error(error)}
