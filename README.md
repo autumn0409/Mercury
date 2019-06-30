@@ -7,7 +7,7 @@ Users provide all kinds of content, and decide, through voting, what's good and 
 Video: https://youtu.be/hlvH8fMGX8M
 
 ## Installation
-### Production
+### Install packages
 First clone the repo:   https://github.com/autumn0409/Mercury.git
 
 ```
@@ -21,14 +21,13 @@ cd frontend
 npm install
 ``` 
 
-Lastly, build and start the server
+Lastly, build the server
 ```
 cd ../backend
 npm install
 ```
-When no port is set in environment variable, port `4000` will be used.
 
-### Development
+### Run
 Run both backend and frontend via concurrently:
 ```
 cd frontend
