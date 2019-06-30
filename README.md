@@ -21,17 +21,9 @@ cd frontend
 npm install
 ``` 
 
-Open your local mongoDB and edit the database connection info:
-```
-cd ../backend
-```
-index.js
-```
-line 14  (paste your local database link)
-```
-
 Lastly, build and start the server
 ```
+cd ../backend
 npm install
 npm start
 ```

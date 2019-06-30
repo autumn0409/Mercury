@@ -11,7 +11,7 @@ import CommentVote from './resolvers/CommentVote'
 
 import mongoose from 'mongoose';
 
-const DB_URL = "mongodb://localhost:27017/Web_final?retryWrites=true&w=majority"
+const DB_URL = "mongodb+srv://oop:246813579@cluster0-y9zgc.mongodb.net/final?retryWrites=true&w=majority"
 
 mongoose.connect(DB_URL, {
   useNewUrlParser: true
