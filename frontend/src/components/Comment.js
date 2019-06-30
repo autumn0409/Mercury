@@ -57,14 +57,12 @@ class Comment extends React.Component {
 
       if (hasUpVotedThisComment) {
         this.setState({
-          likeColor:"green"
           hasUpVotedBefore: true,
           myVoteId: myUpVoteForThisComment[0].id,
         })
       }
       else if (hasDownVotedThisComment) {
         this.setState({
-          dislikeColor:"crimson"
           hasDownVotedBefore: true,
           myVoteId: myDownVoteForThisComment[0].id,
         })
