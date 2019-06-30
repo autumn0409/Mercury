@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Mutation, withApollo } from 'react-apollo'
 import { withRouter, Redirect } from 'react-router-dom'
 import { Formik } from 'formik'
-import { Button, Form, FormGroup, FormText, Label, Input } from 'reactstrap'
+import { Col,Jumbotron,Button, Form, FormGroup, FormText, Label, Input } from 'reactstrap'
 
 import { LOGIN_MUTATION, LOGIN_SCHEMA } from '../../lib/graphql'
 import { setCookie, removeAllCookies } from '../../lib/utils'
@@ -61,8 +61,10 @@ class Login extends Component {
                                     handleSubmit,
                                     isSubmitting
                                 }) => (
-                                        <FormWrapper>
-                                            <h1>Login</h1>
+                                    <Jumbotron style={{padding:"20px 10px", background:"white"}}>
+                                        <h5>Login</h5>
+                                        <Col sm = {8}>
+                                            
                                             <Form onSubmit={handleSubmit}>
                                                 <FormGroup>
                                                     <Label for="username">Username</Label>
@@ -101,7 +103,7 @@ class Login extends Component {
                                                             : ''}
                                                     </FormText>
                                                 </FormGroup>
-                                                <div className="col-sm-12 text-center">
+                                               
                                                     <Button
                                                         type="submit"
                                                         disabled={
@@ -112,22 +114,16 @@ class Login extends Component {
                                                             !!(errors.password && touched.password)
                                                         }
                                                         outline
-                                                        style={{ width: '100px', margin: '5px' }}
+                                                        style={{ width: '120px', margin: '5px',padding:"3px" }}
                                                         color="primary"
                                                     >
                                                         Login
 											</Button>
-                                                    <Button
-                                                        onClick={() => history.push('/register')}
-                                                        outline
-                                                        style={{ width: '100px', margin: '5px' }}
-                                                        color="info"
-                                                    >
-                                                        Register
-											</Button>
-                                                </div>
+                                                    
+                                                <small>Don't have an account? <a href="/register">register</a>!</small>
                                             </Form>
-                                        </FormWrapper>
+                                        </Col>
+                                    </Jumbotron>
                                     )}
                             />
                         )

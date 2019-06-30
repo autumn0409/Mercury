@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Mutation, withApollo } from 'react-apollo'
 import { withRouter, Redirect } from 'react-router-dom'
 import { Formik } from 'formik'
-import { Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap'
+import { Col,Jumbotron, Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap'
 import { REGISTER_MUTATION, REGISTER_SCHEMA } from '../../lib/graphql'
 import { setCookie, removeAllCookies } from '../../lib/utils'
 import withAuthGuard from '../../hoc/AuthGuard/AuthGuard'
@@ -28,6 +28,7 @@ class Register extends Component {
 					// logged in
 					client.cache.reset().then(() => {
 						window.location.reload();
+						window.history.push('/frontPage')
 					})
 				}}
 				onError={error => console.error(error)}
@@ -36,7 +37,7 @@ class Register extends Component {
 					loading || authHint ? (
 						<Hint />
 					) : (
-							<Formik
+						<Formik
 								initialValues={{ username: '', password: '', email: '', age: '' }}
 								validationSchema={REGISTER_SCHEMA}
 								onSubmit={
@@ -62,8 +63,10 @@ class Register extends Component {
 									handleSubmit,
 									isSubmitting
 								}) => (
-										<FormWrapper>
-											<h1>Register</h1>
+									<Jumbotron style={{padding:"20px 10px", background:"white"}}>
+										<h5>Register</h5>
+										<Col sm ={8}>
+											
 											<Form onSubmit={handleSubmit}>
 												<FormGroup>
 													<Label for="username">Username</Label>
@@ -142,7 +145,7 @@ class Register extends Component {
 															: ''}
 													</FormText>
 												</FormGroup>
-												<div className="col-sm-12 text-center">
+												
 													<Button
 														type="submit"
 														disabled={
@@ -157,22 +160,18 @@ class Register extends Component {
 															!!(errors.age && touched.age)
 														}
 														outline
-														style={{ width: '100px', margin: '5px' }}
+														style={{ width: '120px', margin: '5px',padding:"3px" }}
 														color="primary"
 													>
 														Register
 											</Button>
-													<Button
-														onClick={() => history.push('/login')}
-														outline
-														style={{ width: '100px', margin: '5px' }}
-														color="info"
-													>
-														Login
-											</Button>
-												</div>
+													
+
+											<small>Already have an account? <a href="/login">login</a>!</small>
+												
 											</Form>
-										</FormWrapper>
+											</Col>
+										</Jumbotron>
 									)}
 							/>
 						)
