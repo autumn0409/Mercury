@@ -1,4 +1,5 @@
 import React from 'react';
+import PerfectScrollbar from 'react-perfect-scrollbar';
 
 import Comment from '../../components/Comment'
 class CommentList extends React.Component {
@@ -17,7 +18,13 @@ class CommentList extends React.Component {
                 />
             )
         })
-        return commentList;
+        return (
+            <PerfectScrollbar>
+                <div>
+                    {commentList}
+                </div>
+            </PerfectScrollbar>
+        )
     }
 }
 

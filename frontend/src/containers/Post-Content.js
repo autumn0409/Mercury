@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { Query, Mutation } from 'react-apollo'
 import { Jumbotron, Input, Button, ButtonToolbar } from 'reactstrap'
 import { withRouter } from 'react-router-dom'
-import nl2br from 'react-newline-to-break'; 
+import nl2br from 'react-newline-to-break';
 
 import {
   FIND_POST_QUERY,
@@ -30,7 +30,7 @@ class Example extends Component {
       hasLikedBefore: false,
       hasDislikedBefore: false,
       myLikeId: '',
-      isAuth:false,
+      isAuth: false,
     }
   }
 
@@ -326,7 +326,7 @@ class Example extends Component {
 
             return (
               <React.Fragment>
-                <Jumbotron style={{padding:"2rem 3rem"}}>
+                <Jumbotron style={{ padding: "2rem 3rem" }}>
                   <div className='d-flex justify-content-between'>
                     <div>
                       <h4 className="display-6">{post.title}</h4>
@@ -339,9 +339,9 @@ class Example extends Component {
                               <ButtonToolbar>
                                 <Button onClick={this.handleEditPost} className='mr-3'>edit</Button>
                                 <Button onClick={this.handleDeletePost}>delete</Button>
-                            
+
                               </ButtonToolbar>
-                              </React.Fragment>
+                            </React.Fragment>
                             : <div />
                         }
                       </div> : <div />
@@ -352,11 +352,11 @@ class Example extends Component {
                   <p className="lead">{nl2br(post.body)}</p>
                   <hr className="my-1" />
                   <p className="lead">
-                    <svg className="like" style={{fill:this.state.hasLikedBefore ? "green" : "dimgrey"}} version="1.1" width="50" height="24" viewBox="0 0 24 24" onClick={this.handleLike}>
+                    <svg className="like" style={{ fill: this.state.hasLikedBefore ? "green" : "dimgrey" }} version="1.1" width="50" height="24" viewBox="0 0 24 24" onClick={this.handleLike}>
                       <path d="M23,10C23,8.89 22.1,8 21,8H14.68L15.64,3.43C15.66,3.33 15.67,3.22 15.67,3.11C15.67,2.7 15.5,2.32 15.23,2.05L14.17,1L7.59,7.58C7.22,7.95 7,8.45 7,9V19A2,2 0 0,0 9,21H18C18.83,21 19.54,20.5 19.84,19.78L22.86,12.73C22.95,12.5 23,12.26 23,12V10.08L23,10M1,21H5V9H1V21Z"></path>
                     </svg>
                     {likeNum}
-                    <svg className="dislike" style={{fill:this.state.dislikeColor ? "red" : "dimgrey"}} version="1.1" width="50" height="24" viewBox="0 0 24 24" onClick={this.handleDislike}>
+                    <svg className="dislike" style={{ fill: this.state.hasDislikedBefore ? "red" : "dimgrey" }} version="1.1" width="50" height="24" viewBox="0 0 24 24" onClick={this.handleDislike}>
                       <path d="M19,15H23V3H19M15,3H6C5.17,3 4.46,3.5 4.16,4.22L1.14,11.27C1.05,11.5 1,11.74 1,12V13.91L1,14A2,2 0 0,0 3,16H9.31L8.36,20.57C8.34,20.67 8.33,20.77 8.33,20.88C8.33,21.3 8.5,21.67 8.77,21.94L9.83,23L16.41,16.41C16.78,16.05 17,15.55 17,15V5C17,3.89 16.1,3 15,3Z"></path>
                     </svg>
                     {dislikeNum}
@@ -364,25 +364,27 @@ class Example extends Component {
                 </Jumbotron>
                 <div className='d-flex flex-column'>
                   {
-                    isAuth?
-                    <>
-                    <Input
-                    type='textarea'
-                    placeholder="Write down your comment:"
-                    innerRef={el => { this.inputEl = el }}
-                    value={this.state.inputText}
-                    onChange={this.handleInputChange}
-                    />
-                    <Button
-                    className='align-self-end'
-                    onClick={this.handleCreateComment}>Send</Button>
-                    </> 
-                    :<p>Please <a href="/Login">login</a> or <a href='/Register'>register </a>to share your thoughts!</p>
+                    isAuth ?
+                      <>
+                        <Input
+                          type='textarea'
+                          placeholder="Write down your comment:"
+                          innerRef={el => { this.inputEl = el }}
+                          value={this.state.inputText}
+                          onChange={this.handleInputChange}
+                        />
+                        <Button
+                          className='align-self-end'
+                          onClick={this.handleCreateComment}>Send</Button>
+                      </>
+                      : <p>Please <a href="/Login">login</a> or <a href='/Register'>register </a>to share your thoughts!</p>
                   }
-                  
-                  
+
+
                 </div>
-                <CommentList comments={post.comments} />
+                <div style={{ height: "243px" }}>
+                  <CommentList comments={post.comments} />
+                </div>
               </React.Fragment>
             )
           }}
@@ -394,11 +396,11 @@ class Example extends Component {
           }}
         </Mutation>
         <Mutation mutation={CREATE_COMMENT_MUTATION}>
-          { 
+          {
             createComment => {
-            this.createComment = createComment;
-            return null;
-          }}
+              this.createComment = createComment;
+              return null;
+            }}
         </Mutation>
         <Mutation mutation={CREATE_LIKE_MUTATION}>
           {createLike => {
