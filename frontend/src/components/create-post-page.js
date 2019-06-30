@@ -111,7 +111,7 @@ class CreatePost extends Component {
                         <ButtonDropdown isOpen={this.state.dropdownOpen} toggle={this.handleDropdownToggle}>
                           <DropdownToggle caret outline>
                             {this.state.dropdownSub === '' ?
-                              'Select an sub' : this.state.dropdownSub}
+                              'Select a sub' : this.state.dropdownSub}
                           </DropdownToggle>
                           <DropdownMenu>
                             {subMenu}
