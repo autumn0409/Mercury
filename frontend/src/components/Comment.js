@@ -281,7 +281,7 @@ class Comment extends React.Component {
           {isAuth ?
             <div>
               {username === me.username ?
-                <div style={{display:"flex"}} >
+                <div style={{margin:"23%",display:"flex"}} >
                   <ButtonGroup>
                   <Button color="primary" className='mr-2' style={{width: '50px' ,padding:"3px"}} onClick={this.handleEditInputToggled}><small>edit</small></Button>
                   <Button color="primary" style={{width: '60px',padding:"3px"}} onClick={this.handleDeleteComment}><small>delete</small></Button>
