@@ -27,13 +27,18 @@ class Navigation extends React.Component {
 
     this.toggle = this.toggle.bind(this);
     this.state = {
-      isOpen: false
+      isOpen: false,
+      hover: false
     };
 
     this.toggleNavbar = this.toggleNavbar.bind(this);
     this.state = {
       collapsed: true
     };
+  }
+  toggelHover(){
+    this.setState({hover: !this.state.hover})
+    console.log("hover",this.state.hover)
   }
   toggle() {
     this.setState({
@@ -47,6 +52,13 @@ class Navigation extends React.Component {
   }
   render() {
     const { isAuth, history } = this.props;
+    const hoverStyle={
+       curser:"pointer"
+    }
+    const style = {}
+    if(this.state.hover){
+      
+    }
 
     return (
       <div className="NavBarr" style={{width:"100%"}}>
@@ -54,7 +66,7 @@ class Navigation extends React.Component {
 
           <NavbarToggler onClick={this.toggle} />
 
-          <NavbarBrand onClick={() => history.push("/frontPage")}>Reddit Clone</NavbarBrand>
+          <NavbarBrand style={{curser:"pointer"}} onMouseEnter={ this.toggelHover.bind(this)} onClick={() => history.push("/frontPage")}>Reddit Clone</NavbarBrand>
 
           <SearchField onSearchClick={
             (e) => {
@@ -81,7 +93,7 @@ class Navigation extends React.Component {
                   <Query query={ME_QUERY}>
                     {({ loading, error, data, subscribeToMore }) => {
                         if (loading) return <p>Loading...</p>;
-                        if (error) return <p>Error :(((</p>;
+                        if (error) return <DropdownToggle nav caret>Login</DropdownToggle>;
                         const me = data.me;
                         return (
                             <DropdownToggle nav caret>{me.username}</DropdownToggle>

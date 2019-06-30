@@ -21,9 +21,7 @@ class SubPage extends Component {
     const subName = this.props.match.params.subName;
 
     return (
-      <Container  >
-        <Row>
-          <Col>
+      <Container  style={{width:"100%"}} >
             <Query query={SUB_QUERY} fetchPolicy={"cache-and-network"} variables={{ query: subName }}>
               {({ loading, error, data, subscribeToMore }) => {
                 if (loading) return <p>Loading...</p>
@@ -104,8 +102,7 @@ class SubPage extends Component {
                   </ul>)
               }}
             </Query>
-          </Col>
-        </Row>
+          
       </Container>
     )
   }
