@@ -3,7 +3,6 @@ import { Mutation, withApollo } from 'react-apollo'
 import { withRouter, Redirect } from 'react-router-dom'
 import { Formik } from 'formik'
 import { Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap'
-
 import { REGISTER_MUTATION, REGISTER_SCHEMA } from '../../lib/graphql'
 import { setCookie, removeAllCookies } from '../../lib/utils'
 import withAuthGuard from '../../hoc/AuthGuard/AuthGuard'
@@ -78,10 +77,11 @@ class Register extends Component {
 														placeholder="Username"
 													/>
 													<FormText color="danger">
-														{(errors.username
+														{
+															(errors.username
 															? errors.username.replace('username', 'Username')
 															: '') ||
-															(error ? 'Unable to register. (contact staff)' : '')}
+															(error ? 'Unable to register. (contact staff)'+error :'')}
 													</FormText>
 												</FormGroup>
 												<FormGroup>
