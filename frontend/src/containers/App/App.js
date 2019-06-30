@@ -32,8 +32,7 @@ class App extends Component {
             <Navbar style = {{width:"100%"}}></Navbar>
           </div>
 
-          <Row>
-            <Col>
+          <div>
               <Switch>
                 <Route path='/createPost' component={CreatePost} />
                 <Route path='/frontPage' component={FrontPage} />
@@ -49,8 +48,7 @@ class App extends Component {
                 <Route path='/search/:name' component={Search}/>
                 <Redirect from="/" to='frontPage' />
               </Switch>
-            </Col>
-          </Row>
+            </div>
         </Router>
       </Container>
 

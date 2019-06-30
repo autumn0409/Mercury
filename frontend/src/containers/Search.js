@@ -48,7 +48,6 @@ class SubPage extends Component {
                     </React.Fragment>
                 }
                 
-                console.log(result)   
                 const posts = result.map((post, id) => (
                   <Post {...post} key={id} />
                 ))
