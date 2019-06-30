@@ -4,7 +4,8 @@ export {
     SUBS_QUERY,
     SUB_QUERY,
     FIND_POST_QUERY,
-    FAVORITE_POSTS_QUERY
+    FAVORITE_POSTS_QUERY,
+    POSTS_QUERY
 } from './queries'
 export {
     CREATE_POST_MUTATION,

@@ -19,9 +19,7 @@ class MyPosts extends Component {
 
   render() {
     return (
-      <Container  >
-        <Row>
-          <Col xs="6">
+      <Container style={{width:'100%'}}>
             <Query query={ME_QUERY} fetchPolicy={"cache-and-network"}>
               {({ loading, error, data, subscribeToMore }) => {
                 if (loading) return <p>Loading...</p>;
@@ -88,7 +86,7 @@ class MyPosts extends Component {
                   })
                 return (
                   <React.Fragment>
-                    <h6>Posts by {me.username}</h6>
+                    <h6 style={{padding:"20px"}}>Posts by {me.username}</h6>
                     <ul className="list-group list-group-flush" style={{ width: "100%" }}>
                       {posts}
                     </ul>
@@ -96,8 +94,6 @@ class MyPosts extends Component {
                 )
               }}
             </Query>
-          </Col>
-        </Row>
       </Container>
     )
   }

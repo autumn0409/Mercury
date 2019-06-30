@@ -1,7 +1,7 @@
 
 import React, { Component } from 'react';
 import { Query, Mutation } from 'react-apollo'
-import { Jumbotron, Input, Button } from 'reactstrap'
+import { Jumbotron, Input, Button, ButtonToolbar } from 'reactstrap'
 import { withRouter } from 'react-router-dom'
 import nl2br from 'react-newline-to-break'; 
 
@@ -340,7 +340,7 @@ class Example extends Component {
 
             return (
               <React.Fragment>
-                <Jumbotron>
+                <Jumbotron style={{padding:"2rem 3rem"}}>
                   <div className='d-flex justify-content-between'>
                     <div>
                       <h4 className="display-6">{post.title}</h4>
@@ -350,9 +350,12 @@ class Example extends Component {
                         {
                           post.author.username === me.username ?
                             <React.Fragment>
-                              <Button onClick={this.handleEditPost} className='mr-3'>edit</Button>
-                              <Button onClick={this.handleDeletePost}>delete</Button>
-                            </React.Fragment>
+                              <ButtonToolbar>
+                                <Button onClick={this.handleEditPost} className='mr-3'>edit</Button>
+                                <Button onClick={this.handleDeletePost}>delete</Button>
+                            
+                              </ButtonToolbar>
+                              </React.Fragment>
                             : <div />
                         }
                       </div> : <div />

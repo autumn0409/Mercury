@@ -163,3 +163,25 @@ export const FAVORITE_POSTS_QUERY = gql`
     }
 	}
 `
+
+export const POSTS_QUERY = gql`
+query {
+  posts {
+    id
+    title 
+    author{
+      id
+      username
+    }
+    body
+    likes{
+      id
+      user{
+        id
+        username
+      }
+      like
+    }
+  }
+}
+`

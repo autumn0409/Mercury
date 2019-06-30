@@ -5,9 +5,9 @@ import {
   Row,
   Col,
 } from 'reactstrap'
-import {Link } from "react-router-dom"
+
 import {
-  SUB_QUERY,
+  POSTS_QUERY,
   POSTS_SUBSCRIPTION
 } from '../lib/graphql'
 
@@ -18,31 +18,40 @@ let unsubscribePosts = null
 class SubPage extends Component {
 
   render() {
-    const subName = this.props.match.params.subName;
-
+    const subName = this.props.match.params.name;
+    const target = this.props.match.params.name;
+    console.log(subName)
     return (
+
       <Container  >
         <Row>
           <Col>
-            <Query query={SUB_QUERY} fetchPolicy={"cache-and-network"} variables={{ query: subName }}>
+            <Query query={POSTS_QUERY} fetchPolicy={"cache-and-network"} variables={{ query: subName }}>
               {({ loading, error, data, subscribeToMore }) => {
                 if (loading) return <p>Loading...</p>
                 if (error) return <p>Error :(((</p>
+                console.log(data.posts)
+                const result = data.posts.filter(post =>{
+                    post.title.toLowerCase().includes(target)
+                });
 
-                const sub_object = data.sub;
-
-                const posts = sub_object.posts.map((post, id) => (
-                  <Post {...post} subName={subName} key={id} />
-                ))
-
-                if(posts.length == 0){
-                  return <div>
-                    <h1>oops</h1>
-                    <h6>seems that there's no post in this sub</h6>
-                    <hr></hr>
-                    <h5><Link style={{color:"dimgrey"}} to='/createPost'>share your thoughts NOW!</Link></h5>
-                  </div>
+                data.posts.map((post,id)=>{
+                    if(post.title.toLowerCase().includes(target))
+                        {result.push(post)
+                    }
+                })
+                if(result.length == 0){
+                    return <React.Fragment>
+                        <h1>OOPS...</h1>
+                        <h6>No post found</h6>
+                        <h6>try another keyword</h6>
+                    </React.Fragment>
                 }
+                
+                console.log(result)   
+                const posts = result.map((post, id) => (
+                  <Post {...post} key={id} />
+                ))
 
                 if (!unsubscribePosts)
                   unsubscribePosts = subscribeToMore({

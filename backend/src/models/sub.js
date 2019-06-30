@@ -9,7 +9,7 @@ const SubSchema = new Schema({
     name: {
         type: String,
         required: true,
-    },
+    }
 });
 
 // Creating a table within database with the defined schema
