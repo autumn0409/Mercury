@@ -1,4 +1,4 @@
-﻿﻿# Mercury
+# Mercury
 Mercury is the god of trade, commerce, messages/communication, travelers and boundaries.
 This forum is a source for what's new and popular on the web.
 Users provide all kinds of content, and decide, through voting, what's good and what's junk. Messages and news can be spread faster through this forum. Different contents are stored in different Subs allowing users can find the news they are interested in immediately.
